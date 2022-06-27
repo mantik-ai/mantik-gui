@@ -22,27 +22,20 @@ components:
       properties:
         name:
           type: string
+        password:
+          type: string
+        token:
+          type: string    
         address:
           type: string
         userId:
           type: integer
         bankInfo:
-          type: string
+          type: string          
         connections:
-          type: string
-    Credentials:
-      type: object
-      properties:
-        connectionName:
-          type: string
-        loginName:
-          type: string
-        password:
-          type: string
-        token:
-          type: string
-        authMethod:
-          type: string
+          type: array
+          items:
+	    $ref: '#/components/schemas/Connection'     
     Project:
       type: object
       properties:
@@ -52,6 +45,23 @@ components:
           type: string
         data:
           type: string
+    Connection:
+    	type: object
+    	properties: 
+    	  connectionId:
+    	    type: integer
+    	  connectionName:
+            type: string
+          connectionProvider:
+            type: string  
+          loginName:
+            type: string
+          password:
+            type: string
+          token:
+            type: string
+          authMethod:
+            type: string
 
 
 paths:
@@ -116,7 +126,7 @@ paths:
                   properties:
                     settings:
                       $ref: '#/components/schemas/Settings'
-    put:
+    post:
         summary: sets some settings
         responses:
           '200':
