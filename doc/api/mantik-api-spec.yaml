@@ -1,0 +1,184 @@
+openapi: "3.0.2"
+info:
+  title: Mantik minimal API
+  description: The API serves the front end with all necessary information on projects, and users.
+  version: "0.1.0"
+
+servers:
+    - url: https://api.server.test/v1
+#    - url: https://mantik.ai/
+#      description: landing page of mantik
+#    - url: http://dev.mantik.ai
+#      description: dev infrastructure for testing until review apps do fully work with github
+
+components:
+  schemas:
+    errorMessage:
+      type: string
+      maxLength: 1024
+      description: an error message
+    Settings:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        userId:
+          type: integer
+        bankInfo:
+          type: string
+        connections:
+          type: string
+    Credentials:
+      type: object
+      properties:
+        connectionName:
+          type: string
+        loginName:
+          type: string
+        password:
+          type: string
+        token:
+          type: string
+        authMethod:
+          type: string
+    Project:
+      type: object
+      properties:
+        git:
+          type: string
+        model:
+          type: string
+        data:
+          type: string
+
+
+paths:
+  /users/userIds:
+    get:
+      summary: list of all user Ids
+      description: a list of all user Ids. Should only be possible for an administrator
+      responses:
+        '200':    # status code
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+
+
+  /users/{userId}:
+    get:
+      summary: Returns the information on a specific user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: a json array with user information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    userName:
+                        type: string
+                    userId:
+                        type: integer
+                    address:
+                        type: string
+                    bankInfo:
+                        type: string
+
+
+  /users/{userId}/settings:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns the settings for a specific user
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    settings:
+                      $ref: '#/components/schemas/Settings'
+    put:
+        summary: sets some settings
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    settings:
+                      $ref: '#/components/schemas/Settings'
+
+
+  /projects:
+    get:
+        summary: returns all projects. Should be possible only for admins
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Project'
+
+
+  /projects/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns all projects for user with userId
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Project'
+
+
+  /projects/{projectId}:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns the information on a specific project
+        responses:
+          '200':
+            description: information on a specific project
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Project'
+
+
