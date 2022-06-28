@@ -3,10 +3,12 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "prepare": "husky install",
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "next": "12.1.6",
@@ -19,13 +21,27 @@
         "@types/react-dom": "18.0.5",
         "@typescript-eslint/eslint-plugin": "^5.27.0",
         "@typescript-eslint/parser": "^5.27.0",
-        "eslint": "^7.32.0 || ^8.2.0",
-        "eslint-config-kentcdodds": "^20.2.0",
+        "eslint": "^8.18.0",
+        "eslint-config-kentcdodds": "^20.3.1",
         "eslint-config-next": "12.1.6",
         "eslint-plugin-import": "^2.25.3",
         "eslint-plugin-jsx-a11y": "^6.5.1",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
+        "husky": "^8.0.0",
+        "lint-staged": "^13.0.3",
+        "prettier": "2.7.1",
         "typescript": "4.7.3"
-    }
+    },
+    "lint-staged": {
+        "*.{css,less,scss,html,json,jsx,js}": [
+            "prettier --write ."
+        ],
+        "*.js": "eslint --fix"
+    },
+    "eslintIgnore": [
+        "node_modules",
+        "coverage",
+        "dist"
+    ]
 }
