@@ -1,0 +1,267 @@
+openapi: "3.0.2"
+info:
+  title: Mantik minimal API
+  description: The API serves the front end with all necessary information on projects, and users.
+  version: "0.1.0"
+
+servers:
+    - url: https://api.server.test/v1
+#    - url: https://mantik.ai/
+#      description: landing page of mantik
+#    - url: http://dev.mantik.ai
+#      description: dev infrastructure for testing until review apps do fully work with github
+
+components:
+  schemas:
+    errorMessage:
+      type: string
+      maxLength: 1024
+      description: an error message
+    Settings:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        token:
+          type: string    
+        address:
+          type: string
+        userId:
+          type: integer
+        bankInfo:
+          type: string          
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection'     
+    Project:
+      type: object
+      properties:
+        owner: 
+          type: string
+        members: 
+          type: array
+          items: string  
+        groups: 
+          type: array
+          items:
+            type: string  
+        git:
+          type: array
+          items: string
+        experiment:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Experiment'
+        data:
+          type: array
+          items: string
+    Connection:
+      type: object
+      properties: 
+        connectionId:
+          type: integer
+        connectionName:
+          type: string
+        connectionProvider:
+          type: string  
+        loginName:
+          type: string
+        password:
+          type: string
+        token:
+          type: string
+        authMethod:
+          type: string
+    Experiment:
+      type: object
+      properties:
+        experiment_id:
+          type: string #Unique identifier for the experiment.
+        name:
+          type: string #Human readable name that identifies the experiment.
+        artifact_location:
+          type: string #Location where artifacts for the experiment are stored.
+        lifecycle_stage:
+          type: string # Current life cycle stage of the experiment ... “active” or “deleted”. Deleted experiments are not returned by APIs.
+        last_update_time:
+          type: integer  #Last update time
+        creation_time:
+          type: integer #Creation time
+        tags:
+          type: array #An array of ExperimentTag (Additional metadata key-value pairs.)
+          items:
+              key:  
+                type: string
+              value:
+                type: string   
+
+paths:
+  /users/userIds:
+    get:
+      summary: list of all user Ids
+      description: a list of all user Ids. Should only be possible for an administrator
+      responses:
+        '200':    # status code
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+
+
+  /users/{userId}:
+    get:
+      summary: Returns the information on a specific user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: a json array with user information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    userName:
+                        type: string
+                    userId:
+                        type: integer
+                    address:
+                        type: string
+                    bankInfo:
+                        type: string
+
+  /users/create:
+    put:
+      summary: creates a new user
+      requestBody:
+        description: Creates a new user
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                userName:
+                  type: string
+                userId:
+                  type: integer
+                address:
+                  type: string
+                bankInfo:
+                  type: string
+            example:
+              userName: black_panther
+              userId: 1
+              address: road_to_nowhere
+              bankInfo: bank_of_wakanda
+                             
+  /users/{userId}/settings:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns the settings for a specific user
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    settings:
+                      $ref: '#/components/schemas/Settings'
+    post:
+      summary: sets some settings
+      requestBody:
+        description: Creates User Settings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Created 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    $ref: '#/components/schemas/Settings'
+
+
+  /projects:
+    get:
+        summary: returns all projects. Should be possible only for admins
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Project'
+
+
+  /projects/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns all projects for user with userId
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Project'
+
+
+  /projects/{projectId}:
+    parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+        summary: returns the information on a specific project
+        responses:
+          '200':
+            description: information on a specific project
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Project'
+    post:
+        summary: Update project
+        responses:
+          '200':
+            description: Update project information (add experiments, git repos, ...)
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Project'
+
