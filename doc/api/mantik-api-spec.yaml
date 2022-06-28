@@ -35,34 +35,68 @@ components:
         connections:
           type: array
           items:
-	    $ref: '#/components/schemas/Connection'     
+            $ref: '#/components/schemas/Connection'     
     Project:
       type: object
       properties:
-        git:
+        owner: 
           type: string
-        model:
-          type: string
-        data:
-          type: string
-    Connection:
-    	type: object
-    	properties: 
-    	  connectionId:
-    	    type: integer
-    	  connectionName:
-            type: string
-          connectionProvider:
+        members: 
+          type: array
+          items: string  
+        groups: 
+          type: array
+          items:
             type: string  
-          loginName:
-            type: string
-          password:
-            type: string
-          token:
-            type: string
-          authMethod:
-            type: string
-
+        git:
+          type: array
+          items: string
+        experiment:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Experiment'
+        data:
+          type: array
+          items: string
+    Connection:
+      type: object
+      properties: 
+        connectionId:
+          type: integer
+        connectionName:
+          type: string
+        connectionProvider:
+          type: string  
+        loginName:
+          type: string
+        password:
+          type: string
+        token:
+          type: string
+        authMethod:
+          type: string
+    Experiment:
+      type: object
+      properties:
+        experiment_id:
+          type: string #Unique identifier for the experiment.
+        name:
+          type: string #Human readable name that identifies the experiment.
+        artifact_location:
+          type: string #Location where artifacts for the experiment are stored.
+        lifecycle_stage:
+          type: string # Current life cycle stage of the experiment ... “active” or “deleted”. Deleted experiments are not returned by APIs.
+        last_update_time:
+          type: integer  #Last update time
+        creation_time:
+          type: integer #Creation time
+        tags:
+          type: array #An array of ExperimentTag (Additional metadata key-value pairs.)
+          items:
+              key:  
+                type: string
+              value:
+                type: string   
 
 paths:
   /users/userIds:
@@ -106,7 +140,31 @@ paths:
                     bankInfo:
                         type: string
 
-
+  /users/create:
+    put:
+      summary: creates a new user
+      requestBody:
+        description: Creates a new user
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                userName:
+                  type: string
+                userId:
+                  type: integer
+                address:
+                  type: string
+                bankInfo:
+                  type: string
+            example:
+              userName: black_panther
+              userId: 1
+              address: road_to_nowhere
+              bankInfo: bank_of_wakanda
+                             
   /users/{userId}/settings:
     parameters:
       - name: userId
@@ -127,17 +185,24 @@ paths:
                     settings:
                       $ref: '#/components/schemas/Settings'
     post:
-        summary: sets some settings
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    settings:
-                      $ref: '#/components/schemas/Settings'
+      summary: sets some settings
+      requestBody:
+        description: Creates User Settings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Settings'
+      responses:
+        '200':
+          description: Created 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settings:
+                    $ref: '#/components/schemas/Settings'
 
 
   /projects:
