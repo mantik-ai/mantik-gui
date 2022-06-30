@@ -31,7 +31,7 @@ Code is generated into the `fastapi` directory.
  - `cd fastapi`
  - Edit Dockerfile (see 'Known problems' section below)
  - `docker-compose build`
- - docker-compose up
+ - `docker-compose up`
  - Open `http://0.0.0.0:8080/docs` in a browser to see the docs
 
 ## Known problems
