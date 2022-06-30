@@ -21,7 +21,7 @@ Code for running a (mockup) server can be generated automatically. The [openapi-
 docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
     -i local/mantik-api-spec.yaml \
     -g python-fastapi \
-    -o /fastapi/
+    -o /local/fastapi/
 ```
 
 Code is generated into the `fastapi` directory.

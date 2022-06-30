@@ -20,6 +20,7 @@ components:
       description: An error message
     Settings:
       type: object
+      description: User settings
       properties:
         user:
           $ref: '#/components/schemas/User'
@@ -38,6 +39,7 @@ components:
         - password
     Project:
       type: object
+      description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
       properties:
         projectId:
           type: string
@@ -68,6 +70,7 @@ components:
         - owner
     Connection:
       type: object
+      description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
       properties: 
         connectionId:
           type: integer
@@ -89,27 +92,29 @@ components:
         - connectionProvider
     ExperimentRepository:
       type: object
+      description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
       properties:
         experimentId:
-          type: string #Unique identifier for the experiment.
+          type: string
         name:
-          type: string #Human readable name that identifies the experiment.
+          type: string
         artifact_location:
-          type: string #Location where artifacts for the experiment are stored.
+          type: string
         lifecycle_stage:
-          type: string # Current life cycle stage of the experiment ... “active” or “deleted”. Deleted experiments are not returned by APIs.
+          type: string
         last_update_time:
-          type: integer  #Last update time
+          type: integer
         creation_time:
-          type: integer #Creation time
+          type: integer
         labels:
-          type: array #An array of ExperimentTag (Additional metadata key-value pairs.)
+          type: array
           items:
             $ref: '#/components/schemas/Label'
       required:
         - experimentId
     User:
       type: object
+      description: Represents a user
       properties:
         userId:
           type: integer
@@ -123,6 +128,7 @@ components:
         - email
     CodeRepository:
       type: object
+      description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
       properties:
         codeRepositoryId:
           type: string
@@ -130,7 +136,7 @@ components:
           type: string
         description:
           type: string
-        tags:
+        labels:
           type: array
           items:
             $ref: '#/components/schemas/Label'
@@ -139,6 +145,7 @@ components:
         - uri
     DataRepository:
       type: object
+      description: Represents a data repository
       properties:
         dataRepositoryId:
           type: string
@@ -146,7 +153,7 @@ components:
           type: string
         description:
           type: string
-        tags:
+        labels:
           type: array
           items:
             $ref: '#/components/schemas/Label'
@@ -155,6 +162,7 @@ components:
         - uri
     ModelRepository:
       type: object
+      description: Represents a model
       properties:
         modelRepositoryId:
           type: string
@@ -162,7 +170,11 @@ components:
           type: string
         description:
           type: string
-        tags:
+        git:
+          $ref: '#/components/schemas/CodeRepository'
+        commit:
+          type: string
+        labels:
           type: array
           items:
             $ref: '#/components/schemas/Label'
@@ -171,6 +183,7 @@ components:
         - uri
     UserGroup:
       type: object
+      description: Represents a user group
       properties:
         userGroupId:
           type: string
@@ -178,8 +191,6 @@ components:
           type: string
         admin:
           $ref: '#/components/schemas/User'
-        organization:
-          $ref: '#/components/schemas/Organization'
         members:
           type: array
           items:
@@ -190,6 +201,7 @@ components:
         - admin
     Organization:
       type: object
+      description: Represents an organization, i.e. a collection of user groups and users
       properties:
         organizationId:
           type: string
@@ -197,12 +209,21 @@ components:
           type: string
         contact:
           $ref: '#/components/schemas/User'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroup'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
       required:
         - organizationId
         - name
         - contact
     paymentInfo:
       type: object
+      description: Represents payment information
       properties:
         paymentInfoId:
           type: string
@@ -212,7 +233,6 @@ components:
           type: string
         paymentDetails:
           type: string
-          required: true
       required:
         - paymentInfoId
         - address
@@ -220,6 +240,7 @@ components:
         - paymentDetails
     Label:
       type: object
+      description: Represents a label
       properties:
         key:
           type: string
@@ -233,8 +254,8 @@ components:
 paths:
   /users:
     get:
-      summary: list of all user Ids
-      description: a list of all user Ids. Should only be possible for an administrator
+      summary: List of all users
+      description: List of all users (admin only)
       responses:
         '200':
           description: OK
@@ -245,7 +266,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
     put:
-      summary: creates a new user
+      summary: Creates a new user
       requestBody:
         description: Creates a new user
         required: true
@@ -274,17 +295,17 @@ paths:
 
 
   /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
     get:
       summary: Returns the information on a specific user
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
       responses:
         '200':
-          description: a json array with user information
+          description: A json array with user information
           content:
             application/json:
               schema:
@@ -298,6 +319,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successfully updated user
+
 
   /users/{userId}/settings:
     parameters:
@@ -307,7 +332,7 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns the settings for a specific user
+        summary: Returns the settings for a specific user
         responses:
           '200':
             description: OK
@@ -319,9 +344,9 @@ paths:
                     settings:
                       $ref: '#/components/schemas/Settings'
     post:
-      summary: sets some settings
+      summary: Updates user settings
       requestBody:
-        description: Creates User Settings
+        description: Updated user settings
         required: true
         content:
           application/json:
@@ -329,19 +354,12 @@ paths:
               $ref: '#/components/schemas/Settings'
       responses:
         '200':
-          description: Created 
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  settings:
-                    $ref: '#/components/schemas/Settings'
+          description: Successfully updated settings
 
 
   /projects:
     get:
-      summary: returns all projects. Should be possible only for admins
+      summary: Returns all projects (admin only)
       responses:
         '200':
           description: OK
@@ -366,7 +384,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Project'
+                type: object
+                properties:
+                  projectId:
+                    type: string
 
 
   /projects/user/{userId}:
@@ -377,7 +398,7 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns all projects for user with userId
+        summary: Returns all projects for user with userId
         responses:
           '200':
             description: OK
@@ -397,10 +418,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns the information on a specific project
+        summary: Returns the information on a specific project
         responses:
           '200':
-            description: information on a specific project
+            description: Information on a specific project
             content:
               application/json:
                 schema:
@@ -416,11 +437,7 @@ paths:
                 $ref: '#/components/schemas/Project'
         responses:
           '200':
-            description: Update project information (add experiments, git repos, ...)
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Project'
+            description: Successfully updated project information
 
 
   /projects/{projectId}/code:
@@ -431,10 +448,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns code entries for given project
+        summary: Returns code entries for given project
         responses:
           '200':
-            description: code entries for given project
+            description: Code entries for given project
             content:
               application/json:
                 schema:
@@ -456,7 +473,10 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/CodeRepository'
+                  type: object
+                  properties:
+                    codeRepositoryId:
+                      type: string
 
 
   /projects/{projectId}/code/{codeRepositoryId}:
@@ -472,16 +492,16 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns code entry for given project
+        summary: Returns code entry for given project
         responses:
           '200':
-            description: code entry for given project
+            description: Code entry for given project
             content:
               application/json:
                 schema:
                   $ref: '#/components/schemas/CodeRepository'
     post:
-        summary: Update code repository
+        summary: Updates code repository
         requestBody:
           description: Updated code repository information
           required: true
@@ -492,10 +512,6 @@ paths:
         responses:
           '200':
             description: Successfully updated code repository
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/CodeRepository'
 
 
   /projects/{projectId}/data:
@@ -506,10 +522,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns data entries for given project
+        summary: Returns data entries for given project
         responses:
           '200':
-            description: data entries for given project
+            description: Data entries for given project
             content:
               application/json:
                 schema:
@@ -531,7 +547,10 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/DataRepository'
+                  type: object
+                  properties:
+                    dataRepositoryId:
+                      type: string
 
 
   /projects/{projectId}/data/{dataRepositoryId}:
@@ -547,10 +566,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns data entry for given project
+        summary: Returns data entry for given project
         responses:
           '200':
-            description: data entry for given project
+            description: Data entry for given project
             content:
               application/json:
                 schema:
@@ -567,10 +586,6 @@ paths:
         responses:
           '200':
             description: Successfully updated code repository
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/DataRepository'
 
 
   /projects/{projectId}/experiments:
@@ -581,10 +596,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns experiment entries for given project
+        summary: Returns experiment entries for given project
         responses:
           '200':
-            description: experiment entries for given project
+            description: Experiment entries for given project
             content:
               application/json:
                 schema:
@@ -606,8 +621,10 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/ExperimentRepository'
-
+                  type: object
+                  properties:
+                    experimentRepositoryId:
+                      type: string
 
 
   /projects/{projectId}/experiments/{experimentRepositoryId}:
@@ -623,10 +640,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns experiment entry for given project
+        summary: Returns experiment entry for given project
         responses:
           '200':
-            description: experiment entry for given project
+            description: Experiment entry for given project
             content:
               application/json:
                 schema:
@@ -643,10 +660,6 @@ paths:
         responses:
           '200':
             description: Successfully updated experiment repository
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ExperimentRepository'
 
 
   /projects/{projectId}/models:
@@ -657,14 +670,16 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns model entries for given project
+        summary: Returns model entries for given project
         responses:
           '200':
-            description: model entries for given project
+            description: Model entries for given project
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/ModelRepository'
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ModelRepository'
     put:
         summary: Add model repository
         requestBody:
@@ -682,8 +697,10 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/ModelRepository'
-
+                  type: object
+                  properties:
+                    modelRepositoryId:
+                      type: string
 
 
   /projects/{projectId}/models/{modelRepositoryId}:
@@ -699,10 +716,10 @@ paths:
         schema:
           type: integer
     get:
-        summary: returns model entry for given project
+        summary: Returns model entry for given ID
         responses:
           '200':
-            description: model entry for given project
+            description: Model entry for given ID
             content:
               application/json:
                 schema:
@@ -719,18 +736,14 @@ paths:
         responses:
           '200':
             description: Successfully updated model repository
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ModelRepository'
 
 
   /groups:
     get:
-      summary: Get all User group (admin only).
+      summary: Get all User group (admin only)
       responses:
         '200':
-          description: Got all user groups.
+          description: Got all user groups
           content:
             application/json:
               schema:
@@ -738,7 +751,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/UserGroup'
     put:
-      summary: Create a new user group.
+      summary: Create a new user group
       requestBody:
         description: User group information
         required: true
@@ -752,7 +765,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserGroup'
+                type: object
+                properties:
+                  groupId:
+                    type: string
+
 
   /groups/{groupId}:
     parameters:
@@ -782,15 +799,11 @@ paths:
       responses:
         '200':
           description: Successfully updated user group
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserGroup'
 
 
   /organizations:
     get:
-      summary: get list of organizations (admin only)
+      summary: Get list of organizations (admin only)
       responses:
         '200':
           description: List of organizations
@@ -815,8 +828,10 @@ paths:
           content:
             application/json:
               schema:
-                organizationId:
-                  type: integer
+                type: object
+                properties:
+                  organizationId:
+                    type: integer
 
 
   /organizations/{organizationId}:
