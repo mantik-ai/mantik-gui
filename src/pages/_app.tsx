@@ -1,13 +1,19 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
 import MainLayout from '../common/layouts/MainLayout'
+import { CssBaseline, ThemeProvider } from '@mui/material'
+import '../styles/global.css'
+import { defaultTheme } from '../common/themes/default'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MantikApp({ Component, pageProps }: AppProps) {
     return (
-        <MainLayout>
-            <Component {...pageProps} />
-        </MainLayout>
+        <ThemeProvider theme={defaultTheme}>
+            <CssBaseline />
+            <MainLayout>
+                <Component {...pageProps} />
+            </MainLayout>
+        </ThemeProvider>
     )
 }
 
-export default MyApp
+export default MantikApp
