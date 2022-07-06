@@ -26,7 +26,7 @@ interface NavbarProps {
 
 export const Navbar = (props: NavbarProps) => {
     return (
-        <AppBar component="nav" position="static">
+        <AppBar component="nav" position="fixed">
             <Toolbar>
                 <Link href="/">
                     <MenuItem>
@@ -80,6 +80,7 @@ export const Navbar = (props: NavbarProps) => {
                     <VerticalDivider />
                     <Button
                         style={{
+                            minWidth: '90px',
                             fontSize: '16px',
                             fontWeight: '600',
                             letterSpacing: '0.46',
