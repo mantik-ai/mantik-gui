@@ -8,13 +8,13 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
-import { Route } from '../../types/route'
 import styled from '@emotion/styled'
+import { Route } from '../../types/route'
 
 const VerticalDivider = styled.div`
     border: 1px solid white;
     width: 0;
-    margin: 0 1em;
+    margin: 0 1.6em 0 1rem;
 `
 const Spacing = styled.div`
     margin: 0 3%;
@@ -23,6 +23,7 @@ const Spacing = styled.div`
 interface NavbarProps {
     routes: Route[]
 }
+
 export const Navbar = (props: NavbarProps) => {
     return (
         <AppBar component="nav" position="static">
@@ -31,11 +32,12 @@ export const Navbar = (props: NavbarProps) => {
                     <MenuItem>
                         <Typography
                             color="white"
-                            variant="h5"
+                            fontWeight={700}
+                            fontSize={40}
+                            letterSpacing={0.46}
                             component="div"
-                            sx={{ flexGrow: 1 }}
                         >
-                            MantikAI
+                            MantikUI
                         </Typography>
                     </MenuItem>
                 </Link>
@@ -43,7 +45,13 @@ export const Navbar = (props: NavbarProps) => {
                 {props.routes.map((route) => (
                     <Link href={route.path} key={route.name}>
                         <MenuItem>
-                            <Typography textAlign="center" color="white">
+                            <Typography
+                                textAlign="center"
+                                color="white"
+                                fontWeight={600}
+                                fontSize={20}
+                                letterSpacing={0.4}
+                            >
                                 {route.name}
                             </Typography>
                         </MenuItem>
@@ -59,14 +67,23 @@ export const Navbar = (props: NavbarProps) => {
                     }}
                 >
                     <Button
+                        style={{
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            letterSpacing: '0.46',
+                        }}
                         color="secondary"
-                        variant="contained"
-                        sx={{ color: '#4F98F5' }}
+                        variant="text"
                     >
                         Register
                     </Button>
-                    <VerticalDivider></VerticalDivider>
+                    <VerticalDivider />
                     <Button
+                        style={{
+                            fontSize: '16px',
+                            fontWeight: '600',
+                            letterSpacing: '0.46',
+                        }}
                         color="secondary"
                         variant="contained"
                         sx={{ color: '#4F98F5' }}
