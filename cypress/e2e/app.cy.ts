@@ -2,6 +2,9 @@
 
 describe('Main App', () => {
     beforeEach(() => {
-        cy.visit('https://localhost:3000')
+        cy.visit('http://localhost:3000')
+    })
+    it('is true every time', () => {
+        expect(true).to.be.equal(true)
     })
 })
