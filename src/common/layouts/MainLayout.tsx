@@ -1,7 +1,7 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { Footer } from '../components/footer/Footer'
 import { Navbar } from '../components/navbar/Navbar'
-import styled from '@emotion/styled'
 import { Route } from '../types/route'
 
 const Content = styled.main`
@@ -21,10 +21,10 @@ interface MainLayoutProps {
 const Layout: React.FC<MainLayoutProps> = (props) => {
     return (
         <>
-            <Navbar routes={routes}></Navbar>
-            <Content>
-                {props.children}
-                <Footer></Footer>
+            <Content style={{height: "100vh"}}>
+                <Navbar routes={routes}/>
+                    {props.children}
+                <Footer/>
             </Content>
         </>
     )
