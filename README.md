@@ -15,5 +15,5 @@ A project for the development and administration of AI or ML related problems
 ## Getting Started
 
 -   Clone the repository
--   Install dependencies with `yarn install` (in this project we use yarn don't mix up with npm)
--   Run `yarn dev` to start the development server locally (default port is 3000)
+-   Install dependencies with `npm install` 
+-   Run `npm run dev` to start the development server locally (default port is 3000)
