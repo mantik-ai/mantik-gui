@@ -4,6 +4,7 @@ import Link from 'next/link'
 import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
+import styled from '@emotion/styled'
 import { NavbarProps } from '../../types/navbarProps'
 import { Links } from '../../types/links'
 
@@ -13,24 +14,45 @@ const links: Links[] = [
     { url: '', icon: <GitHubIcon /> },
 ]
 
+const FooterContainer = styled.div`
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    height: fit-content;
+    line-height: 0;
+    overflow: hidden;
+`
+
+const FooterNavigation = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 60px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+`
+
 export const Footer = (props: NavbarProps) => {
     return (
-        <div id={'footer'}>
+        <FooterContainer>
             <Box
                 component="img"
-                id={'footer-background'}
                 sx={{
                     bottom: { lg: '-5%', xl: '-15%' },
                     width: { xs: '200%', sm: '150%', md: '100%' },
                     left: { xs: '-50%', sm: '-25%', md: 0 },
+                    position: 'relative',
                 }}
                 src="/images/footer.svg"
                 alt="footer background"
             />
-            <div id={'footer-content'}>
+            <FooterNavigation color="primary.dark">
                 <Typography
-                    fontSize={'24px'}
-                    fontWeight={700}
+                    variant="h3"
+                    color="primary.dark"
                     padding={'0 2rem'}
                 >
                     MantikUI
@@ -46,11 +68,8 @@ export const Footer = (props: NavbarProps) => {
                             <Link href={route.path} key={route.name}>
                                 <MenuItem>
                                     <Typography
-                                        color="#2E598F"
-                                        fontWeight={400}
-                                        fontSize={20}
-                                        letterSpacing={0.46}
-                                        component="div"
+                                        variant="h6"
+                                        color="primary.dark"
                                     >
                                         {route.name}
                                     </Typography>
@@ -60,12 +79,16 @@ export const Footer = (props: NavbarProps) => {
                 </Stack>
                 <Stack direction={'row'}>
                     {links.map((link, index) => (
-                        <IconButton key={index} href={link.url}>
+                        <IconButton
+                            key={index}
+                            href={link.url}
+                            sx={{ color: 'primary.dark' }}
+                        >
                             {link.icon}
                         </IconButton>
                     ))}
                 </Stack>
-            </div>
-        </div>
+            </FooterNavigation>
+        </FooterContainer>
     )
 }

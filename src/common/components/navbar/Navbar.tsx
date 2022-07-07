@@ -23,7 +23,7 @@ export default function Navbar(props: NavbarProps) {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography className={'logo-item-drawer'} component="div">
+            <Typography variant={'h2'} color="primary">
                 MantikUI
             </Typography>
             <Divider />
@@ -33,7 +33,7 @@ export default function Navbar(props: NavbarProps) {
                     .map((route) => (
                         <Link href={route.path} key={route.name}>
                             <MenuItem>
-                                <Typography className={'menu-item-drawer'}>
+                                <Typography variant="h5" color="primary.dark">
                                     {route.name}
                                 </Typography>
                             </MenuItem>
@@ -57,8 +57,8 @@ export default function Navbar(props: NavbarProps) {
                         <MenuIcon />
                     </IconButton>
                     <Typography
-                        className={'logo-item'}
-                        component="div"
+                        variant="h2"
+                        color="white"
                         display={{ xs: 'none', md: 'block' }}
                         mr={8}
                     >
@@ -73,7 +73,10 @@ export default function Navbar(props: NavbarProps) {
                                 .map((route) => (
                                     <Link href={route.path} key={route.name}>
                                         <MenuItem>
-                                            <Typography className={'menu-item'}>
+                                            <Typography
+                                                variant="h5"
+                                                color="secondary"
+                                            >
                                                 {route.name}
                                             </Typography>
                                         </MenuItem>
@@ -88,11 +91,7 @@ export default function Navbar(props: NavbarProps) {
                         flex={1}
                         spacing={2}
                     >
-                        <Button
-                            className={'btn'}
-                            color="secondary"
-                            variant="outlined"
-                        >
+                        <Button color="secondary" variant="outlined">
                             Register
                         </Button>
                         <Divider
@@ -101,13 +100,12 @@ export default function Navbar(props: NavbarProps) {
                             sx={{ borderColor: 'white' }}
                         />
                         <Button
-                            className={'btn'}
                             size={'small'}
                             color="secondary"
                             variant="contained"
                             sx={{ color: '#4F98F5' }}
                         >
-                            Login
+                            login
                         </Button>
                     </Stack>
                 </Toolbar>

@@ -4,10 +4,10 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import MainLayout from '../common/layouts/MainLayout'
 import '../styles/global.css'
 import { defaultTheme } from '../common/themes/default'
-import '@fontsource/Blinker/300.css'
-import '@fontsource/Blinker/400.css'
-import '@fontsource/Blinker/600.css'
-import '@fontsource/Blinker/700.css'
+import '@fontsource/blinker/300.css'
+import '@fontsource/blinker/400.css'
+import '@fontsource/blinker/600.css'
+import '@fontsource/blinker/700.css'
 
 function MantikApp({ Component, pageProps }: AppProps) {
     return (

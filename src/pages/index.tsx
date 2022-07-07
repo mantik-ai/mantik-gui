@@ -12,16 +12,9 @@ const Home: NextPage = () => {
             flexGrow={1}
             spacing={4}
         >
-            <Typography fontSize={'72px'} fontWeight={700} letterSpacing={0.46}>
-                MantikUI
-            </Typography>
+            <Typography variant="h1">MantikUI</Typography>
 
-            <Typography
-                fontSize={'24px'}
-                fontWeight={300}
-                letterSpacing={0.46}
-                textAlign={'center'}
-            >
+            <Typography variant="h4" textAlign="center">
                 Enhance the AI Modeler&apos;s life,
                 <br />
                 by solving BIG problems.
@@ -29,7 +22,6 @@ const Home: NextPage = () => {
 
             <Stack spacing={4} direction={{ xs: 'column', sm: 'row' }}>
                 <Button
-                    className={'btn'}
                     style={{
                         color: 'white',
                         minWidth: '260px',
@@ -38,10 +30,9 @@ const Home: NextPage = () => {
                     color="primary"
                     variant="contained"
                 >
-                    TRY IT OUT
+                    try it out
                 </Button>
                 <Button
-                    className={'btn'}
                     style={{
                         minWidth: '260px',
                     }}
@@ -49,7 +40,7 @@ const Home: NextPage = () => {
                     color="primary"
                     variant="outlined"
                 >
-                    SIGN UP
+                    sign up
                 </Button>
             </Stack>
         </Stack>
