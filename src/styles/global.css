@@ -2,3 +2,61 @@ html,
 body {
     height: 100%;
 }
+
+.btn {
+    font-size: 16px;
+    font-weight: 600;
+    min-width: 95px;
+}
+
+.logo-item {
+    color: white;
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.logo-item-drawer {
+    color: #4f98f5;
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.menu-item {
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.menu-item-drawer {
+    text-align: left;
+    color: #2e598f;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+#footer {
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    height: fit-content;
+    line-height: 0;
+    overflow: hidden;
+}
+
+#footer-background {
+    position: relative;
+}
+
+#footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    min-height: 60px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    color: #2e598f;
+}

@@ -1,57 +1,47 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import styled from '@emotion/styled'
-import Link from "next/link";
-import {Button, MenuItem, Stack} from "@mui/material";
-import {Route} from '../../types/route'
+import * as React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Drawer from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import MenuIcon from '@mui/icons-material/Menu'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import Link from 'next/link'
+import { Button, MenuItem, Stack } from '@mui/material'
+import { NavbarProps } from '../../types/navbarProps'
 
-interface NavbarProps {
-    routes: Route[]
-}
-
-const drawerWidth = 240;
-
-const Spacing = styled.div`margin: 0 3%;`
-const VerticalDivider = styled.div`
-  border: 1px solid white;
-  width: 0;
-  margin: 0 1rem 0 0.2rem;
-`
+const drawerWidth = 240
 
 export default function Navbar(props: NavbarProps) {
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = React.useState(false)
 
     const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
+        setMobileOpen(!mobileOpen)
+    }
 
     const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{textAlign: 'center'}}>
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <Typography className={'logo-item-drawer'} component="div">
                 MantikUI
             </Typography>
-            <Divider/>
+            <Divider />
             <List>
-                {props.routes.map((route) => (
-                    <Link href={route.path} key={route.name}>
-                        <MenuItem>
-                            <Typography className={'menu-item-drawer'}>
-                                {route.name}
-                            </Typography>
-                        </MenuItem>
-                    </Link>
-                ))}
+                {props.routes
+                    .filter((route) => route.positions.includes('drawer'))
+                    .map((route) => (
+                        <Link href={route.path} key={route.name}>
+                            <MenuItem>
+                                <Typography className={'menu-item-drawer'}>
+                                    {route.name}
+                                </Typography>
+                            </MenuItem>
+                        </Link>
+                    ))}
             </List>
         </Box>
-    );
+    )
 
     return (
         <>
@@ -62,50 +52,64 @@ export default function Navbar(props: NavbarProps) {
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{mr: 2, display: {sm: 'none'}}}
+                        sx={{ display: { sm: 'none' } }}
                     >
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
-                    <Typography className={'logo-item'} component="div" display={{ xs: 'none', md:'block' }}>
+                    <Typography
+                        className={'logo-item'}
+                        component="div"
+                        display={{ xs: 'none', md: 'block' }}
+                        mr={8}
+                    >
                         MantikUI
                     </Typography>
-                    <Spacing/>
-                    <Box sx={{display: {xs: 'none', sm: 'block'}}}>
-                        <Stack direction={"row"}>
-                            {props.routes.map((route) => (
-                                <Link href={route.path} key={route.name}>
-                                    <MenuItem>
-                                        <Typography className={'menu-item'}>
-                                            {route.name}
-                                        </Typography>
-                                    </MenuItem>
-                                </Link>
-                            ))}
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Stack direction={'row'}>
+                            {props.routes
+                                .filter((route) =>
+                                    route.positions.includes('navbar')
+                                )
+                                .map((route) => (
+                                    <Link href={route.path} key={route.name}>
+                                        <MenuItem>
+                                            <Typography className={'menu-item'}>
+                                                {route.name}
+                                            </Typography>
+                                        </MenuItem>
+                                    </Link>
+                                ))}
                         </Stack>
                     </Box>
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'end',
-                        }}
+                    <Stack
+                        direction={'row'}
+                        justifyContent={'end'}
+                        flex={1}
+                        spacing={2}
                     >
-                        <Button className={'btn'} color="secondary" variant="text">
-                            Register
-                        </Button>
-                        <VerticalDivider/>
                         <Button
                             className={'btn'}
-                            size={'medium'}
+                            color="secondary"
+                            variant="outlined"
+                        >
+                            Register
+                        </Button>
+                        <Divider
+                            orientation="vertical"
+                            flexItem
+                            sx={{ borderColor: 'white' }}
+                        />
+                        <Button
+                            className={'btn'}
+                            size={'small'}
                             color="secondary"
                             variant="contained"
-                            sx={{color: '#4F98F5'}}
+                            sx={{ color: '#4F98F5' }}
                         >
                             Login
                         </Button>
-                    </Box>
+                    </Stack>
                 </Toolbar>
             </AppBar>
 
@@ -118,17 +122,20 @@ export default function Navbar(props: NavbarProps) {
                         keepMounted: true, // Better open performance on mobile.
                     }}
                     sx={{
-                        display: {xs: 'block', sm: 'none'},
-                        '& .MuiDrawer-paper': {boxSizing: 'border-box', width: drawerWidth},
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': {
+                            boxSizing: 'border-box',
+                            width: drawerWidth,
+                        },
                     }}
                 >
                     {drawer}
                 </Drawer>
             </Box>
 
-            <Box component="main" sx={{p: 3, padding: 0}}>
-                <Toolbar/>
+            <Box component="main" sx={{ p: 3, padding: 0 }}>
+                <Toolbar />
             </Box>
         </>
-    );
+    )
 }
