@@ -17,7 +17,7 @@ import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import { Links } from '../../common/types/links'
 
-const signInWith: Links[] = [
+const loginWith: Links[] = [
     { url: 'https://example.com/4', icon: <GoogleIcon /> },
     { url: 'https://example.com/5', icon: <FacebookOutlinedIcon /> },
     { url: 'https://example.com/6', icon: <GitHubIcon /> },
@@ -65,11 +65,17 @@ const Login: NextPage = () => {
                                 Not yet registered?
                             </Link>
                         </Stack>
-                        <TextField label="email" variant="outlined" />
+                        <TextField
+                            label="email"
+                            variant="outlined"
+                            type={'email'}
+                            required
+                        />
                         <TextField
                             label="password"
                             variant="outlined"
                             type={'password'}
+                            required
                         />
                         <Link
                             variant="body2"
@@ -100,7 +106,7 @@ const Login: NextPage = () => {
                             justifyContent="center"
                             spacing={1}
                         >
-                            {signInWith.map(({ url, icon }) => (
+                            {loginWith.map(({ url, icon }) => (
                                 <IconButton
                                     style={{ border: '1px solid #80808066' }}
                                     key={url}
