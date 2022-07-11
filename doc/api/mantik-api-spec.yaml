@@ -29,7 +29,7 @@ components:
         token:
           type: string
         paymentInfo:
-          $ref: '#components/schemas/paymentInfo'
+          $ref: '#/components/schemas/paymentInfo'
         connections:
           type: array
           items:
