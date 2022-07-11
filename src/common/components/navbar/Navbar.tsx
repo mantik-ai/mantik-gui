@@ -91,8 +91,8 @@ export default function Navbar(props: NavbarProps) {
                         flex={1}
                         spacing={2}
                     >
-                        <Button color="secondary" variant="outlined">
-                            Register
+                        <Button href={'/register'} color="secondary" variant="outlined">
+                            register
                         </Button>
                         <Divider
                             orientation="vertical"
@@ -100,6 +100,7 @@ export default function Navbar(props: NavbarProps) {
                             sx={{ borderColor: 'white' }}
                         />
                         <Button
+                            href={'/login'}
                             size={'small'}
                             color="secondary"
                             variant="contained"
