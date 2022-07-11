@@ -1,7 +1,7 @@
 import React from 'react'
-import { Footer } from '../components/footer/Footer'
-import { Navbar } from '../components/navbar/Navbar'
 import styled from '@emotion/styled'
+import { Footer } from '../components/footer/Footer'
+import Navbar from '../components/navbar/Navbar'
 import { Route } from '../types/route'
 
 const Content = styled.main`
@@ -10,21 +10,31 @@ const Content = styled.main`
 `
 
 const routes: Route[] = [
-    { name: 'About', path: '/about' },
-    { name: 'Docs', path: '/docs' },
-    { name: 'Projects', path: '/projects' },
+    { name: 'About', path: '/about', positions: ['navbar', 'drawer'] },
+    { name: 'Docs', path: '/docs', positions: ['navbar', 'drawer'] },
+    { name: 'Projects', path: '/projects', positions: ['navbar', 'drawer'] },
+    { name: 'Contact', path: '/contact', positions: ['footer', 'drawer'] },
+    { name: 'Privacy', path: '/privacy', positions: ['footer', 'drawer'] },
+    { name: 'Imprint', path: '/imprint', positions: ['footer', 'drawer'] },
 ]
 
 interface MainLayoutProps {
     children: React.ReactNode
 }
+
 const Layout: React.FC<MainLayoutProps> = (props) => {
     return (
         <>
-            <Navbar routes={routes}></Navbar>
-            <Content>
+            <Content
+                style={{
+                    height: '100vh',
+                    display: 'flex',
+                    flexFlow: 'column',
+                }}
+            >
+                <Navbar routes={routes} />
                 {props.children}
-                <Footer></Footer>
+                <Footer routes={routes} />
             </Content>
         </>
     )
