@@ -1,5 +1,7 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import MainLayout from '../common/layouts/MainLayout'
 import '../styles/global.css'
@@ -10,13 +12,17 @@ import '@fontsource/blinker/600.css'
 import '@fontsource/blinker/700.css'
 
 function MantikApp({ Component, pageProps }: AppProps) {
+    const [queryClient] = React.useState(() => new QueryClient())
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <MainLayout>
-                <Component {...pageProps} />
-            </MainLayout>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={defaultTheme}>
+                <CssBaseline />
+                <MainLayout>
+                    <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </ThemeProvider>
+        </QueryClientProvider>
     )
 }
 
