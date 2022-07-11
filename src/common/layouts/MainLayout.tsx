@@ -1,7 +1,7 @@
 import React from 'react'
+import styled from '@emotion/styled'
 import { Footer } from '../components/footer/Footer'
 import { Navbar } from '../components/navbar/Navbar'
-import styled from '@emotion/styled'
 import { Route } from '../types/route'
 
 const Content = styled.main`

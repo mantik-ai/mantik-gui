@@ -1,9 +1,9 @@
 import React from 'react'
 import type { AppProps } from 'next/app'
-import MainLayout from '../common/layouts/MainLayout'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { CssBaseline, ThemeProvider } from '@mui/material'
+import MainLayout from '../common/layouts/MainLayout'
 import '../styles/global.css'
 import { defaultTheme } from '../common/themes/default'
 

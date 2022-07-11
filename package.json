@@ -8,6 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
+        "generate:queries": "orval --config orval.config.js",
         "format": "prettier --write .",
         "cypress": "cypress open",
         "cypress:headless": "cypress run",
@@ -18,9 +19,11 @@
         "@emotion/react": "^11.9.3",
         "@emotion/styled": "^11.9.3",
         "@mui/material": "^5.8.6",
+        "axios": "^0.27.2",
         "next": "12.1.6",
         "react": "18.1.0",
-        "react-dom": "18.1.0"
+        "react-dom": "18.1.0",
+        "react-query": "^3.39.1"
     },
     "devDependencies": {
         "@testing-library/cypress": "^8.0.3",
@@ -43,6 +46,7 @@
         "jest": "^28.1.2",
         "jest-environment-jsdom": "^28.1.2",
         "lint-staged": "^13.0.3",
+        "orval": "^6.8.1",
         "prettier": "2.7.1",
         "typescript": "4.7.3",
         "typescript-styled-plugin": "^0.18.2"
@@ -56,6 +60,7 @@
     "eslintIgnore": [
         "node_modules",
         "coverage",
-        "dist"
+        "dist",
+        "src/common/queries"
     ]
 }

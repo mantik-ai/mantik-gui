@@ -8,8 +8,8 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
-import { Route } from '../../types/route'
 import styled from '@emotion/styled'
+import { Route } from '../../types/route'
 
 const VerticalDivider = styled.div`
     border: 1px solid white;
