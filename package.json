@@ -13,7 +13,8 @@
         "cypress": "cypress open",
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test start http://localhost:3000 cypress",
-        "test:e2e:headless": "start-server-and-test start http://localhost:3000 cypress:headless"
+        "test:e2e:headless": "start-server-and-test start http://localhost:3000 cypress:headless",
+        "typecheck": "tsc --noEmit --project tsconfig.json"
     },
     "dependencies": {
         "@emotion/react": "^11.9.3",
