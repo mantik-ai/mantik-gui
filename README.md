@@ -1,6 +1,10 @@
-# mantik-gui
+# Project mantik-gui
 
 A project for the development and administration of AI or ML related problems
+
+Preview under
+ https://mantik-gui.vercel.app
+ 
 
 ## Tech Stack
 
@@ -11,3 +15,9 @@ A project for the development and administration of AI or ML related problems
 -   [Axios](https://github.com/axios/axios)
 
 **Linting and Code formatting** with eslint and prettier
+
+## Getting Started
+
+-   Clone the repository
+-   Install dependencies with `npm install`
+-   Run `npm run dev` to start the development server locally (default port is 3000)

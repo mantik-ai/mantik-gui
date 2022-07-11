@@ -1,80 +1,139 @@
-import {
-    AppBar,
-    Button,
-    Container,
-    MenuItem,
-    Toolbar,
-    Typography,
-} from '@mui/material'
+import * as React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Divider from '@mui/material/Divider'
+import Drawer from '@mui/material/Drawer'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import MenuIcon from '@mui/icons-material/Menu'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 import Link from 'next/link'
-import React from 'react'
-import { Route } from '../../types/route'
-import styled from '@emotion/styled'
+import { Button, MenuItem, Stack } from '@mui/material'
+import { NavbarProps } from '../../types/navbarProps'
 
-const VerticalDivider = styled.div`
-    border: 1px solid white;
-    width: 0;
-    margin: 0 1em;
-`
-const Spacing = styled.div`
-    margin: 0 3%;
-`
+const drawerWidth = 240
 
-interface NavbarProps {
-    routes: Route[]
-}
-export const Navbar = (props: NavbarProps) => {
+export default function Navbar(props: NavbarProps) {
+    const [mobileOpen, setMobileOpen] = React.useState(false)
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen)
+    }
+
+    const drawer = (
+        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+            <Typography variant={'h2'} color="primary">
+                MantikUI
+            </Typography>
+            <Divider />
+            <List>
+                {props.routes
+                    .filter((route) => route.positions.includes('drawer'))
+                    .map((route) => (
+                        <Link href={route.path} key={route.name}>
+                            <MenuItem>
+                                <Typography variant="h5" color="primary.dark">
+                                    {route.name}
+                                </Typography>
+                            </MenuItem>
+                        </Link>
+                    ))}
+            </List>
+        </Box>
+    )
+
     return (
-        <AppBar component="nav" position="static">
-            <Toolbar>
-                <Link href="/">
-                    <MenuItem>
-                        <Typography
-                            color="white"
-                            variant="h5"
-                            component="div"
-                            sx={{ flexGrow: 1 }}
+        <>
+            <AppBar component="nav">
+                <Toolbar>
+                    <IconButton
+                        color="secondary"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ display: { sm: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h2"
+                        color="white"
+                        display={{ xs: 'none', md: 'block' }}
+                        mr={8}
+                    >
+                        MantikUI
+                    </Typography>
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Stack direction={'row'}>
+                            {props.routes
+                                .filter((route) =>
+                                    route.positions.includes('navbar')
+                                )
+                                .map((route) => (
+                                    <Link href={route.path} key={route.name}>
+                                        <MenuItem>
+                                            <Typography
+                                                variant="h5"
+                                                color="secondary"
+                                            >
+                                                {route.name}
+                                            </Typography>
+                                        </MenuItem>
+                                    </Link>
+                                ))}
+                        </Stack>
+                    </Box>
+
+                    <Stack
+                        direction={'row'}
+                        justifyContent={'end'}
+                        flex={1}
+                        spacing={2}
+                    >
+                        <Button color="secondary" variant="outlined">
+                            Register
+                        </Button>
+                        <Divider
+                            orientation="vertical"
+                            flexItem
+                            sx={{ borderColor: 'white' }}
+                        />
+                        <Button
+                            size={'small'}
+                            color="secondary"
+                            variant="contained"
+                            sx={{ color: '#4F98F5' }}
                         >
-                            MantikAI
-                        </Typography>
-                    </MenuItem>
-                </Link>
-                <Spacing />
-                {props.routes.map((route) => (
-                    <Link href={route.path} key={route.name}>
-                        <MenuItem>
-                            <Typography textAlign="center" color="white">
-                                {route.name}
-                            </Typography>
-                        </MenuItem>
-                    </Link>
-                ))}
-                <Container
-                    maxWidth={false}
+                            login
+                        </Button>
+                    </Stack>
+                </Toolbar>
+            </AppBar>
+
+            <Box component="nav">
+                <Drawer
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
                     sx={{
-                        display: 'flex',
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'end',
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': {
+                            boxSizing: 'border-box',
+                            width: drawerWidth,
+                        },
                     }}
                 >
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        sx={{ color: '#4F98F5' }}
-                    >
-                        Register
-                    </Button>
-                    <VerticalDivider></VerticalDivider>
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        sx={{ color: '#4F98F5' }}
-                    >
-                        Login
-                    </Button>
-                </Container>
-            </Toolbar>
-        </AppBar>
+                    {drawer}
+                </Drawer>
+            </Box>
+
+            <Box component="main" sx={{ p: 3, padding: 0 }}>
+                <Toolbar />
+            </Box>
+        </>
     )
 }
