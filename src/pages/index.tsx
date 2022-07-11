@@ -1,6 +1,6 @@
 import React from 'react'
-import type {NextPage} from 'next'
-import {Button, Stack, Typography} from '@mui/material'
+import type { NextPage } from 'next'
+import { Button, Stack, Typography } from '@mui/material'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 
@@ -13,9 +13,9 @@ const Home: NextPage = () => {
             spacing={4}
             sx={{
                 backgroundImage: {
-                    md: "url(/images/balloon.svg), url(/images/cloud1.svg), url(/images/cloud2.svg), url(/images/cloud3.svg), url(/images/cloud4.svg)",
-                    sm: "url(/images/balloon.svg), url(/images/cloud1.svg), url(/images/cloud2.svg), url(/images/cloud4.svg)",
-                    xs: "url(/images/balloon.svg), url(/images/cloud1.svg)",
+                    md: 'url(/images/balloon.svg), url(/images/cloud1.svg), url(/images/cloud2.svg), url(/images/cloud3.svg), url(/images/cloud4.svg)',
+                    sm: 'url(/images/balloon.svg), url(/images/cloud1.svg), url(/images/cloud2.svg), url(/images/cloud4.svg)',
+                    xs: 'url(/images/balloon.svg), url(/images/cloud1.svg)',
                 },
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: {
@@ -30,17 +30,17 @@ const Home: NextPage = () => {
 
             <Typography variant="h4" textAlign="center">
                 Enhance the AI Modeler&apos;s life,
-                <br/>
+                <br />
                 by solving BIG problems.
             </Typography>
 
-            <Stack spacing={4} direction={{xs: 'column', sm: 'row'}}>
+            <Stack spacing={4} direction={{ xs: 'column', sm: 'row' }}>
                 <Button
                     style={{
                         color: 'white',
                         minWidth: '260px',
                     }}
-                    endIcon={<ArrowForwardIcon/>}
+                    endIcon={<ArrowForwardIcon />}
                     color="primary"
                     variant="contained"
                 >
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
                     style={{
                         minWidth: '260px',
                     }}
-                    endIcon={<PersonOutlineIcon/>}
+                    endIcon={<PersonOutlineIcon />}
                     color="primary"
                     variant="outlined"
                 >
