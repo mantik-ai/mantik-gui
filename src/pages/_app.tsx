@@ -2,17 +2,23 @@ import React from 'react'
 import type { AppProps } from 'next/app'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import MainLayout from '../common/layouts/MainLayout'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import '../styles/global.css'
 import { defaultTheme } from '../common/themes/default'
 
 function MantikApp({ Component, pageProps }: AppProps) {
+    const [queryClient] = React.useState(() => new QueryClient())
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <MainLayout>
-                <Component {...pageProps} />
-            </MainLayout>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={defaultTheme}>
+                <CssBaseline />
+                <MainLayout>
+                    <Component {...pageProps} />
+                </MainLayout>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </ThemeProvider>
+        </QueryClientProvider>
     )
 }
 
