@@ -24,7 +24,7 @@ export default function Navbar(props: NavbarProps) {
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
             <Typography variant={'h2'} color="primary">
-                MantikUI
+                Mantik
             </Typography>
             <Divider />
             <List>
@@ -52,19 +52,22 @@ export default function Navbar(props: NavbarProps) {
                         aria-label="open drawer"
                         edge="start"
                         onClick={handleDrawerToggle}
-                        sx={{ display: { sm: 'none' } }}
+                        sx={{ display: { md: 'none' } }}
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography
-                        variant="h2"
-                        color="white"
-                        display={{ xs: 'none', md: 'block' }}
-                        mr={8}
-                    >
-                        MantikUI
-                    </Typography>
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                    <Link href={'/'}>
+                        <Typography
+                            variant="h2"
+                            color="white"
+                            display={{ xs: 'none', sm: 'block' }}
+                            mr={8}
+                            ml={2}
+                        >
+                            Mantik
+                        </Typography>
+                    </Link>
+                    <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                         <Stack direction={'row'}>
                             {props.routes
                                 .filter((route) =>
@@ -91,23 +94,28 @@ export default function Navbar(props: NavbarProps) {
                         flex={1}
                         spacing={2}
                     >
-                        <Button href={'/register'} color="secondary" variant="outlined">
-                            register
-                        </Button>
+                        <Link href={'/register'} passHref>
+                            <Button color="secondary" variant="outlined">
+                                register
+                            </Button>
+                        </Link>
                         <Divider
                             orientation="vertical"
                             flexItem
                             sx={{ borderColor: 'white' }}
                         />
-                        <Button
-                            href={'/login'}
-                            size={'small'}
-                            color="secondary"
-                            variant="contained"
-                            sx={{ color: '#4F98F5' }}
-                        >
-                            login
-                        </Button>
+
+                        <Link href={'/login'} passHref>
+                            <Button
+                                href={'/login'}
+                                size={'small'}
+                                color="secondary"
+                                variant="contained"
+                                sx={{ color: '#4F98F5' }}
+                            >
+                                login
+                            </Button>
+                        </Link>
                     </Stack>
                 </Toolbar>
             </AppBar>
@@ -121,7 +129,7 @@ export default function Navbar(props: NavbarProps) {
                         keepMounted: true, // Better open performance on mobile.
                     }}
                     sx={{
-                        display: { xs: 'block', sm: 'none' },
+                        display: { xs: 'block', md: 'none' },
                         '& .MuiDrawer-paper': {
                             boxSizing: 'border-box',
                             width: drawerWidth,

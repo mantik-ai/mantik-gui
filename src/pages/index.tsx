@@ -26,7 +26,7 @@ const Home: NextPage = () => {
                 },
             }}
         >
-            <Typography variant="h1">MantikUI</Typography>
+            <Typography variant="h1">Mantik</Typography>
 
             <Typography variant="h4" textAlign="center">
                 Enhance the AI Modeler&apos;s life,
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
                     color="primary"
                     variant="outlined"
                 >
-                    sign up
+                    register
                 </Button>
             </Stack>
         </Stack>
