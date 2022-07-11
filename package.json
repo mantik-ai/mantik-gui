@@ -53,10 +53,10 @@
         "typescript-styled-plugin": "^0.18.2"
     },
     "lint-staged": {
-        "src/*.{css,less,scss,html,json,jsx,js,ts}": [
+        "src/**/*.{css,less,scss,html,json,jsx,js,ts}": [
             "prettier --write ."
         ],
-        "src/*.{js,ts}": "eslint --fix"
+        "src/**/*.{js,ts}": "eslint --fix"
     },
     "eslintIgnore": [
         "node_modules",
