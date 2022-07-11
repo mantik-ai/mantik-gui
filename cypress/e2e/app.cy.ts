@@ -8,3 +8,5 @@ describe('Main App', () => {
         expect(true).to.be.equal(true)
     })
 })
+
+export {}
