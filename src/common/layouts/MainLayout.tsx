@@ -1,13 +1,8 @@
+import { Box } from '@mui/material'
 import React from 'react'
-import styled from '@emotion/styled'
 import { Footer } from '../components/footer/Footer'
 import Navbar from '../components/navbar/Navbar'
 import { Route } from '../types/route'
-
-const Content = styled.main`
-    height: 100%;
-    position: relative;
-`
 
 const routes: Route[] = [
     { name: 'About', path: '/about', positions: ['navbar', 'drawer'] },
@@ -25,8 +20,9 @@ interface MainLayoutProps {
 const Layout: React.FC<MainLayoutProps> = (props) => {
     return (
         <>
-            <Content
+            <Box
                 style={{
+                    position: 'relative',
                     height: '100vh',
                     display: 'flex',
                     flexFlow: 'column',
@@ -35,7 +31,7 @@ const Layout: React.FC<MainLayoutProps> = (props) => {
                 <Navbar routes={routes} />
                 {props.children}
                 <Footer routes={routes} />
-            </Content>
+            </Box>
         </>
     )
 }
