@@ -3,7 +3,8 @@ import type { NextPage } from 'next'
 import { Box, useTheme } from '@mui/material'
 import { SearchHeading } from '../../modules/projects_overview/components/SearchHeading'
 import { SearchSideBar } from '../../modules/projects_overview/components/SearchSideBar'
-import { SearchParameterProvider } from '../../modules/projects_overview/contexts/SearchContext'
+import { SearchParameterProvider } from '../../modules/projects_overview/contexts/SearchParameterContext'
+import { ProjectList } from '../../modules/projects_overview/components/ProjectList'
 
 const Projects: NextPage = () => {
     const theme = useTheme()
@@ -21,7 +22,9 @@ const Projects: NextPage = () => {
                     <Box flex={1}>
                         <SearchSideBar></SearchSideBar>
                     </Box>
-                    <Box display="flex" flex={3} color={'blue'}></Box>
+                    <Box display="flex" flex={3} color={'blue'}>
+                        <ProjectList></ProjectList>
+                    </Box>
                 </Box>
             </Box>
         </SearchParameterProvider>

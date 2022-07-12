@@ -7,12 +7,16 @@ import {
     Select,
     Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
+import SearchParamerterContext, {
+    SortType,
+} from '../contexts/SearchParameterContext'
 
 interface SearchHeadingProps {
     children: React.ReactNode
 }
 export const SearchHeading = (props: SearchHeadingProps) => {
+    const searchParameterContext = useContext(SearchParamerterContext)
     return (
         <Box
             sx={{
@@ -25,19 +29,27 @@ export const SearchHeading = (props: SearchHeadingProps) => {
                 <Typography variant="h4">{props.children}</Typography>
                 <Box sx={{ width: '6em', mb: '0.5em' }}>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">
-                            Sort
-                        </InputLabel>
+                        <InputLabel id="id-sort-type">Sort</InputLabel>
                         <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            // value={age}
+                            labelId="id-sort-type"
+                            id="id-sort-type-select"
+                            value={searchParameterContext.sortType!}
                             label="Sort"
-                            // onChange={handleChange}
+                            onChange={(e) =>
+                                searchParameterContext.setSortType!(
+                                    e.target.value as SortType
+                                )
+                            }
                         >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            {Object.values(SortType)
+                                .filter((v) => !isNaN(Number(v)))
+                                .map((typeIdx) => (
+                                    <MenuItem key={typeIdx} value={typeIdx}>
+                                        {SortType[
+                                            Number(typeIdx)
+                                        ].toLocaleLowerCase()}
+                                    </MenuItem>
+                                ))}
                         </Select>
                     </FormControl>
                 </Box>

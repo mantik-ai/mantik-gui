@@ -6,18 +6,20 @@ import {
     FormControlLabel,
     FormGroup,
     Link as MUILink,
-    List,
     TextField,
     Typography,
     useTheme,
 } from '@mui/material'
 import Link from 'next/link'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
+import SearchParamerterContext from '../contexts/SearchParameterContext'
 
 export const SearchSideBar = () => {
     const theme = useTheme()
-    const problemType = ['Regression', 'Classification']
+
+    const searchParameterContext = useContext(SearchParamerterContext)
+
     const sharedProjects: { name: string; id: string }[] = [
         { name: 'Wind-power output regression', id: 'asdffads' },
         {
@@ -28,48 +30,65 @@ export const SearchSideBar = () => {
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
-            <List>
-                <FormControl fullWidth>
-                    <TextField
-                        id="outlined-basic"
-                        label="Search
-                        "
-                        variant="outlined"
-                    />
-                    <Spacing value={theme.spacing(4)}></Spacing>
+            <Spacing value={theme.spacing(4)}></Spacing>
+            <FormControl fullWidth>
+                <TextField
+                    id="search-string"
+                    label="Search"
+                    variant="outlined"
+                    value={searchParameterContext.searchString!}
+                    onChange={(e) =>
+                        searchParameterContext.setSearchString!(e.target.value)
+                    }
+                />
+                <Spacing value={theme.spacing(4)}></Spacing>
 
-                    <Typography variant="caption">Problem Type</Typography>
-                    <FormGroup>
-                        {problemType.map((text, _) => (
+                <Typography variant="caption">Problem Type</Typography>
+                <FormGroup>
+                    {searchParameterContext.problemTypes!.map(
+                        (problemType, i) => (
                             <FormControlLabel
+                                key={problemType.name}
+                                id={`problem-type-${problemType.name.toLowerCase()}`}
                                 control={<Checkbox />}
-                                label={text}
+                                label={problemType.name}
+                                value={
+                                    searchParameterContext.problemTypes![i]
+                                        .active
+                                }
+                                onChange={(_, checked) =>
+                                    searchParameterContext.setProblemType!(
+                                        i,
+                                        checked
+                                    )
+                                }
                             />
-                        ))}
-                    </FormGroup>
-                    <Divider />
-                    <Spacing value={theme.spacing(4)}></Spacing>
+                        )
+                    )}
+                </FormGroup>
+                <Divider />
+                <Spacing value={theme.spacing(4)}></Spacing>
 
-                    <Typography variant="caption">Shared projects</Typography>
-                    <Spacing value={theme.spacing(1)}></Spacing>
-                    {sharedProjects.map((project, _) => (
-                        <Link
+                <Typography variant="caption">Shared projects</Typography>
+                <Spacing value={theme.spacing(1)}></Spacing>
+                {sharedProjects.map((project, _) => (
+                    <Link
+                        key={project.id}
+                        color="inherit"
+                        href={`/projects/details/${project.id}`}
+                    >
+                        <MUILink
+                            paragraph
+                            variant="body1"
                             color="inherit"
-                            href={`/projects/details/${project.id}`}
+                            underline="none"
+                            sx={{ cursor: 'pointer' }}
                         >
-                            <MUILink
-                                paragraph
-                                variant="body1"
-                                color="inherit"
-                                underline="none"
-                                sx={{ cursor: 'pointer' }}
-                            >
-                                {project.name}
-                            </MUILink>
-                        </Link>
-                    ))}
-                </FormControl>
-            </List>
+                            {project.name}
+                        </MUILink>
+                    </Link>
+                ))}
+            </FormControl>
         </Box>
     )
 }
