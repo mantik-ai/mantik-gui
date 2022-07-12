@@ -111,7 +111,7 @@ export default function Navbar(props: NavbarProps) {
                                 size={'small'}
                                 color="secondary"
                                 variant="contained"
-                                sx={{ color: '#4F98F5' }}
+                                sx={{ color: 'primary.main' }}
                             >
                                 login
                             </Button>

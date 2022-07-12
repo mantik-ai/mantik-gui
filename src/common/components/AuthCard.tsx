@@ -1,5 +1,3 @@
-import React from 'react'
-import type { NextPage } from 'next'
 import {
     Button,
     Card,
@@ -8,22 +6,46 @@ import {
     IconButton,
     Link,
     Stack,
-    TextField,
     Typography,
 } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import React, { ReactNode } from 'react'
+import { SvgIconComponent } from '@mui/icons-material'
 import GoogleIcon from '@mui/icons-material/Google'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import { Links } from '../../common/types/links'
+import { Links } from '../types/links'
 
-const loginWith: Links[] = [
+export const enum AuthCardTypes {
+    LOGIN = 'login',
+    REGISTER = 'register',
+}
+
+interface AuthCardProps {
+    icon: SvgIconComponent
+    fields: ReactNode[]
+    type: AuthCardTypes
+}
+
+const externAuth: Links[] = [
     { url: 'https://example.com/4', icon: <GoogleIcon /> },
     { url: 'https://example.com/5', icon: <FacebookOutlinedIcon /> },
     { url: 'https://example.com/6', icon: <GitHubIcon /> },
 ]
 
-const Login: NextPage = () => {
+export const AuthCard = (props: AuthCardProps) => {
+    let linkText = ''
+
+    switch (props.type) {
+        case AuthCardTypes.LOGIN:
+            linkText = 'Not yet registered?'
+            break
+        case AuthCardTypes.REGISTER:
+            linkText = 'Already registered?'
+            break
+        default:
+            break
+    }
+
     return (
         <Stack alignItems={'center'} justifyContent={'center'} flexGrow={1}>
             <Card
@@ -37,7 +59,7 @@ const Login: NextPage = () => {
                 }}
             >
                 <Divider textAlign="left">
-                    <LockOutlinedIcon
+                    <props.icon
                         sx={{
                             fontSize: '3rem',
                             backgroundColor: 'primary.main',
@@ -55,42 +77,36 @@ const Login: NextPage = () => {
                             justifyContent="space-between"
                             alignItems="center"
                         >
-                            <Typography variant="h4">Login</Typography>
+                            <Typography variant="h4" textTransform="capitalize">
+                                {props.type}
+                            </Typography>
                             <Link
-                                href={'/register'}
+                                href={'/login'}
                                 variant="body2"
                                 color="textSecondary"
                                 align="right"
                             >
-                                Not yet registered?
+                                {linkText}
                             </Link>
                         </Stack>
-                        <TextField
-                            label="email"
-                            variant="outlined"
-                            type={'email'}
-                            required
-                        />
-                        <TextField
-                            label="password"
-                            variant="outlined"
-                            type={'password'}
-                            required
-                        />
-                        <Link
-                            variant="body2"
-                            color="textSecondary"
-                            align="left"
-                        >
-                            Forgot password?
-                        </Link>
+                        {props.fields}
+
+                        {props.type === AuthCardTypes.LOGIN && (
+                            <Link
+                                variant="body2"
+                                color="textSecondary"
+                                align="left"
+                            >
+                                Forgot password?
+                            </Link>
+                        )}
                         <Button
                             variant="contained"
                             style={{
                                 color: 'white',
                             }}
                         >
-                            login
+                            {props.type}
                         </Button>
                         <Divider sx={{ py: 1 }}>
                             <Typography
@@ -98,7 +114,7 @@ const Login: NextPage = () => {
                                 color="textSecondary"
                                 align="center"
                             >
-                                or login with
+                                or {props.type} with
                             </Typography>
                         </Divider>
                         <Stack
@@ -106,7 +122,7 @@ const Login: NextPage = () => {
                             justifyContent="center"
                             spacing={1}
                         >
-                            {loginWith.map(({ url, icon }) => (
+                            {externAuth.map(({ url, icon }) => (
                                 <IconButton
                                     style={{ border: '1px solid #80808066' }}
                                     key={url}
@@ -122,5 +138,3 @@ const Login: NextPage = () => {
         </Stack>
     )
 }
-
-export default Login
