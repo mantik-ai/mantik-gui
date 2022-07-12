@@ -30,6 +30,7 @@
         "react-query": "^3.39.1"
     },
     "devDependencies": {
+        "@faker-js/faker": "^7.3.0",
         "@testing-library/cypress": "^8.0.3",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
@@ -47,6 +48,7 @@
         "eslint-plugin-react-hooks": "^4.3.0",
         "husky": "^8.0.0",
         "lint-staged": "^13.0.3",
+        "msw": "^0.43.1",
         "orval": "^6.8.1",
         "prettier": "2.7.1",
         "typescript": "4.7.3",
@@ -63,5 +65,8 @@
         "coverage",
         "dist",
         "src/common/queries"
-    ]
+    ],
+    "msw": {
+        "workerDirectory": "public"
+    }
 }

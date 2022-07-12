@@ -10,9 +10,15 @@ import '@fontsource/blinker/300.css'
 import '@fontsource/blinker/400.css'
 import '@fontsource/blinker/600.css'
 import '@fontsource/blinker/700.css'
+import { setupMSW } from '../common/debug'
+
+if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
+    setupMSW()
+}
 
 function MantikApp({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient())
+
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={defaultTheme}>
