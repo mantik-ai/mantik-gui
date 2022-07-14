@@ -6,7 +6,6 @@ module.exports = {
             schemas: './models',
             client: 'react-query',
             mode: 'tags-split',
-            mock: true,
         },
         input: {
             target: './doc/api/mantik-api-spec.yaml',

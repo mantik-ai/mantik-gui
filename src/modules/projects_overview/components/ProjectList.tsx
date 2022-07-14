@@ -36,16 +36,10 @@ export const ProjectList = (props: ProjectListProps) => {
     return (
         <List>
             {data?.data.map((project) => (
-                <>
-                    <ProjectEntry
-                        key={project.projectId}
-                        project={project}
-                    ></ProjectEntry>
-                    <Spacing
-                        key={`spacing-${project.projectId}`}
-                        value={theme.spacing(2)}
-                    />
-                </>
+                <Box key={project.projectId}>
+                    <ProjectEntry project={project}></ProjectEntry>
+                    <Spacing value={theme.spacing(2)} />
+                </Box>
             ))}
         </List>
     )

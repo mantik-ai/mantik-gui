@@ -10,15 +10,11 @@ import '@fontsource/blinker/300.css'
 import '@fontsource/blinker/400.css'
 import '@fontsource/blinker/600.css'
 import '@fontsource/blinker/700.css'
-import { setupMSW } from '../common/debug'
 import axios from 'axios'
+import getConfig from 'next/config'
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
-    setupMSW()
-}
-
-// for api mocking purposes
-axios.defaults.baseURL = 'https://www.google.com/'
+const { publicRuntimeConfig } = getConfig()
+axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
 
 function MantikApp({ Component, pageProps }: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient())
