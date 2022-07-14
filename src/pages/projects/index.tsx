@@ -22,7 +22,15 @@ const Projects: NextPage = () => {
                     <Box flex={1}>
                         <SearchSideBar></SearchSideBar>
                     </Box>
-                    <Box display="flex" flex={3} color={'blue'}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            padding: theme.spacing(4),
+                        }}
+                        flex={3}
+                        color={'blue'}
+                    >
                         <ProjectList></ProjectList>
                     </Box>
                 </Box>

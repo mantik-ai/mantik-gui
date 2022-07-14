@@ -13,20 +13,13 @@ import {
 import Link from 'next/link'
 import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
+import { useGetProjectsUserUserId } from '../../../common/queries'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
 
 export const SearchSideBar = () => {
     const theme = useTheme()
-
     const searchParameterContext = useContext(SearchParamerterContext)
-
-    const sharedProjects: { name: string; id: string }[] = [
-        { name: 'Wind-power output regression', id: 'asdffads' },
-        {
-            name: 'renewable energy sentiment analysis for the german population',
-            id: 'gffdsafdsf',
-        },
-    ]
+    const { data, error } = useGetProjectsUserUserId(500)
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
@@ -71,11 +64,11 @@ export const SearchSideBar = () => {
 
                 <Typography variant="caption">Shared projects</Typography>
                 <Spacing value={theme.spacing(1)}></Spacing>
-                {sharedProjects.map((project, _) => (
+                {data?.data.map((project) => (
                     <Link
-                        key={project.id}
+                        key={project.projectId}
                         color="inherit"
-                        href={`/projects/details/${project.id}`}
+                        href={`/projects/details/${project.projectId}`}
                     >
                         <MUILink
                             paragraph
@@ -84,7 +77,7 @@ export const SearchSideBar = () => {
                             underline="none"
                             sx={{ cursor: 'pointer' }}
                         >
-                            {project.name}
+                            {project.projectId}
                         </MUILink>
                     </Link>
                 ))}

@@ -5,34 +5,28 @@ import {
     CardContent,
     Typography,
 } from '@mui/material'
+import Link from 'next/link'
 import React from 'react'
+import { Project } from '../../../common/queries'
 
-interface ProjectEntryProps {}
+interface ProjectEntryProps {
+    project: Project
+}
 export const ProjectEntry = (props: ProjectEntryProps) => {
     return (
         <Card>
             <CardContent>
-                <Typography
-                    sx={{ fontSize: 14 }}
-                    color="text.secondary"
-                    gutterBottom
-                >
-                    Word of the Day
-                </Typography>
                 <Typography variant="h5" component="div">
-                    Test
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
+                    {props.project.projectId}
                 </Typography>
                 <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
+                    from {props.project.owner.name}
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Learn More</Button>
+                <Link href={`/projects/details/${props.project.projectId}`}>
+                    <Button size="small">View details</Button>
+                </Link>
             </CardActions>
         </Card>
     )
