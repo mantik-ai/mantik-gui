@@ -737,6 +737,42 @@ paths:
           '200':
             description: Successfully updated model repository
 
+  /projects/user/{userId}/recommendation:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: searchString
+        in: query
+        schema:
+          type: string
+      - name: labels
+        in: query
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+      - name: holderId
+        in: query
+        description: The Owner / Group / Organisation that owns the repo
+        schema:
+          type: integer
+    get:
+      summary:
+        Return a curation of projects tailored for a specific user with a set of
+        search parameters
+      responses:
+        '200':
+          description: Successully returned a recommendation of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelRepository'
+
 
   /groups:
     get:
