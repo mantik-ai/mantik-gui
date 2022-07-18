@@ -722,7 +722,7 @@ paths:
                 '200':
                     description: Successfully updated model repository
 
-    /projects/user/{userId}/recommendation:
+    /projects/user/{userId}/search:
         parameters:
             - name: userId
               in: path
