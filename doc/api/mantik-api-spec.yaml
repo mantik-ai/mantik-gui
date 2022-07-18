@@ -765,7 +765,7 @@ paths:
                 search parameters
             responses:
                 '200':
-                    description: Successully returned a recommendation of projects
+                    description: Successully returned projects that match the search
                     content:
                         application/json:
                             schema:
