@@ -18,7 +18,12 @@ const Projects: NextPage = () => {
                 }}
             >
                 <SearchHeading>Projects</SearchHeading>
-                <Box sx={{ display: 'flex' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                    }}
+                >
                     <Box flex={1}>
                         <SearchSideBar></SearchSideBar>
                     </Box>
@@ -26,7 +31,10 @@ const Projects: NextPage = () => {
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            padding: theme.spacing(4),
+                            padding: {
+                                sx: theme.spacing(2),
+                                md: theme.spacing(4),
+                            },
                         }}
                         flex={3}
                         color={'blue'}

@@ -2,6 +2,7 @@ import {
     Box,
     CircularProgress,
     List,
+    Stack,
     Typography,
     useTheme,
 } from '@mui/material'
@@ -39,13 +40,13 @@ export const ProjectList = (props: ProjectListProps) => {
     }
 
     return (
-        <List>
+        <Stack spacing={theme.spacing(2)}>
             {data?.data.map((project) => (
-                <Box key={project.projectId}>
-                    <ProjectEntry project={project}></ProjectEntry>
-                    <Spacing value={theme.spacing(2)} />
-                </Box>
+                <ProjectEntry
+                    key={project.projectId}
+                    project={project}
+                ></ProjectEntry>
             ))}
-        </List>
+        </Stack>
     )
 }

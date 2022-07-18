@@ -8,18 +8,26 @@ import {
     Link as MUILink,
     TextField,
     Typography,
+    useMediaQuery,
     useTheme,
 } from '@mui/material'
+import { AxiosResponse } from 'axios'
 import Link from 'next/link'
 import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
-import { useGetProjectsUserUserId } from '../../../common/queries'
+import { Project, useGetProjectsUserUserId } from '../../../common/queries'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
 
 export const SearchSideBar = () => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
+
+    const upToMediumSize = useMediaQuery(theme.breakpoints.up('md'))
+    // let projectsData: AxiosResponse<Project[], any> | undefined
+    // if (upToMediumSize) {
     const { data } = useGetProjectsUserUserId(500)
+    // projectsData = data
+    // }
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
@@ -61,26 +69,29 @@ export const SearchSideBar = () => {
                 </FormGroup>
                 <Divider />
                 <Spacing value={theme.spacing(4)}></Spacing>
-
-                <Typography variant="caption">Your Projects</Typography>
-                <Spacing value={theme.spacing(1)}></Spacing>
-                {data?.data.map((project) => (
-                    <Link
-                        key={project.projectId}
-                        color="inherit"
-                        href={`/projects/details/${project.projectId}`}
-                    >
-                        <MUILink
-                            paragraph
-                            variant="body1"
-                            color="inherit"
-                            underline="none"
-                            sx={{ cursor: 'pointer' }}
-                        >
-                            {project.projectId}
-                        </MUILink>
-                    </Link>
-                ))}
+                {upToMediumSize ? (
+                    <>
+                        <Typography variant="caption">Your Projects</Typography>
+                        <Spacing value={theme.spacing(1)}></Spacing>
+                        {data?.data.map((project) => (
+                            <Link
+                                key={project.projectId}
+                                color="inherit"
+                                href={`/projects/details/${project.projectId}`}
+                            >
+                                <MUILink
+                                    paragraph
+                                    variant="body1"
+                                    color="inherit"
+                                    underline="none"
+                                    sx={{ cursor: 'pointer' }}
+                                >
+                                    {project.projectId}
+                                </MUILink>
+                            </Link>
+                        ))}
+                    </>
+                ) : null}
             </FormControl>
         </Box>
     )
