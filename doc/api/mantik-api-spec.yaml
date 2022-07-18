@@ -1,8 +1,8 @@
-openapi: "3.0.2"
+openapi: '3.0.2'
 info:
-  title: Mantik minimal API
-  description: The API serves the front end with all necessary information on projects, and users.
-  version: "0.1.0"
+    title: Mantik minimal API
+    description: The API serves the front end with all necessary information on projects, and users.
+    version: '0.1.0'
 
 servers:
     - url: https://api.server.test/v1
@@ -11,891 +11,871 @@ servers:
 #    - url: http://dev.mantik.ai
 #      description: dev infrastructure for testing until review apps do fully work with github
 
-
 components:
-  schemas:
-    errorMessage:
-      type: string
-      maxLength: 1024
-      description: An error message
-    Settings:
-      type: object
-      description: User settings
-      properties:
-        user:
-          $ref: '#/components/schemas/User'
-        password:
-          type: string
-        token:
-          type: string
+    schemas:
+        errorMessage:
+            type: string
+            maxLength: 1024
+            description: An error message
+        Settings:
+            type: object
+            description: User settings
+            properties:
+                user:
+                    $ref: '#/components/schemas/User'
+                password:
+                    type: string
+                token:
+                    type: string
+                paymentInfo:
+                    $ref: '#/components/schemas/paymentInfo'
+                connections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Connection'
+            required:
+                - user
+                - password
+        Project:
+            type: object
+            description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
+            properties:
+                projectId:
+                    type: string
+                owner:
+                    $ref: '#/components/schemas/User'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserGroup'
+                codeRepositories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/CodeRepository'
+                experimentRepositories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ExperimentRepository'
+                dataRepositories:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DataRepository'
+            required:
+                - projectId
+                - owner
+        Connection:
+            type: object
+            description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
+            properties:
+                connectionId:
+                    type: integer
+                connectionName:
+                    type: string
+                connectionProvider:
+                    type: string
+                loginName:
+                    type: string
+                password:
+                    type: string
+                token:
+                    type: string
+                authMethod:
+                    type: string
+            required:
+                - connectionId
+                - connectionName
+                - connectionProvider
+        ExperimentRepository:
+            type: object
+            description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
+            properties:
+                experimentId:
+                    type: string
+                name:
+                    type: string
+                artifact_location:
+                    type: string
+                lifecycle_stage:
+                    type: string
+                last_update_time:
+                    type: integer
+                creation_time:
+                    type: integer
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - experimentId
+        User:
+            type: object
+            description: Represents a user
+            properties:
+                userId:
+                    type: integer
+                name:
+                    type: string
+                email:
+                    type: string
+            required:
+                - userId
+                - name
+                - email
+        CodeRepository:
+            type: object
+            description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
+            properties:
+                codeRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - codeRepositoryId
+                - uri
+        DataRepository:
+            type: object
+            description: Represents a data repository
+            properties:
+                dataRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - dataRepositoryId
+                - uri
+        ModelRepository:
+            type: object
+            description: Represents a model
+            properties:
+                modelRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                git:
+                    $ref: '#/components/schemas/CodeRepository'
+                commit:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - modelRepositoryId
+                - uri
+        UserGroup:
+            type: object
+            description: Represents a user group
+            properties:
+                userGroupId:
+                    type: string
+                name:
+                    type: string
+                admin:
+                    $ref: '#/components/schemas/User'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - userGroupId
+                - name
+                - admin
+        Organization:
+            type: object
+            description: Represents an organization, i.e. a collection of user groups and users
+            properties:
+                organizationId:
+                    type: string
+                name:
+                    type: string
+                contact:
+                    $ref: '#/components/schemas/User'
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserGroup'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - organizationId
+                - name
+                - contact
         paymentInfo:
-          $ref: '#/components/schemas/paymentInfo'
-        connections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection'
-      required:
-        - user
-        - password
-    Project:
-      type: object
-      description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
-      properties:
-        projectId:
-          type: string
-        owner: 
-          $ref: '#/components/schemas/User'
-        members: 
-          type: array
-          items:
-            $ref: '#/components/schemas/User' 
-        groups: 
-          type: array
-          items:
-            $ref: '#/components/schemas/UserGroup' 
-        codeRepositories:
-          type: array
-          items:
-            $ref: '#/components/schemas/CodeRepository'
-        experimentRepositories:
-          type: array
-          items: 
-            $ref: '#/components/schemas/ExperimentRepository'
-        dataRepositories:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataRepository'
-      required:
-        - projectId
-        - owner
-    Connection:
-      type: object
-      description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
-      properties: 
-        connectionId:
-          type: integer
-        connectionName:
-          type: string
-        connectionProvider:
-          type: string
-        loginName:
-          type: string
-        password:
-          type: string
-        token:
-          type: string
-        authMethod:
-          type: string
-      required:
-        - connectionId
-        - connectionName
-        - connectionProvider
-    ExperimentRepository:
-      type: object
-      description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
-      properties:
-        experimentId:
-          type: string
-        name:
-          type: string
-        artifact_location:
-          type: string
-        lifecycle_stage:
-          type: string
-        last_update_time:
-          type: integer
-        creation_time:
-          type: integer
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-      required:
-        - experimentId
-    User:
-      type: object
-      description: Represents a user
-      properties:
-        userId:
-          type: integer
-        name:
-          type: string
-        email:
-          type: string
-      required:
-        - userId
-        - name
-        - email
-    CodeRepository:
-      type: object
-      description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
-      properties:
-        codeRepositoryId:
-          type: string
-        uri:
-          type: string
-        description:
-          type: string
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-      required:
-        - codeRepositoryId
-        - uri
-    DataRepository:
-      type: object
-      description: Represents a data repository
-      properties:
-        dataRepositoryId:
-          type: string
-        uri: 
-          type: string
-        description:
-          type: string
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-      required:
-        - dataRepositoryId
-        - uri
-    ModelRepository:
-      type: object
-      description: Represents a model
-      properties:
-        modelRepositoryId:
-          type: string
-        uri:
-          type: string
-        description:
-          type: string
-        git:
-          $ref: '#/components/schemas/CodeRepository'
-        commit:
-          type: string
-        labels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-      required:
-        - modelRepositoryId
-        - uri
-    UserGroup:
-      type: object
-      description: Represents a user group
-      properties:
-        userGroupId:
-          type: string
-        name:
-          type: string
-        admin:
-          $ref: '#/components/schemas/User'
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-      required:
-        - userGroupId
-        - name
-        - admin
-    Organization:
-      type: object
-      description: Represents an organization, i.e. a collection of user groups and users
-      properties:
-        organizationId:
-          type: string
-        name:
-          type: string
-        contact:
-          $ref: '#/components/schemas/User'
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserGroup'
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-      required:
-        - organizationId
-        - name
-        - contact
-    paymentInfo:
-      type: object
-      description: Represents payment information
-      properties:
-        paymentInfoId:
-          type: string
-        address:
-          type: string
-        paymentMethod:
-          type: string
-        paymentDetails:
-          type: string
-      required:
-        - paymentInfoId
-        - address
-        - paymentMethod
-        - paymentDetails
-    Label:
-      type: object
-      description: Represents a label
-      properties:
-        key:
-          type: string
-        value:
-          type: string
-      required:
-        - key
-        - value
-
+            type: object
+            description: Represents payment information
+            properties:
+                paymentInfoId:
+                    type: string
+                address:
+                    type: string
+                paymentMethod:
+                    type: string
+                paymentDetails:
+                    type: string
+            required:
+                - paymentInfoId
+                - address
+                - paymentMethod
+                - paymentDetails
+        Label:
+            type: object
+            description: Represents a label
+            properties:
+                key:
+                    type: string
+                value:
+                    type: string
+            required:
+                - key
+                - value
 
 paths:
-  /users:
-    get:
-      summary: List of all users
-      description: List of all users (admin only)
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
+    /users:
+        get:
+            summary: List of all users
+            description: List of all users (admin only)
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/User'
+        put:
+            summary: Creates a new user
+            requestBody:
+                description: Creates a new user
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                userName:
+                                    type: string
+                                email:
+                                    type: string
+                        example:
+                            userName: black_panther
+                            email: panther@road_to_nowhere.wakanda
+            responses:
+                '201':
+                    description: Successfully created user
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    userId:
+                                        type: integer
+
+    /users/{userId}:
+        parameters:
+            - name: userId
+              in: path
+              required: true
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-    put:
-      summary: Creates a new user
-      requestBody:
-        description: Creates a new user
-        required: true
-        content: 
-          application/json:
-            schema: 
-              type: object
-              properties:
-                userName:
+                  type: integer
+        get:
+            summary: Returns the information on a specific user
+            responses:
+                '200':
+                    description: A json array with user information
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+        post:
+            summary: Update user info
+            requestBody:
+                description: Updated user info
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/User'
+            responses:
+                '200':
+                    description: Successfully updated user
+
+    /users/{userId}/settings:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns the settings for a specific user
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    settings:
+                                        $ref: '#/components/schemas/Settings'
+        post:
+            summary: Updates user settings
+            requestBody:
+                description: Updated user settings
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Settings'
+            responses:
+                '200':
+                    description: Successfully updated settings
+
+    /projects:
+        get:
+            summary: Returns all projects (admin only)
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Project'
+        put:
+            summary: Creates a new project
+            requestBody:
+                description: Project information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Project'
+            responses:
+                '201':
+                    description: Created new project
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    projectId:
+                                        type: string
+
+    /projects/user/{userId}:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns all projects for user with userId
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Project'
+
+    /projects/{projectId}:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns the information on a specific project
+            responses:
+                '200':
+                    description: Information on a specific project
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Project'
+        post:
+            summary: Update project
+            requestBody:
+                description: Updated project information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Project'
+            responses:
+                '200':
+                    description: Successfully updated project information
+
+    /projects/{projectId}/code:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns code entries for given project
+            responses:
+                '200':
+                    description: Code entries for given project
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/CodeRepository'
+        put:
+            summary: Add code repository
+            requestBody:
+                description: Added code repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CodeRepository'
+            responses:
+                '201':
+                    description: Successfully added code repository
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    codeRepositoryId:
+                                        type: string
+
+    /projects/{projectId}/code/{codeRepositoryId}:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: codeRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns code entry for given project
+            responses:
+                '200':
+                    description: Code entry for given project
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CodeRepository'
+        post:
+            summary: Updates code repository
+            requestBody:
+                description: Updated code repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CodeRepository'
+            responses:
+                '200':
+                    description: Successfully updated code repository
+
+    /projects/{projectId}/data:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns data entries for given project
+            responses:
+                '200':
+                    description: Data entries for given project
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/DataRepository'
+        put:
+            summary: Add data repository
+            requestBody:
+                description: Added data repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DataRepository'
+            responses:
+                '201':
+                    description: Successfully added code repository
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    dataRepositoryId:
+                                        type: string
+
+    /projects/{projectId}/data/{dataRepositoryId}:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: dataRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns data entry for given project
+            responses:
+                '200':
+                    description: Data entry for given project
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DataRepository'
+        post:
+            summary: Update data repository
+            requestBody:
+                description: Updated data repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DataRepository'
+            responses:
+                '200':
+                    description: Successfully updated code repository
+
+    /projects/{projectId}/experiments:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns experiment entries for given project
+            responses:
+                '200':
+                    description: Experiment entries for given project
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/ExperimentRepository'
+        put:
+            summary: Add experiment repository
+            requestBody:
+                description: Added data repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ExperimentRepository'
+            responses:
+                '201':
+                    description: Successfully added experiment repository
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    experimentRepositoryId:
+                                        type: string
+
+    /projects/{projectId}/experiments/{experimentRepositoryId}:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: experimentRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns experiment entry for given project
+            responses:
+                '200':
+                    description: Experiment entry for given project
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ExperimentRepository'
+        post:
+            summary: Update experiment repository
+            requestBody:
+                description: Updated data repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ExperimentRepository'
+            responses:
+                '200':
+                    description: Successfully updated experiment repository
+
+    /projects/{projectId}/models:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns model entries for given project
+            responses:
+                '200':
+                    description: Model entries for given project
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/ModelRepository'
+        put:
+            summary: Add model repository
+            requestBody:
+                description: Added model repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/ModelRepository'
+            responses:
+                '201':
+                    description: Successfully added model repository
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    modelRepositoryId:
+                                        type: string
+
+    /projects/{projectId}/models/{modelRepositoryId}:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: modelRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            summary: Returns model entry for given ID
+            responses:
+                '200':
+                    description: Model entry for given ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ModelRepository'
+        post:
+            summary: Update model repository
+            requestBody:
+                description: Updated model repository information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ModelRepository'
+            responses:
+                '200':
+                    description: Successfully updated model repository
+
+    /projects/user/{userId}/recommendation:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: searchString
+              in: query
+              schema:
                   type: string
-                email:
-                  type: string
-            example:
-              userName: black_panther
-              email: panther@road_to_nowhere.wakanda
-      responses:
-        '201':
-          description: Successfully created user
-          content:
-            application/json:
+            - name: labels
+              in: query
               schema:
-                type: object
-                properties:
-                  userId: 
-                    type: integer
-
-
-  /users/{userId}:
-    parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Returns the information on a specific user
-      responses:
-        '200':
-          description: A json array with user information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-    post:
-      summary: Update user info
-      requestBody:
-        description: Updated user info
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '200':
-          description: Successfully updated user
-
-
-  /users/{userId}/settings:
-    parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns the settings for a specific user
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    settings:
-                      $ref: '#/components/schemas/Settings'
-    post:
-      summary: Updates user settings
-      requestBody:
-        description: Updated user settings
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Settings'
-      responses:
-        '200':
-          description: Successfully updated settings
-
-
-  /projects:
-    get:
-      summary: Returns all projects (admin only)
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Project'
-    put:
-      summary: Creates a new project
-      requestBody:
-        description: Project information
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Project'
-      responses:
-        '201':
-          description: Created new project
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  projectId:
-                    type: string
-
-
-  /projects/user/{userId}:
-    parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns all projects for user with userId
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Project'
-
-
-  /projects/{projectId}:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns the information on a specific project
-        responses:
-          '200':
-            description: Information on a specific project
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Project'
-    post:
-        summary: Update project
-        requestBody:
-          description: Updated project information
-          required: true
-          content:
-            application/json:
+                      $ref: '#/components/schemas/Label'
+            - name: holderId
+              in: query
+              description: The Owner / Group / Organisation that owns the repo
               schema:
-                $ref: '#/components/schemas/Project'
-        responses:
-          '200':
-            description: Successfully updated project information
+                  type: integer
+        get:
+            summary:
+                Return a curation of projects tailored for a specific user with a set of
+                search parameters
+            responses:
+                '200':
+                    description: Successully returned a recommendation of projects
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/ModelRepository'
 
+    /groups:
+        get:
+            summary: Get all User group (admin only)
+            responses:
+                '200':
+                    description: Got all user groups
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/UserGroup'
+        put:
+            summary: Create a new user group
+            requestBody:
+                description: User group information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserGroup'
+            responses:
+                '201':
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    groupId:
+                                        type: string
 
-  /projects/{projectId}/code:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns code entries for given project
-        responses:
-          '200':
-            description: Code entries for given project
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/CodeRepository'
-    put:
-        summary: Add code repository
-        requestBody:
-          description: Added code repository information
-          required: true
-          content:
-            application/json:
+    /groups/{groupId}:
+        parameters:
+            - name: groupId
+              in: path
+              required: true
               schema:
-                $ref: '#/components/schemas/CodeRepository'
-        responses:
-          '201':
-            description: Successfully added code repository
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    codeRepositoryId:
-                      type: string
+                  type: integer
+        get:
+            summary: Get Group information
+            responses:
+                '200':
+                    description: Get group information
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserGroup'
+        post:
+            summary: Update group
+            requestBody:
+                description: Updated user group information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserGroup'
+            responses:
+                '200':
+                    description: Successfully updated user group
 
+    /organizations:
+        get:
+            summary: Get list of organizations (admin only)
+            responses:
+                '200':
+                    description: List of organizations
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Organization'
+        put:
+            summary: Add organization
+            requestBody:
+                description: Organization info
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Organization'
+            responses:
+                '201':
+                    description: Sucessfully added organization
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    organizationId:
+                                        type: integer
 
-  /projects/{projectId}/code/{codeRepositoryId}:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: codeRepositoryId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns code entry for given project
-        responses:
-          '200':
-            description: Code entry for given project
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/CodeRepository'
-    post:
-        summary: Updates code repository
-        requestBody:
-          description: Updated code repository information
-          required: true
-          content:
-            application/json:
+    /organizations/{organizationId}:
+        parameters:
+            - name: organizationId
+              in: path
+              required: true
               schema:
-                $ref: '#/components/schemas/CodeRepository'
-        responses:
-          '200':
-            description: Successfully updated code repository
-
-
-  /projects/{projectId}/data:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns data entries for given project
-        responses:
-          '200':
-            description: Data entries for given project
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/DataRepository'
-    put:
-        summary: Add data repository
-        requestBody:
-          description: Added data repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataRepository'
-        responses:
-          '201':
-            description: Successfully added code repository
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    dataRepositoryId:
-                      type: string
-
-
-  /projects/{projectId}/data/{dataRepositoryId}:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: dataRepositoryId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns data entry for given project
-        responses:
-          '200':
-            description: Data entry for given project
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/DataRepository'
-    post:
-        summary: Update data repository
-        requestBody:
-          description: Updated data repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataRepository'
-        responses:
-          '200':
-            description: Successfully updated code repository
-
-
-  /projects/{projectId}/experiments:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns experiment entries for given project
-        responses:
-          '200':
-            description: Experiment entries for given project
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ExperimentRepository'
-    put:
-        summary: Add experiment repository
-        requestBody:
-          description: Added data repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExperimentRepository'
-        responses:
-          '201':
-            description: Successfully added experiment repository
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    experimentRepositoryId:
-                      type: string
-
-
-  /projects/{projectId}/experiments/{experimentRepositoryId}:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: experimentRepositoryId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns experiment entry for given project
-        responses:
-          '200':
-            description: Experiment entry for given project
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ExperimentRepository'
-    post:
-        summary: Update experiment repository
-        requestBody:
-          description: Updated data repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ExperimentRepository'
-        responses:
-          '200':
-            description: Successfully updated experiment repository
-
-
-  /projects/{projectId}/models:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns model entries for given project
-        responses:
-          '200':
-            description: Model entries for given project
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ModelRepository'
-    put:
-        summary: Add model repository
-        requestBody:
-          description: Added model repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ModelRepository'
-        responses:
-          '201':
-            description: Successfully added model repository
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    modelRepositoryId:
-                      type: string
-
-
-  /projects/{projectId}/models/{modelRepositoryId}:
-    parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: modelRepositoryId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-        summary: Returns model entry for given ID
-        responses:
-          '200':
-            description: Model entry for given ID
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ModelRepository'
-    post:
-        summary: Update model repository
-        requestBody:
-          description: Updated model repository information
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ModelRepository'
-        responses:
-          '200':
-            description: Successfully updated model repository
-
-  /projects/user/{userId}/recommendation:
-    parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: integer
-      - name: searchString
-        in: query
-        schema:
-          type: string
-      - name: labels
-        in: query
-        schema:
-          type: array
-          items:
-            $ref: '#/components/schemas/Label'
-      - name: holderId
-        in: query
-        description: The Owner / Group / Organisation that owns the repo
-        schema:
-          type: integer
-    get:
-      summary:
-        Return a curation of projects tailored for a specific user with a set of
-        search parameters
-      responses:
-        '200':
-          description: Successully returned a recommendation of projects
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ModelRepository'
-
-
-  /groups:
-    get:
-      summary: Get all User group (admin only)
-      responses:
-        '200':
-          description: Got all user groups
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserGroup'
-    put:
-      summary: Create a new user group
-      requestBody:
-        description: User group information
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserGroup'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  groupId:
-                    type: string
-
-
-  /groups/{groupId}:
-    parameters:
-      - name: groupId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Get Group information
-      responses:
-        '200':
-          description: Get group information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserGroup'
-    post:
-      summary: Update group
-      requestBody:
-        description: Updated user group information
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserGroup'
-      responses:
-        '200':
-          description: Successfully updated user group
-
-
-  /organizations:
-    get:
-      summary: Get list of organizations (admin only)
-      responses:
-        '200':
-          description: List of organizations
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Organization'
-    put:
-      summary: Add organization
-      requestBody:
-        description: Organization info
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Organization'
-      responses:
-        '201':
-          description: Sucessfully added organization
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  organizationId:
-                    type: integer
-
-
-  /organizations/{organizationId}:
-    parameters:
-      - name: organizationId
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Get info on specified organization
-      responses:
-        '200':
-          description: Successully retrieved organization info
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Organization'
-    post:
-      summary: Update organization info
-      requestBody:
-        description: Updated organization info
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Organization'
-      responses:
-        '200':
-          description: Successfully updated organization info
-          
+                  type: integer
+        get:
+            summary: Get info on specified organization
+            responses:
+                '200':
+                    description: Successully retrieved organization info
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Organization'
+        post:
+            summary: Update organization info
+            requestBody:
+                description: Updated organization info
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Organization'
+            responses:
+                '200':
+                    description: Successfully updated organization info
