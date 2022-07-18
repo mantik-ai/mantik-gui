@@ -5,13 +5,14 @@ import InstagramIcon from '@mui/icons-material/Instagram'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import styled from '@emotion/styled'
+import { useRouter } from 'next/router'
 import { NavbarProps } from '../../types/navbarProps'
 import { Links } from '../../types/links'
 
 const links: Links[] = [
-    { url: '', icon: <InstagramIcon /> },
-    { url: '', icon: <FacebookOutlinedIcon /> },
-    { url: '', icon: <GitHubIcon /> },
+    { url: 'https://example.com/1', icon: <InstagramIcon /> },
+    { url: 'https://example.com/2', icon: <FacebookOutlinedIcon /> },
+    { url: 'https://example.com/3', icon: <GitHubIcon /> },
 ]
 
 const FooterContainer = styled.div`
@@ -36,7 +37,8 @@ const FooterNavigation = styled.div`
 `
 
 export const Footer = (props: NavbarProps) => {
-    return (
+    const router = useRouter()
+    return router.asPath !== '/' ? null : (
         <FooterContainer>
             <Box
                 component="img"
@@ -50,13 +52,15 @@ export const Footer = (props: NavbarProps) => {
                 alt="footer background"
             />
             <FooterNavigation color="primary.dark">
-                <Typography
-                    variant="h3"
-                    color="primary.dark"
-                    padding={'0 2rem'}
-                >
-                    MantikUI
-                </Typography>
+                <Link href={'/'}>
+                    <Typography
+                        variant="h3"
+                        color="primary.dark"
+                        padding={'0 2rem'}
+                    >
+                        Mantik
+                    </Typography>
+                </Link>
                 <Stack
                     direction={'row'}
                     style={{ height: '100%' }}
