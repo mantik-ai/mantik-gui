@@ -739,9 +739,24 @@ paths:
                   type: array
                   items:
                       $ref: '#/components/schemas/Label'
-            - name: holderId
+            - name: ownerId
               in: query
-              description: The Owner / Group / Organisation that owns the repo
+              description: The User that owns the project
+              schema:
+                  type: integer
+            - name: memberId
+              in: query
+              description: Filter search by Members of the project
+              schema:
+                  type: integer
+            - name: groupId
+              in: query
+              description: Filter search by User Group
+              schema:
+                  type: integer
+            - name: organizationId
+              in: query
+              description: Filter search by Organization membership of the Owner
               schema:
                   type: integer
         get:
