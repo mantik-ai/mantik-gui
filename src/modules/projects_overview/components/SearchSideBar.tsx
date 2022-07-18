@@ -19,7 +19,7 @@ import SearchParamerterContext from '../contexts/SearchParameterContext'
 export const SearchSideBar = () => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
-    const { data, error } = useGetProjectsUserUserId(500)
+    const { data } = useGetProjectsUserUserId(500)
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
@@ -62,7 +62,7 @@ export const SearchSideBar = () => {
                 <Divider />
                 <Spacing value={theme.spacing(4)}></Spacing>
 
-                <Typography variant="caption">Shared projects</Typography>
+                <Typography variant="caption">Your Projects</Typography>
                 <Spacing value={theme.spacing(1)}></Spacing>
                 {data?.data.map((project) => (
                     <Link

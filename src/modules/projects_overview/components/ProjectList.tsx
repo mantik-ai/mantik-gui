@@ -15,9 +15,6 @@ export const ProjectList = (props: ProjectListProps) => {
     const theme = useTheme()
     const { data, error } = useGetProjectsUserUserId(500)
 
-    if (error) {
-        return <div>Error</div>
-    }
     if (!data) {
         return (
             <Box
@@ -26,9 +23,17 @@ export const ProjectList = (props: ProjectListProps) => {
                 justifyContent="center"
                 alignItems="center"
             >
-                <Typography variant="body1">Loading projects...</Typography>
-                <Spacing value={theme.spacing(4)}></Spacing>
-                <CircularProgress />
+                {error ? (
+                    <Typography variant="body1">Error</Typography>
+                ) : (
+                    <>
+                        <Typography variant="body1">
+                            Loading projects...
+                        </Typography>
+                        <Spacing value={theme.spacing(4)}></Spacing>
+                        <CircularProgress />
+                    </>
+                )}
             </Box>
         )
     }
