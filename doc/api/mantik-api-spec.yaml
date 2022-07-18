@@ -771,7 +771,7 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/ModelRepository'
+                                    $ref: '#/components/schemas/Project'
 
     /groups:
         get:
