@@ -1,20 +1,23 @@
 import {
     Box,
     CircularProgress,
-    List,
     Stack,
     Typography,
     useTheme,
 } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
-import { useGetProjectsUserUserId } from '../../../common/queries'
+import { useGetProjectsUserUserIdSearch } from '../../../common/queries'
+import SearchParamerterContext from '../contexts/SearchParameterContext'
 import { ProjectEntry } from './ProjectEntry'
 
 interface ProjectListProps {}
 export const ProjectList = (props: ProjectListProps) => {
     const theme = useTheme()
-    const { data, error } = useGetProjectsUserUserId(500)
+    const searchParameterContext = useContext(SearchParamerterContext)
+    const { data, error } = useGetProjectsUserUserIdSearch(500, {
+        searchString: searchParameterContext.debouncedSearchString,
+    })
 
     if (!data) {
         return (

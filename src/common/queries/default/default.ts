@@ -32,6 +32,7 @@ import type {
     PutProjectsProjectIdExperiments201,
     ModelRepository,
     PutProjectsProjectIdModels201,
+    GetProjectsUserUserIdSearchParams,
     UserGroup,
     PutGroups201,
     Organization,
@@ -1588,6 +1589,68 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
         TContext
     >(mutationFn, mutationOptions)
 }
+/**
+ * @summary Return a curation of projects tailored for a specific user with a set of search parameters
+ */
+export const getProjectsUserUserIdSearch = (
+    userId: number,
+    params?: GetProjectsUserUserIdSearchParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<Project[]>> => {
+    return axios.get(`/projects/user/${userId}/search`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsUserUserIdSearchQueryKey = (
+    userId: number,
+    params?: GetProjectsUserUserIdSearchParams
+) => [`/projects/user/${userId}/search`, ...(params ? [params] : [])]
+
+export type GetProjectsUserUserIdSearchQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>
+>
+export type GetProjectsUserUserIdSearchQueryError = AxiosError<unknown>
+
+export const useGetProjectsUserUserIdSearch = <
+    TData = Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>,
+    TError = AxiosError<unknown>
+>(
+    userId: number,
+    params?: GetProjectsUserUserIdSearchParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsUserUserIdSearchQueryKey(userId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>
+    > = ({ signal }) =>
+        getProjectsUserUserIdSearch(userId, params, { signal, ...axiosOptions })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
 /**
  * @summary Get all User group (admin only)
  */

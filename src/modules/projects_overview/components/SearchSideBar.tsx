@@ -11,7 +11,6 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { AxiosResponse } from 'axios'
 import Link from 'next/link'
 import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
@@ -23,11 +22,7 @@ export const SearchSideBar = () => {
     const searchParameterContext = useContext(SearchParamerterContext)
 
     const upToMediumSize = useMediaQuery(theme.breakpoints.up('md'))
-    // let projectsData: AxiosResponse<Project[], any> | undefined
-    // if (upToMediumSize) {
     const { data } = useGetProjectsUserUserId(500)
-    // projectsData = data
-    // }
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
