@@ -14,8 +14,9 @@ import {
 import Link from 'next/link'
 import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
-import { Project, useGetProjectsUserUserId } from '../../../common/queries'
+import { useGetProjectsUserUserId } from '../../../common/queries'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
+import { LabelSelector } from './LabelSelector'
 
 export const SearchSideBar = () => {
     const theme = useTheme()
@@ -62,6 +63,12 @@ export const SearchSideBar = () => {
                         )
                     )}
                 </FormGroup>
+
+                <Spacing value={theme.spacing(4)}></Spacing>
+                <Typography variant="caption">Labels</Typography>
+                <LabelSelector></LabelSelector>
+
+                <Spacing value={theme.spacing(4)}></Spacing>
                 <Divider />
                 <Spacing value={theme.spacing(4)}></Spacing>
                 {upToMediumSize ? (
