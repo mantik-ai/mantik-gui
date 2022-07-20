@@ -40,3 +40,6 @@ yarn-error.log*
 # Env files
 .env.development
 .env.production
+
+cypress/videos/**
+cypress/screenshots/**

@@ -1,0 +1,18 @@
+[
+    {
+        "projectId": "Test",
+        "owner": {
+            "userId": " number",
+            "name": " string",
+            "email": " string"
+        }
+    },
+    {
+        "projectId": "Test2",
+        "owner": {
+            "userId": " number",
+            "name": " string",
+            "email": " string"
+        }
+    }
+]
