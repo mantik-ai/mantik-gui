@@ -25,7 +25,7 @@ export const ProjectEntry = (props: ProjectEntryProps) => {
             </CardContent>
             <CardActions>
                 <Link href={`/projects/details/${props.project.projectId}`}>
-                    <Button size="small">View details</Button>
+                    <Button size="small">view details</Button>
                 </Link>
             </CardActions>
         </Card>
