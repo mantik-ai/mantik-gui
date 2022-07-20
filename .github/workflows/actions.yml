@@ -1,0 +1,44 @@
+name: actions
+
+on:
+    pull_request:
+        types: [opened, synchronize]
+
+jobs:
+    test_setup:
+        name: Test Setup
+        runs-on: ubuntu-latest
+        outputs:
+            preview_url: ${{ steps.waitForVercelPreviewDeployment.outputs.url }}
+        steps:
+            - name: Wait for Vercel preview deployment to be ready
+              uses: patrickedqvist/wait-for-vercel-preview@v1.2.0
+              id: waitForVercelPreviewDeployment
+              with:
+                  token: ${{ secrets.VERCEL_TOKEN }}
+                  vercel_password: ${{ secrets.VERCEL_PASSWORD }}
+                  max_timeout: 500
+                  check_interval: 20
+                  environment: 'Preview'
+
+    test_e2e:
+        name: Test Cypress e2e
+        needs: test_setup
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: Run Cypress
+              uses: cypress-io/github-action@v2
+              with:
+                  config: baseUrl=${{ needs.test_setup.outputs.preview_url }}
+                  install: true
+            - uses: actions/upload-artifact@v3
+              if: failure()
+              with:
+                  name: cypress-screenshots
+                  path: cypress/screenshots
+            - uses: actions/upload-artifact@v3
+              if: failure()
+              with:
+                  name: cypress-videos
+                  path: cypress/videos
