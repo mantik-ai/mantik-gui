@@ -13,7 +13,7 @@ import { SvgIconComponent } from '@mui/icons-material'
 import GoogleIcon from '@mui/icons-material/Google'
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import { Links } from '../types/links'
+import { IconLinking } from '../types/linking'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',
@@ -26,7 +26,7 @@ interface AuthCardProps {
     type: AuthCardTypes
 }
 
-const externAuth: Links[] = [
+const externAuth: IconLinking[] = [
     { url: 'https://example.com/4', icon: <GoogleIcon /> },
     { url: 'https://example.com/5', icon: <FacebookOutlinedIcon /> },
     { url: 'https://example.com/6', icon: <GitHubIcon /> },

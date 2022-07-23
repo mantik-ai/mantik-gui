@@ -29,7 +29,7 @@ export default function Navbar(props: NavbarProps) {
             <Divider />
             <List>
                 {props.routes
-                    .filter((route) => route.positions.includes('drawer'))
+                    .filter((route) => route.positions?.includes('drawer'))
                     .map((route) => (
                         <Link href={route.path} key={route.name}>
                             <MenuItem>
@@ -72,7 +72,7 @@ export default function Navbar(props: NavbarProps) {
                         <Stack direction={'row'}>
                             {props.routes
                                 .filter((route) =>
-                                    route.positions.includes('navbar')
+                                    route.positions?.includes('navbar')
                                 )
                                 .map((route) => (
                                     <Link href={route.path} key={route.name}>
