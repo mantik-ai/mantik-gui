@@ -239,15 +239,18 @@ components:
                 - paymentDetails
         Label:
             type: object
-            description: Represents a label
+            description: Represents a label or a Tag depending on the presence of the value parameter
             properties:
-                key:
+                scope:
+                    type: string
+                name:
                     type: string
                 value:
                     type: string
+
             required:
-                - key
-                - value
+                - scope
+                - name
 
 paths:
     /users:
@@ -894,3 +897,54 @@ paths:
             responses:
                 '200':
                     description: Successfully updated organization info
+
+    /labels:
+        get:
+            summary: Get all labels (admin only)
+            responses:
+                '200':
+                    description: List of labels
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Label'
+        put:
+            summary: add label
+            requestBody:
+                description: label info
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Label'
+            responses:
+                '201':
+                    description: Sucessfully added label
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Label'
+    /labels/{userId}/search:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: searchString
+              in: query
+              schema:
+                  type: string
+        get:
+            summary: Return a collection of labels appropriate for the user's search
+            responses:
+                '200':
+                    description: Successully returned labels that match the search
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Label'
