@@ -2,6 +2,7 @@ import React from 'react'
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { SessionProvider } from 'next-auth/react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import axios from 'axios'
 import getConfig from 'next/config'
@@ -16,17 +17,22 @@ import '@fontsource/blinker/700.css'
 const { publicRuntimeConfig } = getConfig()
 axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
 
-function MantikApp({ Component, pageProps }: AppProps) {
+function MantikApp({
+    Component,
+    pageProps: { session, ...pageProps },
+}: AppProps) {
     const [queryClient] = React.useState(() => new QueryClient())
 
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={defaultTheme}>
-                <CssBaseline />
-                <MainLayout>
-                    <Component {...pageProps} />
-                </MainLayout>
-                <ReactQueryDevtools initialIsOpen={false} />
+                <SessionProvider session={session}>
+                    <CssBaseline />
+                    <MainLayout>
+                        <Component {...pageProps} />
+                    </MainLayout>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </SessionProvider>
             </ThemeProvider>
         </QueryClientProvider>
     )
