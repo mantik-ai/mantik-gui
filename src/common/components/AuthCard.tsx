@@ -11,9 +11,16 @@ import {
 import React, { ReactNode } from 'react'
 import { SvgIconComponent } from '@mui/icons-material'
 import GoogleIcon from '@mui/icons-material/Google'
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
-import { Links } from '../types/links'
+import AppleIcon from '@mui/icons-material/Apple'
+import { signIn } from 'next-auth/react'
+import { Providers } from '../types/providers'
+import {
+    APPLE_PROVIDER_ID,
+    COGNITO_PROVIDER_ID,
+    GITHUB_PROVIDER_ID,
+    GOOGLE_PROVIDER_ID,
+} from '../../shared/constants'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',
@@ -26,21 +33,24 @@ interface AuthCardProps {
     type: AuthCardTypes
 }
 
-const externAuth: Links[] = [
-    { url: 'https://example.com/4', icon: <GoogleIcon /> },
-    { url: 'https://example.com/5', icon: <FacebookOutlinedIcon /> },
-    { url: 'https://example.com/6', icon: <GitHubIcon /> },
+const providers: Providers[] = [
+    { id: GOOGLE_PROVIDER_ID, icon: <GoogleIcon /> },
+    { id: GITHUB_PROVIDER_ID, icon: <GitHubIcon /> },
+    { id: APPLE_PROVIDER_ID, icon: <AppleIcon /> },
 ]
 
 export const AuthCard = (props: AuthCardProps) => {
     let linkText = ''
+    let link = ''
 
     switch (props.type) {
         case AuthCardTypes.LOGIN:
             linkText = 'Not yet registered?'
+            link = '/register'
             break
         case AuthCardTypes.REGISTER:
             linkText = 'Already registered?'
+            link = '/login'
             break
         default:
             break
@@ -81,7 +91,7 @@ export const AuthCard = (props: AuthCardProps) => {
                                 {props.type}
                             </Typography>
                             <Link
-                                href={'/login'}
+                                href={link}
                                 variant="body2"
                                 color="textSecondary"
                                 align="right"
@@ -105,6 +115,7 @@ export const AuthCard = (props: AuthCardProps) => {
                             style={{
                                 color: 'white',
                             }}
+                            onClick={() => signIn(COGNITO_PROVIDER_ID)}
                         >
                             {props.type}
                         </Button>
@@ -122,11 +133,11 @@ export const AuthCard = (props: AuthCardProps) => {
                             justifyContent="center"
                             spacing={1}
                         >
-                            {externAuth.map(({ url, icon }) => (
+                            {providers.map(({ id, icon }) => (
                                 <IconButton
                                     style={{ border: '1px solid #80808066' }}
-                                    key={url}
-                                    href={url}
+                                    key={id}
+                                    onClick={() => signIn(id)}
                                 >
                                     {icon}
                                 </IconButton>

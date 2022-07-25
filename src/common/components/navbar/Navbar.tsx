@@ -9,8 +9,9 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
-import { Button, MenuItem, Stack } from '@mui/material'
+import { MenuItem, Stack } from '@mui/material'
 import { NavbarProps } from '../../types/navbarProps'
+import AccountMenu from '../AccountMenu'
 
 const drawerWidth = 240
 
@@ -23,7 +24,11 @@ export default function Navbar(props: NavbarProps) {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant={'h2'} color="primary">
+            <Typography
+                variant={'h2'}
+                color="primary"
+                style={{ cursor: 'pointer' }}
+            >
                 Mantik
             </Typography>
             <Divider />
@@ -63,6 +68,7 @@ export default function Navbar(props: NavbarProps) {
                             display={{ xs: 'none', sm: 'block' }}
                             mr={8}
                             ml={2}
+                            style={{ cursor: 'pointer' }}
                         >
                             Mantik
                         </Typography>
@@ -87,35 +93,13 @@ export default function Navbar(props: NavbarProps) {
                                 ))}
                         </Stack>
                     </Box>
-
                     <Stack
                         direction={'row'}
                         justifyContent={'end'}
                         flex={1}
                         spacing={2}
                     >
-                        <Link href={'/register'} passHref>
-                            <Button color="secondary" variant="outlined">
-                                register
-                            </Button>
-                        </Link>
-                        <Divider
-                            orientation="vertical"
-                            flexItem
-                            sx={{ borderColor: 'white' }}
-                        />
-
-                        <Link href={'/login'} passHref>
-                            <Button
-                                href={'/login'}
-                                size={'small'}
-                                color="secondary"
-                                variant="contained"
-                                sx={{ color: 'primary.main' }}
-                            >
-                                login
-                            </Button>
-                        </Link>
+                        <AccountMenu />
                     </Stack>
                 </Toolbar>
             </AppBar>
