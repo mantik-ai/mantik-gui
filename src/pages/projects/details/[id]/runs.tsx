@@ -2,17 +2,18 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { NextPageWithNestedLayout } from '../../../_app'
 import { DetailsLayout } from '../../../../modules/project_details/layouts/DetailsLayout'
-import { DetailsOverview } from '../../../../modules/project_details/overview/components/DetailsOverview'
+import { Box, Tab, Tabs } from '@mui/material'
+import { DetailsRunsTable } from '../../../../modules/project_details/runs/DetailsRunsTable'
 
-const ProjectDetails: NextPageWithNestedLayout = () => {
+const RunsDetails: NextPageWithNestedLayout = () => {
     const router = useRouter()
     const { id } = router.query
 
-    return <DetailsOverview></DetailsOverview>
+    return <DetailsRunsTable></DetailsRunsTable>
 }
 
-ProjectDetails.getNestedLayout = (page) => {
+RunsDetails.getNestedLayout = (page) => {
     return <DetailsLayout>{page}</DetailsLayout>
 }
 
-export default ProjectDetails
+export default RunsDetails
