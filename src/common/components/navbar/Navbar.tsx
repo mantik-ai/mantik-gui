@@ -61,6 +61,7 @@ export default function Navbar(props: NavbarProps) {
                             variant="h2"
                             color="white"
                             display={{ xs: 'none', sm: 'block' }}
+                            sx={{ cursor: 'pointer' }}
                             mr={8}
                             ml={2}
                         >

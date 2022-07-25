@@ -36,3 +36,10 @@ yarn-error.log*
 
 # jetbrains ide's
 .idea
+
+# Env files
+.env.development
+.env.production
+
+cypress/videos/**
+cypress/screenshots/**
