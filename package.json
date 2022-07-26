@@ -41,6 +41,7 @@
         "@typescript-eslint/eslint-plugin": "^5.27.0",
         "@typescript-eslint/parser": "^5.27.0",
         "cypress": "^10.3.0",
+        "cz-conventional-changelog": "^3.3.0",
         "eslint": "^8.18.0",
         "eslint-config-kentcdodds": "^20.3.1",
         "eslint-config-next": "12.1.6",
@@ -67,5 +68,10 @@
         "coverage",
         "dist",
         "src/common/queries"
-    ]
+    ],
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
 }
