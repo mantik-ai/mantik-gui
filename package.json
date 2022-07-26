@@ -59,8 +59,7 @@
     "lint-staged": {
         "*.{css,less,scss,html,json,jsx,js}": [
             "prettier --write ."
-        ],
-        "*.js": "eslint --fix"
+        ]
     },
     "eslintIgnore": [
         "node_modules",

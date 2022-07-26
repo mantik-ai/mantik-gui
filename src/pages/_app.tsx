@@ -1,4 +1,5 @@
 import React, { ReactElement, ReactNode } from 'react'
+import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -12,7 +13,6 @@ import '@fontsource/blinker/300.css'
 import '@fontsource/blinker/400.css'
 import '@fontsource/blinker/600.css'
 import '@fontsource/blinker/700.css'
-import { NextPage } from 'next'
 
 export type NextPageWithNestedLayout = NextPage & {
     getNestedLayout?: (page: ReactElement) => ReactNode
