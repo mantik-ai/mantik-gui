@@ -247,14 +247,41 @@ components:
                     type: string
                 value:
                     type: string
-
             required:
                 - scope
                 - name
 
+        PaginationResponse:
+            type: object
+            properties:
+                totalrecords:
+                    type: number
+            required:
+                - totalrecords
+    parameters:
+        PageLength:
+            name: pagelength
+            in: query
+            description: Number of records to return
+            schema:
+                minimum: 1
+                maximum: 200
+                default: 50
+                type: number
+        StartIndex:
+            name: startindex
+            in: query
+            description: Start index for paging
+            schema:
+                minimum: 0
+                type: number
+
 paths:
     /users:
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: List of all users
             description: List of all users (admin only)
             responses:
@@ -263,9 +290,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/User'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          users:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/User'
         put:
             summary: Creates a new user
             requestBody:
@@ -357,6 +389,9 @@ paths:
 
     /projects:
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns all projects (admin only)
             responses:
                 '200':
@@ -364,9 +399,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Project'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Project'
         put:
             summary: Creates a new project
             requestBody:
@@ -395,6 +435,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns all projects for user with userId
             responses:
                 '200':
@@ -402,9 +445,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Project'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Project'
 
     /projects/{projectId}:
         parameters:
@@ -443,6 +491,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns code entries for given project
             responses:
                 '200':
@@ -450,9 +501,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/CodeRepository'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          codeRepositories:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/CodeRepository'
         put:
             summary: Add code repository
             requestBody:
@@ -515,6 +571,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns data entries for given project
             responses:
                 '200':
@@ -522,9 +581,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/DataRepository'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          dataRepositories:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/DataRepository'
         put:
             summary: Add data repository
             requestBody:
@@ -587,6 +651,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns experiment entries for given project
             responses:
                 '200':
@@ -594,9 +661,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ExperimentRepository'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          experimentRepositories:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/ExperimentRepository'
         put:
             summary: Add experiment repository
             requestBody:
@@ -659,6 +731,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Returns model entries for given project
             responses:
                 '200':
@@ -666,9 +741,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/ModelRepository'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          models:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/ModelRepository'
         put:
             summary: Add model repository
             requestBody:
@@ -763,6 +843,9 @@ paths:
               schema:
                   type: integer
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary:
                 Return a curation of projects tailored for a specific user with a set of
                 search parameters
@@ -772,12 +855,20 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Project'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Project'
 
     /groups:
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Get all User group (admin only)
             responses:
                 '200':
@@ -785,9 +876,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/UserGroup'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/UserGroup'
         put:
             summary: Create a new user group
             requestBody:
@@ -839,6 +935,9 @@ paths:
 
     /organizations:
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Get list of organizations (admin only)
             responses:
                 '200':
@@ -846,9 +945,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Organization'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Organization'
         put:
             summary: Add organization
             requestBody:
@@ -900,6 +1004,9 @@ paths:
 
     /labels:
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Get all labels (admin only)
             responses:
                 '200':
@@ -907,9 +1014,14 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Label'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'
         put:
             summary: add label
             requestBody:
@@ -926,6 +1038,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Label'
+
     /labels/{userId}/search:
         parameters:
             - name: userId
@@ -938,6 +1051,9 @@ paths:
               schema:
                   type: string
         get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
             summary: Return a collection of labels appropriate for the user's search
             responses:
                 '200':
@@ -945,6 +1061,11 @@ paths:
                     content:
                         application/json:
                             schema:
-                                type: array
-                                items:
-                                    $ref: '#/components/schemas/Label'
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'

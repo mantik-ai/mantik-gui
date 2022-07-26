@@ -5,12 +5,8 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
+import type { ExperimentRepository } from './experimentRepository'
 
-/**
- * Represents a label or a Tag depending on the presence of the value parameter
- */
-export interface Label {
-    scope: string
-    name: string
-    value?: string
+export type GetProjectsProjectIdExperiments200AllOf = {
+    experimentRepositories?: ExperimentRepository[]
 }
