@@ -820,6 +820,33 @@ paths:
                 '200':
                     description: Successfully updated model repository
 
+    /projects/{projectId}/runs:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all runs for a given project
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          runs:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Run'
+
     /projects/user/{userId}/search:
         parameters:
             - name: userId
@@ -1084,30 +1111,3 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Label'
-
-    /runs/user/{userId}:
-        parameters:
-            - name: userId
-              in: path
-              required: true
-              schema:
-                  type: integer
-        get:
-            parameters:
-                - $ref: '#/components/parameters/StartIndex'
-                - $ref: '#/components/parameters/PageLength'
-            summary: Returns all runs for user with userId
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                allOf:
-                                    - $ref: '#/components/schemas/PaginationResponse'
-                                    - properties:
-                                          runs:
-                                              type: array
-                                              items:
-                                                  $ref: '#/components/schemas/Run'
