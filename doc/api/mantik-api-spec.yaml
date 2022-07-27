@@ -252,7 +252,7 @@ components:
                 - name
         Run:
             type: object
-            description: Represents a triple of experiment, code and data
+            description: Represents a quadruple of experiment, code, data and hardware-configuration
             properties:
                 experimentRepository:
                     $ref: '#/components/schemas/ExperimentRepository'
@@ -260,6 +260,11 @@ components:
                     $ref: '#/components/schemas/ModelRepository'
                 dataRepository:
                     $ref: '#/components/schemas/DataRepository'
+                connections:
+                    $ref: '#/components/schemas/Connection'
+                timestamp:
+                    value:
+                        type: string
 
         PaginationResponse:
             type: object
