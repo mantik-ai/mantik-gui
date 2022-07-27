@@ -75,7 +75,7 @@ export const SearchSideBar = () => {
                     <>
                         <Typography variant="caption">Your Projects</Typography>
                         <Spacing value={theme.spacing(1)}></Spacing>
-                        {data?.data.map((project) => (
+                        {data?.data.projects?.map((project) => (
                             <Link
                                 key={project.projectId}
                                 color="inherit"

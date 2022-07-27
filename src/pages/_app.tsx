@@ -17,6 +17,11 @@ import '@fontsource/blinker/700.css'
 const { publicRuntimeConfig } = getConfig()
 axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
 
+if (publicRuntimeConfig.mockDynamically) {
+    axios.defaults.headers.common.dynamic = true
+    axios.defaults.headers.common.Prefer = 'code=200, dynamic=true'
+}
+
 function MantikApp({
     Component,
     pageProps: { session, ...pageProps },
