@@ -5,16 +5,16 @@ import { Label } from '../../../common/queries'
 interface LabelSelectorProps {}
 export const LabelSelector = (props: LabelSelectorProps) => {
     const labels: Label[] = [
-        { key: 'Technology', value: 'TensorFlow' },
-        { key: 'Technology', value: 'Pytorch' },
-        { key: 'Dataset-size', value: 'Terrabyte' },
+        { scope: 'Technology', name: 'TensorFlow' },
+        { scope: 'Technology', name: 'Pytorch' },
+        { scope: 'Dataset-size', name: 'Terrabyte' },
     ]
     return (
         <Autocomplete
             multiple
             id="labels"
             options={labels}
-            getOptionLabel={(label) => label.value}
+            getOptionLabel={(label) => label.name}
             // defaultValue={[top100Films[13]]}
             renderInput={(params) => (
                 <TextField

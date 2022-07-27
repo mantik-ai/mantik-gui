@@ -3,6 +3,7 @@ import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { SessionProvider } from 'next-auth/react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import axios from 'axios'
 import getConfig from 'next/config'
@@ -25,17 +26,27 @@ type AppPropsWithNestedLayout = AppProps & {
 const { publicRuntimeConfig } = getConfig()
 axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
 
-function MantikApp({ Component, pageProps }: AppPropsWithNestedLayout) {
+if (publicRuntimeConfig.mockDynamically) {
+    axios.defaults.headers.common.dynamic = true
+    axios.defaults.headers.common.Prefer = 'code=200, dynamic=true'
+}
+
+function MantikApp({
+    Component,
+    pageProps: { session, ...pageProps },
+}: AppPropsWithNestedLayout) {
     const [queryClient] = React.useState(() => new QueryClient())
     const getNestedLayout = Component.getNestedLayout ?? ((page) => page)
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={defaultTheme}>
-                <CssBaseline />
-                <MainLayout>
-                    {getNestedLayout(<Component {...pageProps} />)}
-                </MainLayout>
-                <ReactQueryDevtools initialIsOpen={false} />
+                <SessionProvider session={session}>
+                    <CssBaseline />
+                    <MainLayout>
+                        {getNestedLayout(<Component {...pageProps} />)}
+                    </MainLayout>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </SessionProvider>
             </ThemeProvider>
         </QueryClientProvider>
     )

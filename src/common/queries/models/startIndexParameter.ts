@@ -7,10 +7,6 @@
  */
 
 /**
- * Represents a label or a Tag depending on the presence of the value parameter
+ * Start index for paging
  */
-export interface Label {
-    scope: string
-    name: string
-    value?: string
-}
+export type StartIndexParameter = number
