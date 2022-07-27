@@ -263,8 +263,7 @@ components:
                 connections:
                     $ref: '#/components/schemas/Connection'
                 timestamp:
-                    value:
-                        type: string
+                    type: string
 
         PaginationResponse:
             type: object

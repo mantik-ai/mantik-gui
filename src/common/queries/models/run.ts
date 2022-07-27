@@ -8,12 +8,15 @@
 import type { ExperimentRepository } from './experimentRepository'
 import type { ModelRepository } from './modelRepository'
 import type { DataRepository } from './dataRepository'
+import type { Connection } from './connection'
 
 /**
- * Represents a triple of experiment, code and data
+ * Represents a quadruple of experiment, code, data and hardware-configuration
  */
 export interface Run {
     experimentRepository?: ExperimentRepository
     modelRepository?: ModelRepository
     dataRepository?: DataRepository
+    connections?: Connection
+    timestamp?: string
 }

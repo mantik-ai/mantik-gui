@@ -46,6 +46,8 @@ import type {
     GetProjectsProjectIdModelsParams,
     PutProjectsProjectIdModels201,
     ModelRepository,
+    GetProjectsProjectIdRuns200,
+    GetProjectsProjectIdRunsParams,
     GetProjectsUserUserIdSearch200,
     GetProjectsUserUserIdSearchParams,
     GetGroups200,
@@ -61,8 +63,6 @@ import type {
     Label,
     GetLabelsUserIdSearch200,
     GetLabelsUserIdSearchParams,
-    GetRunsUserUserId200,
-    GetRunsUserUserIdParams,
 } from '.././models'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -1679,6 +1679,68 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
     >(mutationFn, mutationOptions)
 }
 /**
+ * @summary Returns all runs for a given project
+ */
+export const getProjectsProjectIdRuns = (
+    projectId: number,
+    params?: GetProjectsProjectIdRunsParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdRuns200>> => {
+    return axios.get(`/projects/${projectId}/runs`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdRunsQueryKey = (
+    projectId: number,
+    params?: GetProjectsProjectIdRunsParams
+) => [`/projects/${projectId}/runs`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdRunsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdRuns>>
+>
+export type GetProjectsProjectIdRunsQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdRuns = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdRuns>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: number,
+    params?: GetProjectsProjectIdRunsParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdRuns>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdRunsQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdRuns>>
+    > = ({ signal }) =>
+        getProjectsProjectIdRuns(projectId, params, { signal, ...axiosOptions })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdRuns>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
  * @summary Return a curation of projects tailored for a specific user with a set of search parameters
  */
 export const getProjectsUserUserIdSearch = (
@@ -2312,67 +2374,6 @@ export const useGetLabelsUserIdSearch = <
 
     const query = useQuery<
         Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
-        TError,
-        TData
-    >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
-
-    return {
-        queryKey,
-        ...query,
-    }
-}
-
-/**
- * @summary Returns all runs for user with userId
- */
-export const getRunsUserUserId = (
-    userId: number,
-    params?: GetRunsUserUserIdParams,
-    options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetRunsUserUserId200>> => {
-    return axios.get(`/runs/user/${userId}`, {
-        params,
-        ...options,
-    })
-}
-
-export const getGetRunsUserUserIdQueryKey = (
-    userId: number,
-    params?: GetRunsUserUserIdParams
-) => [`/runs/user/${userId}`, ...(params ? [params] : [])]
-
-export type GetRunsUserUserIdQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getRunsUserUserId>>
->
-export type GetRunsUserUserIdQueryError = AxiosError<unknown>
-
-export const useGetRunsUserUserId = <
-    TData = Awaited<ReturnType<typeof getRunsUserUserId>>,
-    TError = AxiosError<unknown>
->(
-    userId: number,
-    params?: GetRunsUserUserIdParams,
-    options?: {
-        query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getRunsUserUserId>>,
-            TError,
-            TData
-        >
-        axios?: AxiosRequestConfig
-    }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-    const { query: queryOptions, axios: axiosOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ?? getGetRunsUserUserIdQueryKey(userId, params)
-
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getRunsUserUserId>>
-    > = ({ signal }) =>
-        getRunsUserUserId(userId, params, { signal, ...axiosOptions })
-
-    const query = useQuery<
-        Awaited<ReturnType<typeof getRunsUserUserId>>,
         TError,
         TData
     >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
