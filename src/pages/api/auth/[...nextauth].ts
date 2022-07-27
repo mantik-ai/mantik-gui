@@ -4,20 +4,19 @@ import githubProvider from 'next-auth/providers/github'
 import googleProvider from 'next-auth/providers/google'
 import appleProvider from 'next-auth/providers/apple'
 import {
-    COGNITO_PROVIDER_ID,
     APPLE_PROVIDER_ID,
+    COGNITO_PROVIDER_ID,
     GITHUB_PROVIDER_ID,
     GOOGLE_PROVIDER_ID,
-} from '../../../shared/constants'
-import { assertEnv } from '../../../shared/helpers'
-
+} from '../../../common/constants'
+import { assertEnv } from '../../../common/helpers'
 export default nextAuth({
     providers: [
         cognitoProvider({
             id: COGNITO_PROVIDER_ID,
             clientId: assertEnv(process.env.COGNITO_CLIENT_ID),
             clientSecret: assertEnv(process.env.COGNITO_CLIENT_SECRET),
-            domain: process.env.COGNITO_DOMAIN,
+            // domain: assertEnv(process.env.COGNITO_DOMAIN),
         }),
         githubProvider({
             id: GITHUB_PROVIDER_ID,
@@ -42,9 +41,6 @@ export default nextAuth({
             clientSecret: assertEnv(process.env.APPLE_SECRET),
         }),
     ],
-    jwt: {
-        encryption: true,
-    },
     secret: process.env.SECRET,
     callbacks: {
         async jwt({ token, account }) {
@@ -59,14 +55,14 @@ export default nextAuth({
             session.accessToken = token.accessToken
             return session
         },
-        redirect: async () => Promise.resolve('/projects'),
-        async signIn({ account, profile }) {
+        redirect: () => '/projects',
+        async signIn({ account, profile }): Promise<string | boolean> {
             switch (account.provider) {
                 case COGNITO_PROVIDER_ID:
                     console.log(profile)
                     return ''
                 case GOOGLE_PROVIDER_ID:
-                    return profile.email_verified
+                    return profile.email_verified as boolean
                 case APPLE_PROVIDER_ID:
                     return ''
                 case GITHUB_PROVIDER_ID:

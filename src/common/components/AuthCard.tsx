@@ -20,7 +20,7 @@ import {
     COGNITO_PROVIDER_ID,
     GITHUB_PROVIDER_ID,
     GOOGLE_PROVIDER_ID,
-} from '../../shared/constants'
+} from '../constants'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',
