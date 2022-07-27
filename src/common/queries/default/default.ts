@@ -61,6 +61,8 @@ import type {
     Label,
     GetLabelsUserIdSearch200,
     GetLabelsUserIdSearchParams,
+    GetRunsUserUserId200,
+    GetRunsUserUserIdParams,
 } from '.././models'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -2310,6 +2312,67 @@ export const useGetLabelsUserIdSearch = <
 
     const query = useQuery<
         Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary Returns all runs for user with userId
+ */
+export const getRunsUserUserId = (
+    userId: number,
+    params?: GetRunsUserUserIdParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetRunsUserUserId200>> => {
+    return axios.get(`/runs/user/${userId}`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetRunsUserUserIdQueryKey = (
+    userId: number,
+    params?: GetRunsUserUserIdParams
+) => [`/runs/user/${userId}`, ...(params ? [params] : [])]
+
+export type GetRunsUserUserIdQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getRunsUserUserId>>
+>
+export type GetRunsUserUserIdQueryError = AxiosError<unknown>
+
+export const useGetRunsUserUserId = <
+    TData = Awaited<ReturnType<typeof getRunsUserUserId>>,
+    TError = AxiosError<unknown>
+>(
+    userId: number,
+    params?: GetRunsUserUserIdParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getRunsUserUserId>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ?? getGetRunsUserUserIdQueryKey(userId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getRunsUserUserId>>
+    > = ({ signal }) =>
+        getRunsUserUserId(userId, params, { signal, ...axiosOptions })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getRunsUserUserId>>,
         TError,
         TData
     >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })

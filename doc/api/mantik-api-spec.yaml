@@ -250,6 +250,21 @@ components:
             required:
                 - scope
                 - name
+        Run:
+            type: object
+            description: Represents a quadruple of experiment, code, data and hardware-configuration
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connections:
+                    $ref: '#/components/schemas/Connection'
+                timestamp:
+                    value:
+                        type: string
 
         PaginationResponse:
             type: object
@@ -804,6 +819,33 @@ paths:
             responses:
                 '200':
                     description: Successfully updated model repository
+
+    /projects/{projectId}/runs:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all runs for a given project
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          runs:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Run'
 
     /projects/user/{userId}/search:
         parameters:
