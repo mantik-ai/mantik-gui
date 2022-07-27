@@ -6,11 +6,6 @@
  * OpenAPI spec version: 0.1.0
  */
 
-/**
- * Represents a label or a Tag depending on the presence of the value parameter
- */
-export interface Label {
-    scope: string
-    name: string
-    value?: string
+export interface PaginationResponse {
+    totalrecords: number
 }
