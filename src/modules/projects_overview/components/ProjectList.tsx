@@ -44,7 +44,7 @@ export const ProjectList = (props: ProjectListProps) => {
 
     return (
         <Stack spacing={theme.spacing(2)}>
-            {data?.data.projects?.map((project) => (
+            {data.data.projects?.map((project) => (
                 <ProjectEntry
                     key={project.projectId}
                     project={project}

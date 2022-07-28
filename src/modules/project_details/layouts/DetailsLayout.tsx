@@ -8,7 +8,7 @@ interface DetailsLayoutProps {
 export const DetailsLayout = (props: DetailsLayoutProps) => {
     const theme = useTheme()
     return (
-        <Box sx={{ display: 'flex', height: '100vh' }}>
+        <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
             <DetailsSideBar></DetailsSideBar>
             <Box
                 sx={{
