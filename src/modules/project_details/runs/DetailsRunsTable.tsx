@@ -12,15 +12,24 @@ import {
 import { useRouter } from 'next/router'
 import React from 'react'
 import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
-import { useGetProjectsProjectIdRuns } from '../../../common/queries'
+import { Run, useGetProjectsProjectIdRuns } from '../../../common/queries'
+import { RunRepeatDialog } from './RunRepeatDialog'
 
 interface DetailsRunsTableProps {}
 export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
     const router = useRouter()
     const { id } = router.query
     const { data, error } = useGetProjectsProjectIdRuns(
-        Number(typeof id === 'string' ? 1234 : id)
+        Number(typeof id === 'number' ? id : 1234)
     )
+
+    const [openReRunDialog, setOpenReRunDialog] = React.useState(false)
+    const [currentRun, setCurrentRun] = React.useState<Run>({})
+
+    const openDialog = (run: Run) => {
+        setOpenReRunDialog(true)
+        setCurrentRun(run)
+    }
 
     return (
         <DataStateIndicator
@@ -33,11 +42,11 @@ export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Experiments</TableCell>
+                            <TableCell>Experiment</TableCell>
                             <TableCell>Code</TableCell>
                             <TableCell>Data</TableCell>
                             <TableCell>Connection</TableCell>
-                            <TableCell></TableCell>
+                            <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -62,7 +71,13 @@ export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
                                 <TableCell>
                                     {run.connections?.connectionName}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell align="center">
+                                    <Button
+                                        variant="outlined"
+                                        onClick={() => openDialog(run)}
+                                    >
+                                        Re-run
+                                    </Button>
                                     <Button variant="outlined">Details</Button>
                                 </TableCell>
                             </TableRow>
@@ -70,6 +85,11 @@ export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <RunRepeatDialog
+                run={currentRun}
+                open={openReRunDialog}
+                setOpen={setOpenReRunDialog}
+            ></RunRepeatDialog>
         </DataStateIndicator>
     )
 }

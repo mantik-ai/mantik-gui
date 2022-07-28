@@ -28,12 +28,12 @@ export const DetailsSideBar = (props: DetailsSideBarProps) => {
 
     const routes: Route[] = [
         { name: 'Overview', path: `${id}`, icon: <Adjust /> },
+        { name: 'Runs', path: `${id}/runs`, icon: <DirectionsRun /> },
         {
             name: 'Experiments',
             path: `${id}/experiments`,
             icon: <Dashboard />,
         },
-        { name: 'Runs', path: `${id}/runs`, icon: <DirectionsRun /> },
         { name: 'Code', path: `${id}/code`, icon: <Code /> },
         { name: 'DIVIDER', path: '', icon: null },
         { name: 'Settings', path: `${id}/settings`, icon: <Settings /> },
