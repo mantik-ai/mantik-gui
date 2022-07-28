@@ -3,6 +3,7 @@ import {
     Card,
     CardActions,
     CardContent,
+    CardHeader,
     Typography,
 } from '@mui/material'
 import Link from 'next/link'
@@ -15,11 +16,9 @@ interface ProjectEntryProps {
 export const ProjectEntry = (props: ProjectEntryProps) => {
     return (
         <Card>
+            <CardHeader title={props.project.projectId}></CardHeader>
             <CardContent>
-                <Typography variant="h5" component="div">
-                    {props.project.projectId}
-                </Typography>
-                <Typography variant="body2">
+                <Typography variant="body1">
                     from {props.project.owner.name}
                 </Typography>
             </CardContent>

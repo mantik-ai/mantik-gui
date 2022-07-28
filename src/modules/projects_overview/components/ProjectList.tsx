@@ -1,12 +1,6 @@
-import {
-    Box,
-    CircularProgress,
-    Stack,
-    Typography,
-    useTheme,
-} from '@mui/material'
+import { Stack, useTheme } from '@mui/material'
 import React, { useContext } from 'react'
-import { Spacing } from '../../../common/components/Spacing'
+import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
 import { useGetProjectsUserUserIdSearch } from '../../../common/queries'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
 import { ProjectEntry } from './ProjectEntry'
@@ -19,37 +13,20 @@ export const ProjectList = (props: ProjectListProps) => {
         searchString: searchParameterContext.debouncedSearchString,
     })
 
-    if (!data) {
-        return (
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-            >
-                {error ? (
-                    <Typography variant="body1">Error</Typography>
-                ) : (
-                    <>
-                        <Typography variant="body1">
-                            Loading projects...
-                        </Typography>
-                        <Spacing value={theme.spacing(4)}></Spacing>
-                        <CircularProgress />
-                    </>
-                )}
-            </Box>
-        )
-    }
-
     return (
-        <Stack spacing={theme.spacing(2)}>
-            {data.data.projects?.map((project) => (
-                <ProjectEntry
-                    key={project.projectId}
-                    project={project}
-                ></ProjectEntry>
-            ))}
-        </Stack>
+        <DataStateIndicator
+            data={data}
+            error={error}
+            text="Loading Projects..."
+        >
+            <Stack spacing={theme.spacing(2)}>
+                {data?.data.projects?.map((project) => (
+                    <ProjectEntry
+                        key={project.projectId}
+                        project={project}
+                    ></ProjectEntry>
+                ))}
+            </Stack>
+        </DataStateIndicator>
     )
 }
