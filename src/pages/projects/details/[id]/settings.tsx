@@ -4,10 +4,7 @@ import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import { Button, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
-import CollaborationDialog, {
-    CollaborationDialogType,
-} from '../../../../common/components/CollaborationDialog'
-import { useGetProjectsProjectId } from '../../../../common/queries'
+import AddUserDialog from '../../../../common/components/AddUserDialog'
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -34,13 +31,20 @@ const Settings = () => {
     const { id } = router.query
     const [value, setValue] = React.useState(0)
     const [open, setOpen] = React.useState(false)
-    const [dialogType, setDialogType] =
-        React.useState<CollaborationDialogType>()
+    const [dialogContent, setDialogContent] = React.useState({
+        title: '',
+        message: '',
+        buttonText: '',
+    })
 
-    const { data, error, status } = useGetProjectsProjectId(
-        Number(typeof id === 'number' ? id : 1234)
-    )
-
+    const handleClickOpen = (
+        title: string,
+        message: string,
+        buttonText: string
+    ) => {
+        setDialogContent({ title, message, buttonText })
+        setOpen(true)
+    }
     const handleClose = () => setOpen(false)
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
         setValue(newValue)
@@ -67,14 +71,17 @@ const Settings = () => {
                             justifyContent="space-between"
                         >
                             <Typography variant={'body1'}>
-                                The project is currently owned by:{' '}
+                                The project is currently owned by: You
                             </Typography>
                             <Button
                                 variant="outlined"
-                                onClick={() => {
-                                    setDialogType(CollaborationDialogType.OWNER)
-                                    setOpen(true)
-                                }}
+                                onClick={() =>
+                                    handleClickOpen(
+                                        'Change Owner',
+                                        `Please select a user to designate him as the owner of project "${id}".`,
+                                        'Change Owner'
+                                    )
+                                }
                             >
                                 Change Owner
                             </Button>
@@ -93,12 +100,13 @@ const Settings = () => {
                             </Typography>
                             <Button
                                 variant="outlined"
-                                onClick={() => {
-                                    setDialogType(
-                                        CollaborationDialogType.GROUPS
+                                onClick={() =>
+                                    handleClickOpen(
+                                        'Edit Groups',
+                                        `Search for usergroups you want to invite collaborating on the project. Removing usergroups has no effect on individual members added separately.`,
+                                        'Edit Groups'
                                     )
-                                    setOpen(true)
-                                }}
+                                }
                             >
                                 Edit Groups
                             </Button>
@@ -117,12 +125,13 @@ const Settings = () => {
                             </Typography>
                             <Button
                                 variant="outlined"
-                                onClick={() => {
-                                    setDialogType(
-                                        CollaborationDialogType.MEMBERS
+                                onClick={() =>
+                                    handleClickOpen(
+                                        'Edit Members',
+                                        `Search for users you want to invite to the project or remove them from the list of members.`,
+                                        'Edit Members'
                                     )
-                                    setOpen(true)
-                                }}
+                                }
                             >
                                 Edit Members
                             </Button>
@@ -136,8 +145,10 @@ const Settings = () => {
                     Item Three
                 </TabPanel>
             </Box>
-            <CollaborationDialog
-                dialogType={dialogType}
+            <AddUserDialog
+                title={dialogContent.title}
+                message={dialogContent.message}
+                buttonText={dialogContent.buttonText}
                 isOpen={open}
                 handleClose={handleClose}
             />
