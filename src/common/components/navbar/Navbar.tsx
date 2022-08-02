@@ -8,8 +8,9 @@ import List from '@mui/material/List'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 import Link from 'next/link'
-import { MenuItem, Stack } from '@mui/material'
+import { Badge, MenuItem, Stack } from '@mui/material'
 import { NavbarProps } from '../../types/navbarProps'
 import AccountMenu from '../AccountMenu'
 
@@ -97,9 +98,24 @@ export default function Navbar(props: NavbarProps) {
                     <Stack
                         direction={'row'}
                         justifyContent={'end'}
+                        alignItems={'center'}
                         flex={1}
                         spacing={2}
                     >
+                        <Badge
+                            badgeContent={4}
+                            max={99}
+                            color="info"
+                            sx={{
+                                cursor: 'pointer',
+                                '& .MuiBadge-badge': {
+                                    color: 'white',
+                                    backgroundColor: '#bdbdbd',
+                                },
+                            }}
+                        >
+                            <NotificationsIcon color="secondary" />
+                        </Badge>
                         <AccountMenu />
                     </Stack>
                 </Toolbar>
