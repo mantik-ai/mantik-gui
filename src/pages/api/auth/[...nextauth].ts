@@ -10,6 +10,7 @@ import {
     GOOGLE_PROVIDER_ID,
 } from '../../../common/constants'
 import { assertEnv } from '../../../common/helpers'
+
 export default nextAuth({
     providers: [
         cognitoProvider({
