@@ -62,6 +62,7 @@ export const RunRepeatDialog = (props: RunRepeatDialogProps) => {
                         }
                     >
                         {data?.data.dataRepositories?.map((repo) => (
+                            //@ts-ignore - necessary to load object into value
                             <MenuItem key={repo.uri} value={repo}>
                                 {repo.uri}
                             </MenuItem>
