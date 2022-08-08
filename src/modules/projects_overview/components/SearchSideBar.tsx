@@ -27,7 +27,7 @@ export const SearchSideBar = () => {
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
-            <Spacing value={theme.spacing(4)}></Spacing>
+            <Spacing value={theme.spacing(4)} />
             <FormControl fullWidth>
                 <TextField
                     id="search-string"
@@ -38,7 +38,11 @@ export const SearchSideBar = () => {
                         searchParameterContext.setSearchString!(e.target.value)
                     }
                 />
-                <Spacing value={theme.spacing(4)}></Spacing>
+
+                <Spacing value={theme.spacing(4)} />
+                <Typography variant="caption">Labels</Typography>
+                <LabelSelector />
+                <Spacing value={theme.spacing(3)} />
 
                 <Typography variant="caption">Problem Type</Typography>
                 <FormGroup>
@@ -64,17 +68,13 @@ export const SearchSideBar = () => {
                     )}
                 </FormGroup>
 
-                <Spacing value={theme.spacing(4)}></Spacing>
-                <Typography variant="caption">Labels</Typography>
-                <LabelSelector></LabelSelector>
-
-                <Spacing value={theme.spacing(4)}></Spacing>
+                <Spacing value={theme.spacing(3)} />
                 <Divider />
-                <Spacing value={theme.spacing(4)}></Spacing>
+                <Spacing value={theme.spacing(4)} />
                 {upToMediumSize ? (
                     <>
                         <Typography variant="caption">Your Projects</Typography>
-                        <Spacing value={theme.spacing(1)}></Spacing>
+                        <Spacing value={theme.spacing(1)} />
                         {data?.data.projects?.map((project) => (
                             <Link
                                 key={project.projectId}

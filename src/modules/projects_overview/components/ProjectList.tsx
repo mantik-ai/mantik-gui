@@ -12,6 +12,7 @@ import SearchParamerterContext from '../contexts/SearchParameterContext'
 import { ProjectEntry } from './ProjectEntry'
 
 interface ProjectListProps {}
+
 export const ProjectList = (props: ProjectListProps) => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
@@ -34,7 +35,7 @@ export const ProjectList = (props: ProjectListProps) => {
                         <Typography variant="body1">
                             Loading projects...
                         </Typography>
-                        <Spacing value={theme.spacing(4)}></Spacing>
+                        <Spacing value={theme.spacing(4)} />
                         <CircularProgress />
                     </>
                 )}
@@ -45,10 +46,7 @@ export const ProjectList = (props: ProjectListProps) => {
     return (
         <Stack spacing={theme.spacing(2)}>
             {data?.data.projects?.map((project) => (
-                <ProjectEntry
-                    key={project.projectId}
-                    project={project}
-                ></ProjectEntry>
+                <ProjectEntry key={project.projectId} project={project} />
             ))}
         </Stack>
     )
