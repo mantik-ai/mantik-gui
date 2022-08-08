@@ -7,40 +7,66 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    TablePagination,
     TableRow,
+    useTheme,
 } from '@mui/material'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
+import { Spacing } from '../../../common/components/Spacing'
 import { Run, useGetProjectsProjectIdRuns } from '../../../common/queries'
-import { RunRepeatDialog } from './RunRepeatDialog'
+import RunDialogContext from './contexts/RunDialogContext'
+import { DetailsRunsTableToolbar } from './DetailsRunsTableToolbar'
+import { RunDialog } from './RunDialog'
+
+const PageLengthOptions = [50, 25, 10, 5]
 
 interface DetailsRunsTableProps {}
 export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
+    const theme = useTheme()
     const router = useRouter()
     const { id } = router.query
+    const [page, setPage] = React.useState(0)
+    const [rowsPerPage, setRowsPerPage] = React.useState(PageLengthOptions[0])
     const { data, status } = useGetProjectsProjectIdRuns(
-        Number(typeof id === 'number' ? id : 1234)
+        Number(typeof id === 'number' ? id : 1234),
+        { pagelength: rowsPerPage, startindex: page }
     )
 
-    const [openReRunDialog, setOpenReRunDialog] = React.useState(false)
-    const [currentRun, setCurrentRun] = React.useState<Run>({})
+    const [openRunDialog, setOpenRunDialog] = React.useState(false)
+    const runContext = useContext(RunDialogContext)
 
-    const openDialog = (run: Run) => {
-        setOpenReRunDialog(true)
-        setCurrentRun(run)
+    const openDialog = (run?: Run) => {
+        setOpenRunDialog(true)
+        if (run) runContext.setRun!(run)
+    }
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage)
+    }
+
+    const handleChangeRowsPerPage = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setRowsPerPage(parseInt(event.target.value, 10))
+        setPage(0)
     }
 
     return (
         <DataStateIndicator status={status} text="Loading Runs..." usePaper>
+            <DetailsRunsTableToolbar
+                openDialog={openDialog}
+            ></DetailsRunsTableToolbar>
+            <Spacing value={theme.spacing(1)}></Spacing>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell>Experiment</TableCell>
-                            <TableCell>Code</TableCell>
-                            <TableCell>Data</TableCell>
-                            <TableCell>Connection</TableCell>
+                            <TableCell>Model</TableCell>
+                            <TableCell>Dataset</TableCell>
+                            <TableCell>Infrastructure</TableCell>
                             <TableCell align="center">Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -79,12 +105,21 @@ export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
                         ))}
                     </TableBody>
                 </Table>
+                <TablePagination
+                    rowsPerPageOptions={PageLengthOptions}
+                    component="div"
+                    count={data?.data.totalrecords ?? 0}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </TableContainer>
-            <RunRepeatDialog
-                run={currentRun}
-                open={openReRunDialog}
-                setOpen={setOpenReRunDialog}
-            ></RunRepeatDialog>
+            <RunDialog
+                projectId={43254} //TODO: set programmatically after api-spec fix
+                open={openRunDialog}
+                setOpen={setOpenRunDialog}
+            ></RunDialog>
         </DataStateIndicator>
     )
 }
