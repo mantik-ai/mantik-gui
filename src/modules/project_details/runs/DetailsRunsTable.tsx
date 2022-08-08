@@ -19,7 +19,7 @@ interface DetailsRunsTableProps {}
 export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
     const router = useRouter()
     const { id } = router.query
-    const { data, error } = useGetProjectsProjectIdRuns(
+    const { data, status } = useGetProjectsProjectIdRuns(
         Number(typeof id === 'number' ? id : 1234)
     )
 
@@ -32,12 +32,7 @@ export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
     }
 
     return (
-        <DataStateIndicator
-            data={data}
-            error={error}
-            text="Loading Runs..."
-            usePaper
-        >
+        <DataStateIndicator status={status} text="Loading Runs..." usePaper>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

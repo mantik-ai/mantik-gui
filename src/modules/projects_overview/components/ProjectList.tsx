@@ -9,16 +9,12 @@ interface ProjectListProps {}
 export const ProjectList = (props: ProjectListProps) => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
-    const { data, error } = useGetProjectsUserUserIdSearch(500, {
+    const { data, status } = useGetProjectsUserUserIdSearch(500, {
         searchString: searchParameterContext.debouncedSearchString,
     })
 
     return (
-        <DataStateIndicator
-            data={data}
-            error={error}
-            text="Loading Projects..."
-        >
+        <DataStateIndicator status={status} text="Loading Projects...">
             <Stack spacing={theme.spacing(2)}>
                 {data?.data.projects?.map((project) => (
                     <ProjectEntry

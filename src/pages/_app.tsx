@@ -25,8 +25,6 @@ type AppPropsWithNestedLayout = AppProps & {
 
 const { publicRuntimeConfig } = getConfig()
 axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
-console.log('dsfadfs')
-console.log(process.env.NODE_ENV)
 
 if (publicRuntimeConfig.mockDynamically) {
     axios.defaults.headers.common.dynamic = true

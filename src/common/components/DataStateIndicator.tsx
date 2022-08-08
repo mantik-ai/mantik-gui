@@ -2,8 +2,7 @@ import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import React from 'react'
 
 interface DataStateIndicatorProps {
-    data: any
-    error: any
+    status: 'error' | 'loading' | 'idle' | 'success'
     usePaper?: boolean
     text: string
     children: React.ReactNode
@@ -11,7 +10,7 @@ interface DataStateIndicatorProps {
 export const DataStateIndicator = (props: DataStateIndicatorProps) => {
     const content = (
         <>
-            {props.error ? (
+            {props.status === 'error' ? (
                 <Typography variant="body1">Error</Typography>
             ) : (
                 <>
@@ -30,7 +29,7 @@ export const DataStateIndicator = (props: DataStateIndicatorProps) => {
         height: '100%',
     }
 
-    if (!props.data) {
+    if (props.status !== 'success') {
         return (
             <>
                 {props.usePaper ? (
