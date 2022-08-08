@@ -41,7 +41,7 @@ components:
             description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
             properties:
                 projectId:
-                    type: string
+                    type: integer
                 owner:
                     $ref: '#/components/schemas/User'
                 members:
@@ -269,7 +269,7 @@ components:
             type: object
             properties:
                 totalrecords:
-                    type: number
+                    type: integer
             required:
                 - totalrecords
     parameters:
@@ -439,7 +439,7 @@ paths:
                                 type: object
                                 properties:
                                     projectId:
-                                        type: string
+                                        type: integer
 
     /projects/user/{userId}:
         parameters:
