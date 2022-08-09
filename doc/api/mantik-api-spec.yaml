@@ -281,14 +281,14 @@ components:
                 minimum: 1
                 maximum: 200
                 default: 50
-                type: number
+                type: integer
         StartIndex:
             name: startindex
             in: query
             description: Start index for paging
             schema:
                 minimum: 0
-                type: number
+                type: integer
 
 paths:
     /users:
