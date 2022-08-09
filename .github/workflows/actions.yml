@@ -6,6 +6,7 @@ on:
 
 jobs:
     test_e2e:
+        if: ${{ false }} # disable for now
         name: Test Cypress e2e
         runs-on: ubuntu-latest
         steps:

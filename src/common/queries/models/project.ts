@@ -15,7 +15,7 @@ import type { DataRepository } from './dataRepository'
  * A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
  */
 export interface Project {
-    projectId: string
+    projectId: number
     owner: User
     members?: User[]
     groups?: UserGroup[]
