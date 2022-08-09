@@ -7,5 +7,5 @@
  */
 
 export type PutProjects201 = {
-    projectId?: string
+    projectId?: number
 }
