@@ -5,17 +5,16 @@ import { DataStateIndicator } from '../../../common/components/DataStateIndicato
 import { useGetProjectsProjectIdCode } from '../../../common/queries'
 import { CodeRepositoryCard } from './CodeRepositoryCard'
 
-export const CodeRepositoryOverview = (props: {}) => {
+export const CodeRepositoryOverview = () => {
     const router = useRouter()
     const { id } = router.query
-    const { data, status } = useGetProjectsProjectIdCode(
-        Number(typeof id === 'string' ? 1234 : id)
-    )
+    const { data, status } = useGetProjectsProjectIdCode(Number(id))
     return (
         <DataStateIndicator status={status} text="Loading Repositories...">
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 {data?.data.codeRepositories?.map((repo) => (
                     <CodeRepositoryCard
+                        key={repo.uri}
                         codeRepository={repo}
                     ></CodeRepositoryCard>
                 ))}

@@ -20,8 +20,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { Route } from '../../../../common/types/route'
 
-interface DetailsSideBarProps {}
-export const DetailsSideBar = (props: DetailsSideBarProps) => {
+export const DetailsSideBar = () => {
     const router = useRouter()
     const { id } = router.query
     const activeRoute = router.pathname.split('/').at(-1)

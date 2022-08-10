@@ -2,8 +2,7 @@ import { Box, Paper, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-interface DetailsOverviewProps {}
-export const DetailsOverview = (props: DetailsOverviewProps) => {
+export const DetailsOverview = () => {
     const router = useRouter()
     const { id } = router.query
 

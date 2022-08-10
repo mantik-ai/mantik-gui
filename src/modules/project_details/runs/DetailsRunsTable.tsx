@@ -22,17 +22,16 @@ import { RunDialog } from './RunDialog'
 
 const PageLengthOptions = [50, 25, 10, 5]
 
-interface DetailsRunsTableProps {}
-export const DetailsRunsTable = (props: DetailsRunsTableProps) => {
+export const DetailsRunsTable = () => {
     const theme = useTheme()
     const router = useRouter()
     const { id } = router.query
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(PageLengthOptions[0])
-    const { data, status } = useGetProjectsProjectIdRuns(
-        Number(typeof id === 'number' ? id : 1234),
-        { pagelength: rowsPerPage, startindex: page }
-    )
+    const { data, status } = useGetProjectsProjectIdRuns(Number(id), {
+        pagelength: rowsPerPage,
+        startindex: page,
+    })
 
     const [openRunDialog, setOpenRunDialog] = React.useState(false)
     const runContext = useContext(RunDialogContext)

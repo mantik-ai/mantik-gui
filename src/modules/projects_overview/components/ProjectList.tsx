@@ -5,8 +5,7 @@ import { useGetProjectsUserUserIdSearch } from '../../../common/queries'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
 import { ProjectEntry } from './ProjectEntry'
 
-interface ProjectListProps {}
-export const ProjectList = (props: ProjectListProps) => {
+export const ProjectList = () => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
     const { data, status } = useGetProjectsUserUserIdSearch(500, {
