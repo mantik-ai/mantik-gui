@@ -10,6 +10,7 @@ export const ProjectList = () => {
     const searchParameterContext = useContext(SearchParamerterContext)
     const { data, status } = useGetProjectsUserUserIdSearch(500, {
         searchString: searchParameterContext.debouncedSearchString,
+        labels: searchParameterContext.searchLabels,
     })
 
     return (
