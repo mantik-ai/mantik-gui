@@ -2,6 +2,7 @@ import {
     Adjust,
     Code,
     Dashboard,
+    DataObject,
     DirectionsRun,
     Settings,
 } from '@mui/icons-material'
@@ -18,7 +19,7 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { Route } from '../../../../common/types/route'
+import { Route } from '../../../common/types/route'
 
 export const DetailsSideBar = () => {
     const router = useRouter()
@@ -34,11 +35,12 @@ export const DetailsSideBar = () => {
             icon: <Dashboard />,
         },
         { name: 'Code', path: `${id}/code`, icon: <Code /> },
+        { name: 'Datasets', path: `${id}/data`, icon: <DataObject /> },
         { name: 'DIVIDER', path: '', icon: null },
         { name: 'Settings', path: `${id}/settings`, icon: <Settings /> },
     ]
-    const bottomRoutes: Route[] = []
     const theme = useTheme()
+
     return (
         <Box
             sx={{
@@ -57,7 +59,9 @@ export const DetailsSideBar = () => {
                     }}
                 >
                     {routes.map((route) =>
-                        route.name !== 'DIVIDER' ? (
+                        route.name === 'DIVIDER' ? (
+                            <Divider key={route.name} />
+                        ) : (
                             <Link
                                 key={route.name}
                                 href={`/projects/details/${route.path}`}
@@ -65,8 +69,10 @@ export const DetailsSideBar = () => {
                                 <ListItemButton
                                     key={route.name}
                                     selected={
-                                        route.name.toLowerCase() ===
-                                            activeRoute ||
+                                        route.path
+                                            .split('/')
+                                            .at(-1)
+                                            ?.toLowerCase() === activeRoute ||
                                         (activeRoute === '[id]' &&
                                             route.name === 'Overview')
                                     }
@@ -75,8 +81,6 @@ export const DetailsSideBar = () => {
                                     <ListItemText>{route.name}</ListItemText>
                                 </ListItemButton>
                             </Link>
-                        ) : (
-                            <Divider key={route.name} />
                         )
                     )}
                     <Divider />

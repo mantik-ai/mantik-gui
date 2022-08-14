@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, useTheme } from '@mui/material'
-import { DetailsSideBar } from '../overview/components/DetailsSideBar'
+import { DetailsSideBar } from '../overview/DetailsSideBar'
 
 interface DetailsLayoutProps {
     children: React.ReactNode
