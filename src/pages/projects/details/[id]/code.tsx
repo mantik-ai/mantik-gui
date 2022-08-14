@@ -1,10 +1,10 @@
 import React from 'react'
 import { NextPageWithNestedLayout } from '../../../_app'
 import { DetailsLayout } from '../../../../modules/project_details/layouts/DetailsLayout'
-import { CodeRepositoryOverview } from '../../../../modules/project_details/code/CodeRepositoryOverview'
+import { DetailsModelTable } from '../../../../modules/project_details/code/DetailsModelTable'
 
 const CodeDetails: NextPageWithNestedLayout = () => {
-    return <CodeRepositoryOverview></CodeRepositoryOverview>
+    return <DetailsModelTable></DetailsModelTable>
 }
 
 CodeDetails.getNestedLayout = (page) => {

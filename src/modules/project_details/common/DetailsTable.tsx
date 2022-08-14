@@ -52,7 +52,7 @@ export const DetailsTable = <TRes extends PaginationResponse>(
     }
 
     return (
-        <DataStateIndicator status={status} text="Loading Runs..." usePaper>
+        <DataStateIndicator status={status} text="Loading..." usePaper>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

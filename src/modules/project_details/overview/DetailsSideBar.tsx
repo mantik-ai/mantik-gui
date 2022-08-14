@@ -34,7 +34,7 @@ export const DetailsSideBar = () => {
             path: `${id}/experiments`,
             icon: <Dashboard />,
         },
-        { name: 'Code', path: `${id}/code`, icon: <Code /> },
+        { name: 'Code/Models', path: `${id}/code`, icon: <Code /> },
         { name: 'Datasets', path: `${id}/data`, icon: <DataObject /> },
         { name: 'DIVIDER', path: '', icon: null },
         { name: 'Settings', path: `${id}/settings`, icon: <Settings /> },
