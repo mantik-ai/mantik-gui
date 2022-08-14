@@ -5,6 +5,7 @@ import {
     CardContent,
     CardHeader,
     Typography,
+    Link as MUILink,
 } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
@@ -23,8 +24,13 @@ export const ProjectEntry = (props: ProjectEntryProps) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Link href={`/projects/details/${props.project.projectId}`}>
-                    <Button size="small">view details</Button>
+                <Link
+                    href={`/projects/details/${props.project.projectId}`}
+                    passHref
+                >
+                    <Button LinkComponent={MUILink} size="small">
+                        view details
+                    </Button>
                 </Link>
             </CardActions>
         </Card>

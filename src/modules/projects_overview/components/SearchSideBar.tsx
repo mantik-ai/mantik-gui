@@ -1,3 +1,4 @@
+import { Person } from '@mui/icons-material'
 import {
     Box,
     Checkbox,
@@ -6,6 +7,7 @@ import {
     FormControlLabel,
     FormGroup,
     Link as MUILink,
+    Stack,
     TextField,
     Typography,
     useMediaQuery,
@@ -73,13 +75,19 @@ export const SearchSideBar = () => {
                 <Spacing value={theme.spacing(4)}></Spacing>
                 {upToMediumSize ? (
                     <>
-                        <Typography variant="caption">Your Projects</Typography>
+                        <Stack direction="row" gap={theme.spacing(0.5)}>
+                            <Person />
+                            <Typography variant="overline">
+                                Your Projects
+                            </Typography>
+                        </Stack>
                         <Spacing value={theme.spacing(1)}></Spacing>
                         {data?.data.projects?.map((project) => (
                             <Link
                                 key={project.projectId}
                                 color="inherit"
                                 href={`/projects/details/${project.projectId}`}
+                                passHref
                             >
                                 <MUILink
                                     paragraph
