@@ -38,6 +38,8 @@ import type {
     GetProjectsProjectIdDataParams,
     PutProjectsProjectIdData201,
     DataRepository,
+    GetProjectsProjectIdDataUsage200,
+    GetProjectsProjectIdDataUsageParams,
     GetProjectsProjectIdExperiments200,
     GetProjectsProjectIdExperimentsParams,
     PutProjectsProjectIdExperiments201,
@@ -46,8 +48,12 @@ import type {
     GetProjectsProjectIdModelsParams,
     PutProjectsProjectIdModels201,
     ModelRepository,
+    GetProjectsProjectIdModelsUsage200,
+    GetProjectsProjectIdModelsUsageParams,
     GetProjectsProjectIdRuns200,
     GetProjectsProjectIdRunsParams,
+    PutProjectsProjectIdRuns201,
+    AddRun,
     GetProjectsUserUserIdSearch200,
     GetProjectsUserUserIdSearchParams,
     GetGroups200,
@@ -63,6 +69,8 @@ import type {
     Label,
     GetLabelsUserIdSearch200,
     GetLabelsUserIdSearchParams,
+    GetLabelsUserIdScope200,
+    GetLabelsUserIdScopeParams,
 } from '.././models'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -994,6 +1002,71 @@ export const usePutProjectsProjectIdData = <
     >(mutationFn, mutationOptions)
 }
 /**
+ * @summary Returns data entries for given project grouped by their runs
+ */
+export const getProjectsProjectIdDataUsage = (
+    projectId: number,
+    params?: GetProjectsProjectIdDataUsageParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdDataUsage200>> => {
+    return axios.get(`/projects/${projectId}/data/usage`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdDataUsageQueryKey = (
+    projectId: number,
+    params?: GetProjectsProjectIdDataUsageParams
+) => [`/projects/${projectId}/data/usage`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdDataUsageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>
+>
+export type GetProjectsProjectIdDataUsageQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdDataUsage = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: number,
+    params?: GetProjectsProjectIdDataUsageParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdDataUsageQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>
+    > = ({ signal }) =>
+        getProjectsProjectIdDataUsage(projectId, params, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
  * @summary Returns data entry for given project
  */
 export const getProjectsProjectIdDataDataRepositoryId = (
@@ -1535,6 +1608,71 @@ export const usePutProjectsProjectIdModels = <
     >(mutationFn, mutationOptions)
 }
 /**
+ * @summary Returns all models for given project grouped by their runs
+ */
+export const getProjectsProjectIdModelsUsage = (
+    projectId: number,
+    params?: GetProjectsProjectIdModelsUsageParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdModelsUsage200>> => {
+    return axios.get(`/projects/${projectId}/models/usage`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdModelsUsageQueryKey = (
+    projectId: number,
+    params?: GetProjectsProjectIdModelsUsageParams
+) => [`/projects/${projectId}/models/usage`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdModelsUsageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>
+>
+export type GetProjectsProjectIdModelsUsageQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdModelsUsage = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: number,
+    params?: GetProjectsProjectIdModelsUsageParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdModelsUsageQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>
+    > = ({ signal }) =>
+        getProjectsProjectIdModelsUsage(projectId, params, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
  * @summary Returns model entry for given ID
  */
 export const getProjectsProjectIdModelsModelRepositoryId = (
@@ -1740,6 +1878,53 @@ export const useGetProjectsProjectIdRuns = <
     }
 }
 
+/**
+ * @summary Creates a new run
+ */
+export const putProjectsProjectIdRuns = (
+    projectId: number,
+    addRun: AddRun,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<PutProjectsProjectIdRuns201>> => {
+    return axios.put(`/projects/${projectId}/runs`, addRun, options)
+}
+
+export type PutProjectsProjectIdRunsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof putProjectsProjectIdRuns>>
+>
+export type PutProjectsProjectIdRunsMutationBody = AddRun
+export type PutProjectsProjectIdRunsMutationError = AxiosError<unknown>
+
+export const usePutProjectsProjectIdRuns = <
+    TError = AxiosError<unknown>,
+    TContext = unknown
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
+        TError,
+        { projectId: number; data: AddRun },
+        TContext
+    >
+    axios?: AxiosRequestConfig
+}) => {
+    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
+        { projectId: number; data: AddRun }
+    > = (props) => {
+        const { projectId, data } = props ?? {}
+
+        return putProjectsProjectIdRuns(projectId, data, axiosOptions)
+    }
+
+    return useMutation<
+        Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
+        TError,
+        { projectId: number; data: AddRun },
+        TContext
+    >(mutationFn, mutationOptions)
+}
 /**
  * @summary Return a curation of projects tailored for a specific user with a set of search parameters
  */
@@ -2377,6 +2562,71 @@ export const useGetLabelsUserIdSearch = <
         TError,
         TData
     >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary Return all labels of the given scope
+ */
+export const getLabelsUserIdScope = (
+    userId: number,
+    scope: string,
+    params?: GetLabelsUserIdScopeParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetLabelsUserIdScope200>> => {
+    return axios.get(`/labels/${userId}/${scope}`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetLabelsUserIdScopeQueryKey = (
+    userId: number,
+    scope: string,
+    params?: GetLabelsUserIdScopeParams
+) => [`/labels/${userId}/${scope}`, ...(params ? [params] : [])]
+
+export type GetLabelsUserIdScopeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLabelsUserIdScope>>
+>
+export type GetLabelsUserIdScopeQueryError = AxiosError<unknown>
+
+export const useGetLabelsUserIdScope = <
+    TData = Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+    TError = AxiosError<unknown>
+>(
+    userId: number,
+    scope: string,
+    params?: GetLabelsUserIdScopeParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetLabelsUserIdScopeQueryKey(userId, scope, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getLabelsUserIdScope>>
+    > = ({ signal }) =>
+        getLabelsUserIdScope(userId, scope, params, { signal, ...axiosOptions })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!(userId && scope), ...queryOptions })
 
     return {
         queryKey,
