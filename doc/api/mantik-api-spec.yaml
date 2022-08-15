@@ -1207,6 +1207,11 @@ paths:
               required: true
               schema:
                   type: integer
+            - name: scope
+              in: query
+              required: true
+              schema:
+                  type: string
             - name: searchString
               in: query
               schema:
@@ -1219,6 +1224,38 @@ paths:
             responses:
                 '200':
                     description: Successully returned labels that match the search
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'
+
+    /labels/{userId}/{scope}:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: scope
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Return all labels of the given scope
+            responses:
+                '200':
+                    description: Successully returned labels that match the scope
                     content:
                         application/json:
                             schema:
