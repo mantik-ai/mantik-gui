@@ -42,6 +42,8 @@ components:
             properties:
                 projectId:
                     type: integer
+                name:
+                    type: string
                 owner:
                     $ref: '#/components/schemas/User'
                 members:
