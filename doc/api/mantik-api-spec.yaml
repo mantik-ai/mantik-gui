@@ -278,6 +278,23 @@ components:
                     $ref: '#/components/schemas/DataRepository'
                 connections:
                     $ref: '#/components/schemas/Connection'
+        RunsByDataRepository:
+            type: object
+            description: Runs grouped by the data used
+            properties:
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            connections:
+                                $ref: '#/components/schemas/Connection'
 
         PaginationResponse:
             type: object
@@ -628,7 +645,7 @@ paths:
                             $ref: '#/components/schemas/DataRepository'
             responses:
                 '201':
-                    description: Successfully added code repository
+                    description: Successfully added data repository
                     content:
                         application/json:
                             schema:
@@ -636,6 +653,33 @@ paths:
                                 properties:
                                     dataRepositoryId:
                                         type: string
+
+    /projects/{projectId}/data/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns data entries for given project grouped by their runs
+            responses:
+                '200':
+                    description: Data entries for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          dataRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByDataRepository'
 
     /projects/{projectId}/data/{dataRepositoryId}:
         parameters:
