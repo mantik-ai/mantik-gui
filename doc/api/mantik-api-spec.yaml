@@ -913,7 +913,7 @@ paths:
             summary: Get all User group (admin only)
             responses:
                 '200':
-                    description: Got all user groups
+                    description: Get all user groups
                     content:
                         application/json:
                             schema:
@@ -921,7 +921,7 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          projects:
+                                          groups:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/UserGroup'
