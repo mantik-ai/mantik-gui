@@ -295,7 +295,23 @@ components:
                                 $ref: '#/components/schemas/ModelRepository'
                             connections:
                                 $ref: '#/components/schemas/Connection'
-
+        RunsByModel:
+            type: object
+            description: Runs grouped by model used
+            properties:
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connections:
+                                $ref: '#/components/schemas/Connection'
         PaginationResponse:
             type: object
             properties:
@@ -843,6 +859,33 @@ paths:
                                     modelRepositoryId:
                                         type: string
 
+    /projects/{projectId}/models/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all models for given project grouped by their runs
+            responses:
+                '200':
+                    description: models for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          modelsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByModel'
+
     /projects/{projectId}/models/{modelRepositoryId}:
         parameters:
             - name: projectId
@@ -922,6 +965,7 @@ paths:
                                 properties:
                                     timestamp:
                                         type: string
+
     /projects/user/{userId}/search:
         parameters:
             - name: userId
