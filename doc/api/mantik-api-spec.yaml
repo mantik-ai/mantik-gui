@@ -264,6 +264,18 @@ components:
                     $ref: '#/components/schemas/Connection'
                 timestamp:
                     type: string
+        AddRun:
+            type: object
+            description: Necessary information reproduce a run
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connections:
+                    $ref: '#/components/schemas/Connection'
 
         PaginationResponse:
             type: object
@@ -845,7 +857,25 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Run'
-
+        put:
+            requestBody:
+                description: Run information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddRun'
+            summary: Creates a new run
+            responses:
+                '201':
+                    description: Created new run
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    timestamp:
+                                        type: string
     /projects/user/{userId}/search:
         parameters:
             - name: userId
