@@ -681,7 +681,7 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
                 - $ref: '#/components/parameters/PageLength'
-            summary: Returns data entries for given project grouped by their runs
+            summary: Returns data entries for given project and runs grouped by the data
             responses:
                 '200':
                     description: Data entries for given project with their respective runs
