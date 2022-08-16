@@ -6,11 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ExperimentRepository } from './experimentRepository'
+import type { ModelRepository } from './modelRepository'
 import type { DataRepository } from './dataRepository'
 import type { Connection } from './connection'
 
-export type RunsByModelUsageItem = {
+export type RunsByCodeRepositoryUsageItem = {
     experimentRepository?: ExperimentRepository
+    modelRepository?: ModelRepository
     dataRepository?: DataRepository
     connection?: Connection
 }

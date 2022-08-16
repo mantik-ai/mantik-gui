@@ -34,6 +34,8 @@ import type {
     GetProjectsProjectIdCodeParams,
     PutProjectsProjectIdCode201,
     CodeRepository,
+    GetProjectsProjectIdCodeUsage200,
+    GetProjectsProjectIdCodeUsageParams,
     GetProjectsProjectIdData200,
     GetProjectsProjectIdDataParams,
     PutProjectsProjectIdData201,
@@ -44,6 +46,8 @@ import type {
     GetProjectsProjectIdExperimentsParams,
     PutProjectsProjectIdExperiments201,
     ExperimentRepository,
+    GetProjectsProjectIdExperimentsUsage200,
+    GetProjectsProjectIdExperimentsUsageParams,
     GetProjectsProjectIdModels200,
     GetProjectsProjectIdModelsParams,
     PutProjectsProjectIdModels201,
@@ -760,6 +764,71 @@ export const usePutProjectsProjectIdCode = <
     >(mutationFn, mutationOptions)
 }
 /**
+ * @summary Returns all codeRepos for given project and runs that the codeRepos were used in
+ */
+export const getProjectsProjectIdCodeUsage = (
+    projectId: number,
+    params?: GetProjectsProjectIdCodeUsageParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdCodeUsage200>> => {
+    return axios.get(`/projects/${projectId}/code/usage`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdCodeUsageQueryKey = (
+    projectId: number,
+    params?: GetProjectsProjectIdCodeUsageParams
+) => [`/projects/${projectId}/code/usage`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdCodeUsageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>
+>
+export type GetProjectsProjectIdCodeUsageQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdCodeUsage = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: number,
+    params?: GetProjectsProjectIdCodeUsageParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdCodeUsageQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>
+    > = ({ signal }) =>
+        getProjectsProjectIdCodeUsage(projectId, params, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
  * @summary Returns code entry for given project
  */
 export const getProjectsProjectIdCodeCodeRepositoryId = (
@@ -1002,7 +1071,7 @@ export const usePutProjectsProjectIdData = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Returns data entries for given project grouped by their runs
+ * @summary Returns data entries for given project and runs grouped by the data
  */
 export const getProjectsProjectIdDataUsage = (
     projectId: number,
@@ -1316,6 +1385,71 @@ export const usePutProjectsProjectIdExperiments = <
     >(mutationFn, mutationOptions)
 }
 /**
+ * @summary Returns all experiments for given project and runs that the experiments were used in
+ */
+export const getProjectsProjectIdExperimentsUsage = (
+    projectId: number,
+    params?: GetProjectsProjectIdExperimentsUsageParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdExperimentsUsage200>> => {
+    return axios.get(`/projects/${projectId}/experiments/usage`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdExperimentsUsageQueryKey = (
+    projectId: number,
+    params?: GetProjectsProjectIdExperimentsUsageParams
+) => [`/projects/${projectId}/experiments/usage`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdExperimentsUsageQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>
+>
+export type GetProjectsProjectIdExperimentsUsageQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdExperimentsUsage = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: number,
+    params?: GetProjectsProjectIdExperimentsUsageParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdExperimentsUsageQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>
+    > = ({ signal }) =>
+        getProjectsProjectIdExperimentsUsage(projectId, params, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
  * @summary Returns experiment entry for given project
  */
 export const getProjectsProjectIdExperimentsExperimentRepositoryId = (
@@ -1608,7 +1742,7 @@ export const usePutProjectsProjectIdModels = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Returns all models for given project grouped by their runs
+ * @summary Returns all models for given project and runs that the models were created in
  */
 export const getProjectsProjectIdModelsUsage = (
     projectId: number,

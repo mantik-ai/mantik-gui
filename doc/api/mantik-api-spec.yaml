@@ -312,6 +312,43 @@ components:
                                 $ref: '#/components/schemas/DataRepository'
                             connection:
                                 $ref: '#/components/schemas/Connection'
+        RunsByExperiment:
+            type: object
+            description: Runs grouped by expiment used
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+
+        RunsByCodeRepository:
+            type: object
+            description: Runs grouped by codeRepository used
+            properties:
+                codeRepository:
+                    $ref: '#/components/schemas/CodeRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
         PaginationResponse:
             type: object
             properties:
@@ -319,6 +356,7 @@ components:
                     type: integer
             required:
                 - totalrecords
+
     parameters:
         PageLength:
             name: pagelength
@@ -590,6 +628,33 @@ paths:
                                     codeRepositoryId:
                                         type: string
 
+    /projects/{projectId}/code/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all codeRepos for given project and runs that the codeRepos were used in
+            responses:
+                '200':
+                    description: CodeRepos for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          codeRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByCodeRepository'
+
     /projects/{projectId}/code/{codeRepositoryId}:
         parameters:
             - name: projectId
@@ -776,6 +841,33 @@ paths:
                                 properties:
                                     experimentRepositoryId:
                                         type: string
+
+    /projects/{projectId}/experiments/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all experiments for given project and runs that the experiments were used in
+            responses:
+                '200':
+                    description: Experiments for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          experimentsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByExperiment'
 
     /projects/{projectId}/experiments/{experimentRepositoryId}:
         parameters:

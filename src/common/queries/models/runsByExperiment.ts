@@ -6,11 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ExperimentRepository } from './experimentRepository'
-import type { DataRepository } from './dataRepository'
-import type { Connection } from './connection'
+import type { RunsByExperimentUsageItem } from './runsByExperimentUsageItem'
 
-export type RunsByModelUsageItem = {
+/**
+ * Runs grouped by expiment used
+ */
+export interface RunsByExperiment {
     experimentRepository?: ExperimentRepository
-    dataRepository?: DataRepository
-    connection?: Connection
+    usage?: RunsByExperimentUsageItem[]
 }

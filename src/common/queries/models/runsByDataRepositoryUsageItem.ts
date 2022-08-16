@@ -12,5 +12,5 @@ import type { Connection } from './connection'
 export type RunsByDataRepositoryUsageItem = {
     experimentRepository?: ExperimentRepository
     modelRepository?: ModelRepository
-    connections?: Connection
+    connection?: Connection
 }

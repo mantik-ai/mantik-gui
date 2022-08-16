@@ -17,5 +17,5 @@ export interface AddRun {
     experimentRepository?: ExperimentRepository
     modelRepository?: ModelRepository
     dataRepository?: DataRepository
-    connections?: Connection
+    connection?: Connection
 }
