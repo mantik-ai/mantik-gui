@@ -293,7 +293,7 @@ components:
                                 $ref: '#/components/schemas/ExperimentRepository'
                             modelRepository:
                                 $ref: '#/components/schemas/ModelRepository'
-                            connections:
+                            connection:
                                 $ref: '#/components/schemas/Connection'
         RunsByModel:
             type: object
