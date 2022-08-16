@@ -870,7 +870,7 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
                 - $ref: '#/components/parameters/PageLength'
-            summary: Returns all models for given project grouped by their runs
+            summary: Returns all models for given project and runs that the models were created in
             responses:
                 '200':
                     description: models for given project with their respective runs
