@@ -310,7 +310,7 @@ components:
                                 $ref: '#/components/schemas/ExperimentRepository'
                             dataRepository:
                                 $ref: '#/components/schemas/DataRepository'
-                            connections:
+                            connection:
                                 $ref: '#/components/schemas/Connection'
         PaginationResponse:
             type: object
