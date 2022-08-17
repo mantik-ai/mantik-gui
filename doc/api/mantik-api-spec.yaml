@@ -787,6 +787,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepositories:
+                                    value:
+                                        $ref: examples/modelRepositories.json
         put:
             summary: Add model repository
             requestBody:
@@ -830,6 +834,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepository:
+                                    value:
+                                        $ref: examples/modelRepository.json
         post:
             summary: Update model repository
             requestBody:

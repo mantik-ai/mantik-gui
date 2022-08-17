@@ -1,6 +1,6 @@
 {
     "totalrecords": 1,
-    "dataRepositories": [
+    "codeRepositories": [
         {
             "$ref": "experimentRepository.json"
         }
