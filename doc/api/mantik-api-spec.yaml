@@ -523,6 +523,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleCodeRepositories:
+                                    value:
+                                        $ref: examples/codeRepositories.json
         put:
             summary: Add code repository
             requestBody:
@@ -564,6 +568,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleCodeRepository:
+                                    value:
+                                        $ref: examples/codeRepository.json
         post:
             summary: Updates code repository
             requestBody:
