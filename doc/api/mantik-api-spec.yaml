@@ -265,22 +265,22 @@ components:
                 timestamp:
                     type: string
         DeploymentInformation:
-          type: object
-          properties:
-            trainedModelId:
-              type: int
-            connection:
-              $ref: '#components/schemas/Connection'
-            resources:
-              $ref: '#components/schemas/Resources'
-            cronString:
-              type: string
+            type: object
+            properties:
+                trainedModelId:
+                    type: int
+                connection:
+                    $ref: '#components/schemas/Connection'
+                resources:
+                    $ref: '#components/schemas/Resources'
+                cronString:
+                    type: string
         PredictionRequest: {} # matches any value
         PredictionResponse: {}
         PackagedDeployment:
-          type: object
-          apptainerImageUri:
-            type: string
+            type: object
+            apptainerImageUri:
+                type: string
         PaginationResponse:
             type: object
             properties:
@@ -289,22 +289,22 @@ components:
             required:
                 - totalrecords
             parameters:
-              PageLength:
-                name: pagelength
-                in: query
-                description: Number of records to return
-                schema:
-                  minimum: 1
-                  maximum: 200
-                  default: 50
-                  type: integer
-              StartIndex:
-                name: startindex
-                in: query
-                description: Start index for paging
-                schema:
-                  minimum: 0
-                  type: integer
+                PageLength:
+                    name: pagelength
+                    in: query
+                    description: Number of records to return
+                    schema:
+                        minimum: 1
+                        maximum: 200
+                        default: 50
+                        type: integer
+                StartIndex:
+                    name: startindex
+                    in: query
+                    description: Start index for paging
+                    schema:
+                        minimum: 0
+                        type: integer
 
 paths:
     /users:
@@ -844,8 +844,8 @@ paths:
                   type: integer
         get:
             parameters:
-              - $ref: '#components/schemas/StartIndex'
-              - $ref: '#components/schemas/PageLength'
+                - $ref: '#components/schemas/StartIndex'
+                - $ref: '#components/schemas/PageLength'
             summary: List all deployments
             responses:
                 '200':
@@ -853,12 +853,12 @@ paths:
                     content:
                         type: object
                         allOf:
-                          - $ref: '#components/schemas/PaginationResponse'
-                          properties:
-                            deployments:
-                              type: array
-                              items:
-                                $ref: '#/components/schemas/DeploymentInformation' #TODO deployment information schema
+                            - $ref: '#components/schemas/PaginationResponse'
+                            - properties:
+                                  deployments:
+                                      type: array
+                                      items:
+                                          $ref: '#/components/schemas/DeploymentInformation'
         put:
             summary: Create deployment
             requestBody:
@@ -866,17 +866,16 @@ paths:
                 required: true
                 content:
                     application/json:
-                      schema:
-                        $ref: '#/components/schemas/DeploymentInformation'
+                        schema:
+                            $ref: '#/components/schemas/DeploymentInformation'
             responses:
                 '201':
-                  description: Successfully deployed model
-                  content:
-                    application/json:
-                      schema:
-                        deplyomentId:
-                          type: integer
-
+                    description: Successfully deployed model
+                    content:
+                        application/json:
+                            schema:
+                                deplyomentId:
+                                    type: integer
 
     /projects/{projectId}/deployments/{deploymentId}:
         parameters:
@@ -889,16 +888,16 @@ paths:
               in: path
               required: true
               schema:
-                type: integer
+                  type: integer
         get:
             summary: Get deployment information
             responses:
                 '200':
                     description: Model entry for given ID
                     content:
-                      application/json:
-                        schema:
-                          $ref: '#/components/schemas/DeploymentInformation'
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeploymentInformation'
         post:
             summary: Update deployment
             requestBody:
@@ -906,16 +905,16 @@ paths:
                 required: true
                 content:
                     application/json:
-                      schema:
-                        $ref: '#/components/schemas/DeploymentInformation'
+                        schema:
+                            $ref: '#/components/schemas/DeploymentInformation'
             responses:
-                  '200':
+                '200':
                     description: Successfully updated deployment
         delete:
-          summary: Delete deployment
-          responses:
-            '200':
-              description: Successfully deleted deployment
+            summary: Delete deployment
+            responses:
+                '200':
+                    description: Successfully deleted deployment
 
     /projects/{projectId}/deployments/{deploymentId}/predict:
         parameters:
@@ -928,23 +927,23 @@ paths:
               in: path
               required: true
               schema:
-                type: integer
+                  type: integer
         get:
             summary: Get deployment information
             requestBody:
-              description: Prediction request, including data
-              required: true
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/PredictionRequest' #TODO
+                description: Prediction request, including data
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PredictionRequest'
             responses:
                 '200':
                     description: Model entry for given ID
                     content:
-                      application/json:
-                        schema:
-                          $ref: '#/components/schemas/PredictionResponse' #TODO
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PredictionResponse'
 
     /projects/{projectId}/deployments/{deploymentId}/download:
         parameters:
@@ -957,16 +956,16 @@ paths:
               in: path
               required: true
               schema:
-                type: integer
+                  type: integer
         get:
-            summary: Download packaged deployment #TODO Eigentlich ist das doch über mlflow models abgedeckt oder? Was würde dann noch zu run_local dazugehören?
+            summary: Download packaged deployment
             responses:
                 '200':
                     description: Model entry for given ID
                     content:
-                      application/json:
-                        schema:
-                          $ref: '#/components/schemas/PackagedDeployment' #TODO
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PackagedDeployment'
 
     /projects/{projectId}/runs:
         parameters:
