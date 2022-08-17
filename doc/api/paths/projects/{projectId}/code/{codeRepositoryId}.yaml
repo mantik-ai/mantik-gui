@@ -1,0 +1,32 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: codeRepositoryId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns code entry for given project
+    responses:
+        '200':
+            description: Code entry for given project
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../schemas/CodeRepository.yaml'
+post:
+    summary: Updates code repository
+    requestBody:
+        description: Updated code repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../schemas/CodeRepository.yaml'
+    responses:
+        '200':
+            description: Successfully updated code repository

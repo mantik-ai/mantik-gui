@@ -1,0 +1,38 @@
+get:
+    parameters:
+        - $ref: '../parameters/StartIndex.yaml'
+        - $ref: '../parameters/PageLength.yaml'
+    summary: Get list of organizations (admin only)
+    responses:
+        '200':
+            description: List of organizations
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../schemas/Organization.yaml'
+put:
+    summary: Add organization
+    requestBody:
+        description: Organization info
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/Organization.yaml'
+    responses:
+        '201':
+            description: Sucessfully added organization
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            organizationId:
+                                type: integer

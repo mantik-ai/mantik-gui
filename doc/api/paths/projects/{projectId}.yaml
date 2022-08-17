@@ -1,0 +1,27 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns the information on a specific project
+    responses:
+        '200':
+            description: Information on a specific project
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../schemas/Project.yaml'
+post:
+    summary: Update project
+    requestBody:
+        description: Updated project information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../schemas/Project.yaml'
+    responses:
+        '200':
+            description: Successfully updated project information

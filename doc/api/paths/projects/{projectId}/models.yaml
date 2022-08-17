@@ -1,0 +1,46 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns model entries for given project
+    responses:
+        '200':
+            description: Model entries for given project
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  models:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/ModelRepository.yaml'
+put:
+    summary: Add model repository
+    requestBody:
+        description: Added model repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        $ref: '../../../schemas/ModelRepository.yaml'
+    responses:
+        '201':
+            description: Successfully added model repository
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            modelRepositoryId:
+                                type: string

@@ -1,0 +1,47 @@
+get:
+    parameters:
+        - $ref: '../parameters/StartIndex.yaml'
+        - $ref: '../parameters/PageLength.yaml'
+    summary: List of all users
+    description: List of all users (admin only)
+    responses:
+        '200':
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  users:
+                                      type: array
+                                      items:
+                                          $ref: '../schemas/User.yaml'
+put:
+    summary: Creates a new user
+    requestBody:
+        description: Creates a new user
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        userName:
+                            type: string
+                        email:
+                            type: string
+                example:
+                    userName: black_panther
+                    email: panther@road_to_nowhere.wakanda
+    responses:
+        '201':
+            description: Successfully created user
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            userId:
+                                type: integer

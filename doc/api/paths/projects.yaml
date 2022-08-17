@@ -1,0 +1,38 @@
+get:
+    parameters:
+        - $ref: '../parameters/StartIndex.yaml'
+        - $ref: '../parameters/PageLength.yaml'
+    summary: Returns all projects (admin only)
+    responses:
+        '200':
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../schemas/Project.yaml'
+put:
+    summary: Creates a new project
+    requestBody:
+        description: Project information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/Project.yaml'
+    responses:
+        '201':
+            description: Created new project
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            projectId:
+                                type: integer

@@ -1,0 +1,44 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns all runs for a given project
+    responses:
+        '200':
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  runs:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/Run.yaml'
+put:
+    requestBody:
+        description: Run information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../schemas/AddRun.yaml'
+    summary: Creates a new run
+    responses:
+        '201':
+            description: Created new run
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            timestamp:
+                                type: string

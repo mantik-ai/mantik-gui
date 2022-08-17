@@ -1,0 +1,44 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns code entries for given project
+    responses:
+        '200':
+            description: Code entries for given project
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  codeRepositories:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/CodeRepository.yaml'
+put:
+    summary: Add code repository
+    requestBody:
+        description: Added code repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../schemas/CodeRepository.yaml'
+    responses:
+        '201':
+            description: Successfully added code repository
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            codeRepositoryId:
+                                type: string

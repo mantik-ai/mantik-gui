@@ -1,44 +1,187 @@
-openapi: '3.0.2'
+openapi: 3.0.2
 info:
     title: Mantik minimal API
-    description: The API serves the front end with all necessary information on projects, and users.
-    version: '0.1.0'
-
-servers:
-    - url: https://api.server.test/v1
-#    - url: https://mantik.ai/
-#      description: landing page of mantik
-#    - url: http://dev.mantik.ai
-#      description: dev infrastructure for testing until review apps do fully work with github
-
+    description: 'The API serves the front end with all necessary information on projects, and users.'
+    version: 0.1.0
 components:
     schemas:
-        errorMessage:
-            type: string
-            maxLength: 1024
-            description: An error message
-        Settings:
+        AddRun:
             type: object
-            description: User settings
+            description: Necessary information reproduce a run
             properties:
-                user:
-                    $ref: '#/components/schemas/User'
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connection:
+                    $ref: '#/components/schemas/Connection'
+        CodeRepository:
+            type: object
+            description: 'Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket'
+            properties:
+                codeRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - codeRepositoryId
+                - uri
+        Connection:
+            type: object
+            description: 'Represents a connection to a third-party platform, usually either HPC or cloud platform credentials'
+            properties:
+                connectionId:
+                    type: integer
+                connectionName:
+                    type: string
+                connectionProvider:
+                    type: string
+                loginName:
+                    type: string
                 password:
                     type: string
                 token:
                     type: string
-                paymentInfo:
-                    $ref: '#/components/schemas/paymentInfo'
-                connections:
+                authMethod:
+                    type: string
+            required:
+                - connectionId
+                - connectionName
+                - connectionProvider
+        DataRepository:
+            type: object
+            description: Represents a data repository
+            properties:
+                dataRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Connection'
+                        $ref: '#/components/schemas/Label'
             required:
-                - user
-                - password
+                - dataRepositoryId
+                - uri
+        ErrorMessage:
+            type: string
+            maxLength: 1024
+            description: An error message
+        ExperimentRepository:
+            type: object
+            description: 'Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)'
+            properties:
+                experimentId:
+                    type: string
+                name:
+                    type: string
+                artifact_location:
+                    type: string
+                lifecycle_stage:
+                    type: string
+                last_update_time:
+                    type: integer
+                creation_time:
+                    type: integer
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - experimentId
+        Label:
+            type: object
+            description: Represents a label or a Tag depending on the presence of the value parameter
+            properties:
+                scope:
+                    type: string
+                name:
+                    type: string
+                value:
+                    type: string
+            required:
+                - scope
+                - name
+        ModelRepository:
+            type: object
+            description: Represents a model
+            properties:
+                modelRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                git:
+                    $ref: '#/components/schemas/CodeRepository'
+                commit:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - modelRepositoryId
+                - uri
+        Organization:
+            type: object
+            description: 'Represents an organization, i.e. a collection of user groups and users'
+            properties:
+                organizationId:
+                    type: string
+                name:
+                    type: string
+                contact:
+                    $ref: '#/components/schemas/User'
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserGroup'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - organizationId
+                - name
+                - contact
+        PaginationResponse:
+            type: object
+            properties:
+                totalrecords:
+                    type: integer
+            required:
+                - totalrecords
+        PaymentInfo:
+            type: object
+            description: Represents payment information
+            properties:
+                paymentInfoId:
+                    type: string
+                address:
+                    type: string
+                paymentMethod:
+                    type: string
+                paymentDetails:
+                    type: string
+            required:
+                - paymentInfoId
+                - address
+                - paymentMethod
+                - paymentDetails
         Project:
             type: object
-            description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
+            description: 'A project is a collection of code, experiments, data and models with permission management (owner, members, groups)'
             properties:
                 projectId:
                     type: integer
@@ -69,192 +212,9 @@ components:
             required:
                 - projectId
                 - owner
-        Connection:
-            type: object
-            description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
-            properties:
-                connectionId:
-                    type: integer
-                connectionName:
-                    type: string
-                connectionProvider:
-                    type: string
-                loginName:
-                    type: string
-                password:
-                    type: string
-                token:
-                    type: string
-                authMethod:
-                    type: string
-            required:
-                - connectionId
-                - connectionName
-                - connectionProvider
-        ExperimentRepository:
-            type: object
-            description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
-            properties:
-                experimentId:
-                    type: string
-                name:
-                    type: string
-                artifact_location:
-                    type: string
-                lifecycle_stage:
-                    type: string
-                last_update_time:
-                    type: integer
-                creation_time:
-                    type: integer
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - experimentId
-        User:
-            type: object
-            description: Represents a user
-            properties:
-                userId:
-                    type: integer
-                name:
-                    type: string
-                email:
-                    type: string
-            required:
-                - userId
-                - name
-                - email
-        CodeRepository:
-            type: object
-            description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
-            properties:
-                codeRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - codeRepositoryId
-                - uri
-        DataRepository:
-            type: object
-            description: Represents a data repository
-            properties:
-                dataRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - dataRepositoryId
-                - uri
-        ModelRepository:
-            type: object
-            description: Represents a model
-            properties:
-                modelRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                git:
-                    $ref: '#/components/schemas/CodeRepository'
-                commit:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - modelRepositoryId
-                - uri
-        UserGroup:
-            type: object
-            description: Represents a user group
-            properties:
-                userGroupId:
-                    type: string
-                name:
-                    type: string
-                admin:
-                    $ref: '#/components/schemas/User'
-                members:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/User'
-            required:
-                - userGroupId
-                - name
-                - admin
-        Organization:
-            type: object
-            description: Represents an organization, i.e. a collection of user groups and users
-            properties:
-                organizationId:
-                    type: string
-                name:
-                    type: string
-                contact:
-                    $ref: '#/components/schemas/User'
-                groups:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/UserGroup'
-                members:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/User'
-            required:
-                - organizationId
-                - name
-                - contact
-        paymentInfo:
-            type: object
-            description: Represents payment information
-            properties:
-                paymentInfoId:
-                    type: string
-                address:
-                    type: string
-                paymentMethod:
-                    type: string
-                paymentDetails:
-                    type: string
-            required:
-                - paymentInfoId
-                - address
-                - paymentMethod
-                - paymentDetails
-        Label:
-            type: object
-            description: Represents a label or a Tag depending on the presence of the value parameter
-            properties:
-                scope:
-                    type: string
-                name:
-                    type: string
-                value:
-                    type: string
-            required:
-                - scope
-                - name
         Run:
             type: object
-            description: Represents a quadruple of experiment, code, data and hardware-configuration
+            description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
             properties:
                 experimentRepository:
                     $ref: '#/components/schemas/ExperimentRepository'
@@ -266,70 +226,6 @@ components:
                     $ref: '#/components/schemas/Connection'
                 timestamp:
                     type: string
-        AddRun:
-            type: object
-            description: Necessary information reproduce a run
-            properties:
-                experimentRepository:
-                    $ref: '#/components/schemas/ExperimentRepository'
-                modelRepository:
-                    $ref: '#/components/schemas/ModelRepository'
-                dataRepository:
-                    $ref: '#/components/schemas/DataRepository'
-                connection:
-                    $ref: '#/components/schemas/Connection'
-        RunsByDataRepository:
-            type: object
-            description: Runs grouped by the data used
-            properties:
-                dataRepository:
-                    $ref: '#/components/schemas/DataRepository'
-                usage:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            experimentRepository:
-                                $ref: '#/components/schemas/ExperimentRepository'
-                            modelRepository:
-                                $ref: '#/components/schemas/ModelRepository'
-                            connection:
-                                $ref: '#/components/schemas/Connection'
-        RunsByModel:
-            type: object
-            description: Runs grouped by model used
-            properties:
-                modelRepository:
-                    $ref: '#/components/schemas/ModelRepository'
-                usage:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            experimentRepository:
-                                $ref: '#/components/schemas/ExperimentRepository'
-                            dataRepository:
-                                $ref: '#/components/schemas/DataRepository'
-                            connection:
-                                $ref: '#/components/schemas/Connection'
-        RunsByExperiment:
-            type: object
-            description: Runs grouped by expiment used
-            properties:
-                experimentRepository:
-                    $ref: '#/components/schemas/ExperimentRepository'
-                usage:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            modelRepository:
-                                $ref: '#/components/schemas/ModelRepository'
-                            dataRepository:
-                                $ref: '#/components/schemas/DataRepository'
-                            connection:
-                                $ref: '#/components/schemas/Connection'
-
         RunsByCodeRepository:
             type: object
             description: Runs grouped by codeRepository used
@@ -349,14 +245,108 @@ components:
                                 $ref: '#/components/schemas/DataRepository'
                             connection:
                                 $ref: '#/components/schemas/Connection'
-        PaginationResponse:
+        RunsByDataRepository:
             type: object
+            description: Runs grouped by the data used
             properties:
-                totalrecords:
-                    type: integer
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByExperiment:
+            type: object
+            description: Runs grouped by expiment used
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByModel:
+            type: object
+            description: Runs grouped by model used
+            properties:
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        Settings:
+            type: object
+            description: User settings
+            properties:
+                user:
+                    $ref: '#/components/schemas/User'
+                password:
+                    type: string
+                token:
+                    type: string
+                paymentInfo:
+                    $ref: '#/components/schemas/PaymentInfo'
+                connections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Connection'
             required:
-                - totalrecords
-
+                - user
+                - password
+        User:
+            type: object
+            description: Represents a user
+            properties:
+                userId:
+                    type: integer
+                name:
+                    type: string
+                email:
+                    type: string
+            required:
+                - userId
+                - name
+                - email
+        UserGroup:
+            type: object
+            description: Represents a user group
+            properties:
+                userGroupId:
+                    type: string
+                name:
+                    type: string
+                admin:
+                    $ref: '#/components/schemas/User'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - userGroupId
+                - name
+                - admin
     parameters:
         PageLength:
             name: pagelength
@@ -374,7 +364,6 @@ components:
             schema:
                 minimum: 0
                 type: integer
-
 paths:
     /users:
         get:
@@ -424,8 +413,7 @@ paths:
                                 properties:
                                     userId:
                                         type: integer
-
-    /users/{userId}:
+    '/users/{userId}':
         parameters:
             - name: userId
               in: path
@@ -453,8 +441,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated user
-
-    /users/{userId}/settings:
+    '/users/{userId}/settings':
         parameters:
             - name: userId
               in: path
@@ -485,7 +472,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated settings
-
     /projects:
         get:
             parameters:
@@ -525,8 +511,7 @@ paths:
                                 properties:
                                     projectId:
                                         type: integer
-
-    /projects/user/{userId}:
+    '/projects/user/{userId}':
         parameters:
             - name: userId
               in: path
@@ -552,8 +537,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
-
-    /projects/{projectId}:
+    '/projects/{projectId}':
         parameters:
             - name: projectId
               in: path
@@ -581,8 +565,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated project information
-
-    /projects/{projectId}/code:
+    '/projects/{projectId}/code':
         parameters:
             - name: projectId
               in: path
@@ -627,8 +610,7 @@ paths:
                                 properties:
                                     codeRepositoryId:
                                         type: string
-
-    /projects/{projectId}/code/usage:
+    '/projects/{projectId}/code/usage':
         parameters:
             - name: projectId
               in: path
@@ -654,8 +636,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/RunsByCodeRepository'
-
-    /projects/{projectId}/code/{codeRepositoryId}:
+    '/projects/{projectId}/code/{codeRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -688,8 +669,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-
-    /projects/{projectId}/data:
+    '/projects/{projectId}/data':
         parameters:
             - name: projectId
               in: path
@@ -734,8 +714,7 @@ paths:
                                 properties:
                                     dataRepositoryId:
                                         type: string
-
-    /projects/{projectId}/data/usage:
+    '/projects/{projectId}/data/usage':
         parameters:
             - name: projectId
               in: path
@@ -761,8 +740,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/RunsByDataRepository'
-
-    /projects/{projectId}/data/{dataRepositoryId}:
+    '/projects/{projectId}/data/{dataRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -795,8 +773,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-
-    /projects/{projectId}/experiments:
+    '/projects/{projectId}/experiments':
         parameters:
             - name: projectId
               in: path
@@ -841,8 +818,7 @@ paths:
                                 properties:
                                     experimentRepositoryId:
                                         type: string
-
-    /projects/{projectId}/experiments/usage:
+    '/projects/{projectId}/experiments/usage':
         parameters:
             - name: projectId
               in: path
@@ -868,8 +844,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/RunsByExperiment'
-
-    /projects/{projectId}/experiments/{experimentRepositoryId}:
+    '/projects/{projectId}/experiments/{experimentRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -902,8 +877,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated experiment repository
-
-    /projects/{projectId}/models:
+    '/projects/{projectId}/models':
         parameters:
             - name: projectId
               in: path
@@ -950,8 +924,7 @@ paths:
                                 properties:
                                     modelRepositoryId:
                                         type: string
-
-    /projects/{projectId}/models/usage:
+    '/projects/{projectId}/models/usage':
         parameters:
             - name: projectId
               in: path
@@ -977,8 +950,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/RunsByModel'
-
-    /projects/{projectId}/models/{modelRepositoryId}:
+    '/projects/{projectId}/models/{modelRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -1011,8 +983,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated model repository
-
-    /projects/{projectId}/runs:
+    '/projects/{projectId}/runs':
         parameters:
             - name: projectId
               in: path
@@ -1057,8 +1028,7 @@ paths:
                                 properties:
                                     timestamp:
                                         type: string
-
-    /projects/user/{userId}/search:
+    '/projects/user/{userId}/search':
         parameters:
             - name: userId
               in: path
@@ -1099,9 +1069,7 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
                 - $ref: '#/components/parameters/PageLength'
-            summary:
-                Return a curation of projects tailored for a specific user with a set of
-                search parameters
+            summary: Return a curation of projects tailored for a specific user with a set of search parameters
             responses:
                 '200':
                     description: Successully returned projects that match the search
@@ -1116,7 +1084,6 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
-
     /groups:
         get:
             parameters:
@@ -1156,8 +1123,7 @@ paths:
                                 properties:
                                     groupId:
                                         type: string
-
-    /groups/{groupId}:
+    '/groups/{groupId}':
         parameters:
             - name: groupId
               in: path
@@ -1185,7 +1151,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated user group
-
     /organizations:
         get:
             parameters:
@@ -1225,8 +1190,7 @@ paths:
                                 properties:
                                     organizationId:
                                         type: integer
-
-    /organizations/{organizationId}:
+    '/organizations/{organizationId}':
         parameters:
             - name: organizationId
               in: path
@@ -1254,7 +1218,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated organization info
-
     /labels:
         get:
             parameters:
@@ -1291,8 +1254,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Label'
-
-    /labels/{userId}/search:
+    '/labels/{userId}/search':
         parameters:
             - name: userId
               in: path
@@ -1327,8 +1289,7 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Label'
-
-    /labels/{userId}/{scope}:
+    '/labels/{userId}/{scope}':
         parameters:
             - name: userId
               in: path

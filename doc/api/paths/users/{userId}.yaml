@@ -1,0 +1,27 @@
+parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns the information on a specific user
+    responses:
+        '200':
+            description: A json array with user information
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../schemas/User.yaml'
+post:
+    summary: Update user info
+    requestBody:
+        description: Updated user info
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../schemas/User.yaml'
+    responses:
+        '200':
+            description: Successfully updated user

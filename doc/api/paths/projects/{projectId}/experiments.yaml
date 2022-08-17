@@ -1,0 +1,44 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns experiment entries for given project
+    responses:
+        '200':
+            description: Experiment entries for given project
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  experimentRepositories:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/ExperimentRepository.yaml'
+put:
+    summary: Add experiment repository
+    requestBody:
+        description: Added data repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../schemas/ExperimentRepository.yaml'
+    responses:
+        '201':
+            description: Successfully added experiment repository
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            experimentRepositoryId:
+                                type: string

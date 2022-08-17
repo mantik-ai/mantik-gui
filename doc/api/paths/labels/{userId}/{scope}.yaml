@@ -1,0 +1,30 @@
+parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: scope
+      in: path
+      required: true
+      schema:
+          type: string
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Return all labels of the given scope
+    responses:
+        '200':
+            description: Successully returned labels that match the scope
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/Label.yaml'

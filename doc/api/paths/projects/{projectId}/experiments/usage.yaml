@@ -1,0 +1,25 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../../parameters/StartIndex.yaml'
+        - $ref: '../../../../parameters/PageLength.yaml'
+    summary: Returns all experiments for given project and runs that the experiments were used in
+    responses:
+        '200':
+            description: Experiments for given project with their respective runs
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  experimentsWithUsage:
+                                      type: array
+                                      items:
+                                          $ref: '../../../../schemas/RunsByExperiment.yaml'

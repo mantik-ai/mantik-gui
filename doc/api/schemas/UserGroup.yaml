@@ -1,0 +1,17 @@
+type: object
+description: Represents a user group
+properties:
+    userGroupId:
+        type: string
+    name:
+        type: string
+    admin:
+        $ref: ./User.yaml
+    members:
+        type: array
+        items:
+            $ref: ./User.yaml
+required:
+    - userGroupId
+    - name
+    - admin

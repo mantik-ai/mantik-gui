@@ -1,0 +1,16 @@
+type: object
+description: Represents payment information
+properties:
+    paymentInfoId:
+        type: string
+    address:
+        type: string
+    paymentMethod:
+        type: string
+    paymentDetails:
+        type: string
+required:
+    - paymentInfoId
+    - address
+    - paymentMethod
+    - paymentDetails
