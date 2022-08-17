@@ -862,6 +862,8 @@ paths:
                                       type: array
                                       items:
                                           $ref: '#/components/schemas/DeploymentInformation'
+                        example:
+                            $ref: 'examples/deploymentInformations.json'
         put:
             summary: Create deployment
             requestBody:
@@ -871,6 +873,8 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/DeploymentInformation'
+                example:
+                    $ref: 'examples/deploymentInformation.json'
             responses:
                 '201':
                     description: Successfully deployed model
@@ -879,6 +883,8 @@ paths:
                             schema:
                                 deplyomentId:
                                     type: integer
+                            example:
+                                deploymentId: 10
 
     /projects/{projectId}/deployments/{deploymentId}:
         parameters:
@@ -901,6 +907,8 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DeploymentInformation'
+                    example:
+                        $ref: 'examples/deploymentInformation.json'
         post:
             summary: Update deployment
             requestBody:
@@ -910,6 +918,8 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/DeploymentInformation'
+                example:
+                    $ref: 'examples/deploymentInformation.json'
             responses:
                 '200':
                     description: Successfully updated deployment
@@ -940,6 +950,8 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/PredictionRequest'
+                example:
+                    $ref: 'examples/predictionRequest.json'
             responses:
                 '200':
                     description: Model entry for given ID
@@ -947,6 +959,8 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/PredictionResponse'
+                            example:
+                                $ref: 'examples/predictionResponse.json'
 
     /projects/{projectId}/deployments/{deploymentId}/download:
         parameters:
@@ -969,6 +983,8 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/PackagedDeployment'
+                            example:
+                                $ref: 'examples/packagedDeployment.json'
 
     /projects/{projectId}/runs:
         parameters:
