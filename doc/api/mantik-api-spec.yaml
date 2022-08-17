@@ -699,6 +699,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepositories:
+                                    value:
+                                        $ref: examples/experimentRepositories.json
         put:
             summary: Add experiment repository
             requestBody:
@@ -740,6 +744,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepository:
+                                    value:
+                                        $ref: examples/experimentRepository.json
         post:
             summary: Update experiment repository
             requestBody:
