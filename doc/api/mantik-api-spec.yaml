@@ -648,12 +648,7 @@ paths:
                                 ecmwf-ifs-hres-constants-ab:
                                     summary: An example of data
                                     value:
-                                        dataRepositoryId: "constants-ab"
-                                        uri: https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc
-                                        description: AB constants from the ECMWF IFS HRES model
-                                        labels:
-                                            - scope: weather-model
-                                              name: ecmwf-ifs-hres
+                                        $ref: examples/dataRepository.json
         post:
             summary: Update data repository
             requestBody:
