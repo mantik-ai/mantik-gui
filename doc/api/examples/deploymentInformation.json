@@ -1,0 +1,6 @@
+{
+    "trainedModelId": 1,
+    "connection": { "$ref": "connection.json" },
+    "resources": { "$ref": "resources.json" },
+    "cronString": "* * * 1 *"
+}
