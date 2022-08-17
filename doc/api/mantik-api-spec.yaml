@@ -603,6 +603,13 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                exampleDataRepositories:
+                                    value:
+                                        $ref: examples/dataRepositories.json
+                                        # totalrecords: 1
+                                        # dataRepositories:
+                                        #     - $ref: examples/dataRepository.json
         put:
             summary: Add data repository
             requestBody:
