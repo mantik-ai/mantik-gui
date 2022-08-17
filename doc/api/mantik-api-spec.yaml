@@ -645,8 +645,7 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/DataRepository'
                             examples:
-                                ecmwf-ifs-hres-constants-ab:
-                                    summary: An example of data
+                                exampleDataRepository:
                                     value:
                                         $ref: examples/dataRepository.json
         post:
