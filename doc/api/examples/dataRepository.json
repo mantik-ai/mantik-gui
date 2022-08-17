@@ -1,7 +1,7 @@
 {
     "dataRepositoryId": "constants-ab",
     "uri": "https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc",
-    "description": "AB constants from the ECMWF IFS HRES model",
+    "description": "The underlying data are from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data cover a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contain `~10^3` samples.",
     "labels": [
         {
             "scope": "weather-model",

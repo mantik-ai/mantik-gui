@@ -1,0 +1,8 @@
+{
+    "totalrecords": 1,
+    "users": [
+        {
+            "$ref": "user.json"
+        }
+    ]
+}
