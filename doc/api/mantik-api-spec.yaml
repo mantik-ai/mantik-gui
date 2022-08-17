@@ -98,7 +98,7 @@ components:
                 name:
                     type: string
                 artifact_location:
-                    type: string
+                    type: strDataRepositorying
                 lifecycle_stage:
                     type: string
                 last_update_time:
@@ -644,6 +644,16 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                ecmwf-ifs-hres-constants-ab:
+                                    summary: An example of data
+                                    value:
+                                        dataRepositoryId: "constants-ab"
+                                        uri: https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc
+                                        description: AB constants from the ECMWF IFS HRES model
+                                        labels:
+                                            - scope: weather-model
+                                              name: ecmwf-ifs-hres
         post:
             summary: Update data repository
             requestBody:
