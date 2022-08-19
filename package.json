@@ -16,7 +16,8 @@
         "cypress:headless": "cypress run",
         "test:e2e": "start-server-and-test test-server 4000 cypress",
         "test:e2e:headless": "start-server-and-test test-server 4000 cypress:headless",
-        "typecheck": "tsc --noEmit --project tsconfig.json"
+        "typecheck": "tsc --noEmit --project tsconfig.json",
+        "validate:spec": "swagger-cli validate doc/api/openapi.yaml --type yaml"
     },
     "dependencies": {
         "@emotion/react": "^11.9.3",
