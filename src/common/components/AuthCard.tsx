@@ -3,24 +3,14 @@ import {
     Card,
     CardContent,
     Divider,
-    IconButton,
     Link,
     Stack,
     Typography,
 } from '@mui/material'
 import React, { ReactNode } from 'react'
 import { SvgIconComponent } from '@mui/icons-material'
-import GoogleIcon from '@mui/icons-material/Google'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import AppleIcon from '@mui/icons-material/Apple'
 import { signIn } from 'next-auth/react'
-import { Providers } from '../types/providers'
-import {
-    APPLE_PROVIDER_ID,
-    COGNITO_PROVIDER_ID,
-    GITHUB_PROVIDER_ID,
-    GOOGLE_PROVIDER_ID,
-} from '../constants'
+import { COGNITO_PROVIDER_ID } from '../constants'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',
@@ -33,11 +23,12 @@ interface AuthCardProps {
     type: AuthCardTypes
 }
 
-const providers: Providers[] = [
+/*unnecessary at first, but will be useful later*/
+/*const providers: Providers[] = [
     { id: GOOGLE_PROVIDER_ID, icon: <GoogleIcon /> },
     { id: GITHUB_PROVIDER_ID, icon: <GitHubIcon /> },
     { id: APPLE_PROVIDER_ID, icon: <AppleIcon /> },
-]
+]*/
 
 export const AuthCard = (props: AuthCardProps) => {
     let linkText = ''
@@ -119,7 +110,9 @@ export const AuthCard = (props: AuthCardProps) => {
                         >
                             {props.type}
                         </Button>
-                        <Divider sx={{ py: 1 }}>
+
+                        {/*Login/Register with oauth2 provider is not supported in the first release */}
+                        {/*<Divider sx={{ py: 1 }}>
                             <Typography
                                 variant="body2"
                                 color="textSecondary"
@@ -142,7 +135,7 @@ export const AuthCard = (props: AuthCardProps) => {
                                     {icon}
                                 </IconButton>
                             ))}
-                        </Stack>
+                        </Stack>*/}
                     </Stack>
                 </CardContent>
             </Card>
