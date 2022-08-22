@@ -1,0 +1,49 @@
+{
+    "projectId": 1,
+    "name": "Maelstrom Application 6 - Large-Scale Weather Regime Classification",
+    "description": {
+        "$ref": "description.json"
+    },
+    "owner": {
+        "$ref": "user.json"
+    },
+    "members": [
+        {
+            "$ref": "user.json"
+        }
+    ],
+    "groups": [
+        {
+            "$ref": "userGroup.json"
+        }
+    ],
+    "codeRepositories": [
+        {
+            "$ref": "codeRepositories.json"
+        }
+    ],
+    "experimentRepositories": [
+        {
+            "$ref": "experimentRepositories.json"
+        }
+    ],
+    "dataRepositories": [
+        {
+            "$ref": "dataRepositories.json"
+        }
+    ],
+    "labels": [
+        {
+            "scope": "problem-type",
+            "name": "Classification"
+        },
+        {
+            "scope": "problem-type",
+            "name": "Dimensionality Reduction"
+        },
+        {
+            "scope": "problem-type",
+            "name": "Clustering"
+        }
+    ]
+}
