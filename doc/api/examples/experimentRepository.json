@@ -1,0 +1,14 @@
+{
+    "experimentId": "example-experiment",
+    "name": "example-experiment",
+    "artifact_location": "/artifacts/experiments/example-experiment",
+    "lifecycle_stage": "idontknow",
+    "last_update_time": 1660744660,
+    "creation_time": 1660744660,
+    "labels": [
+        {
+            "scope": "problem-type",
+            "name": "Classification"
+        }
+    ]
+}
