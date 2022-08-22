@@ -1,3 +1,4 @@
+import { Person } from '@mui/icons-material'
 import {
     Box,
     Checkbox,
@@ -6,6 +7,7 @@ import {
     FormControlLabel,
     FormGroup,
     Link as MUILink,
+    Stack,
     TextField,
     Typography,
     useMediaQuery,
@@ -27,7 +29,7 @@ export const SearchSideBar = () => {
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
-            <Spacing value={theme.spacing(4)} />
+            <Spacing value={theme.spacing(4)}></Spacing>
             <FormControl fullWidth>
                 <TextField
                     id="search-string"
@@ -38,11 +40,7 @@ export const SearchSideBar = () => {
                         searchParameterContext.setSearchString!(e.target.value)
                     }
                 />
-
-                <Spacing value={theme.spacing(4)} />
-                <Typography variant="caption">Labels</Typography>
-                <LabelSelector />
-                <Spacing value={theme.spacing(3)} />
+                <Spacing value={theme.spacing(4)}></Spacing>
 
                 <Typography variant="caption">Problem Type</Typography>
                 <FormGroup>
@@ -68,18 +66,28 @@ export const SearchSideBar = () => {
                     )}
                 </FormGroup>
 
-                <Spacing value={theme.spacing(3)} />
+                <Spacing value={theme.spacing(4)}></Spacing>
+                <Typography variant="caption">Labels</Typography>
+                <LabelSelector></LabelSelector>
+
+                <Spacing value={theme.spacing(4)}></Spacing>
                 <Divider />
-                <Spacing value={theme.spacing(4)} />
+                <Spacing value={theme.spacing(4)}></Spacing>
                 {upToMediumSize ? (
                     <>
-                        <Typography variant="caption">Your Projects</Typography>
-                        <Spacing value={theme.spacing(1)} />
+                        <Stack direction="row" gap={theme.spacing(0.5)}>
+                            <Person />
+                            <Typography variant="overline">
+                                Your Projects
+                            </Typography>
+                        </Stack>
+                        <Spacing value={theme.spacing(1)}></Spacing>
                         {data?.data.projects?.map((project) => (
                             <Link
                                 key={project.projectId}
                                 color="inherit"
                                 href={`/projects/details/${project.projectId}`}
+                                passHref
                             >
                                 <MUILink
                                     paragraph

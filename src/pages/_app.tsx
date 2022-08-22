@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { ReactElement, ReactNode } from 'react'
+import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -14,6 +15,14 @@ import '@fontsource/blinker/400.css'
 import '@fontsource/blinker/600.css'
 import '@fontsource/blinker/700.css'
 
+export type NextPageWithNestedLayout = NextPage & {
+    getNestedLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithNestedLayout = AppProps & {
+    Component: NextPageWithNestedLayout
+}
+
 const { publicRuntimeConfig } = getConfig()
 axios.defaults.baseURL = publicRuntimeConfig.apiBaseUrl
 
@@ -25,16 +34,16 @@ if (publicRuntimeConfig.mockDynamically) {
 function MantikApp({
     Component,
     pageProps: { session, ...pageProps },
-}: AppProps) {
+}: AppPropsWithNestedLayout) {
     const [queryClient] = React.useState(() => new QueryClient())
-
+    const getNestedLayout = Component.getNestedLayout ?? ((page) => page)
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={defaultTheme}>
                 <SessionProvider session={session}>
                     <CssBaseline />
                     <MainLayout>
-                        <Component {...pageProps} />
+                        {getNestedLayout(<Component {...pageProps} />)}
                     </MainLayout>
                     <ReactQueryDevtools initialIsOpen={false} />
                 </SessionProvider>
