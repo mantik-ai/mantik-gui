@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-export interface Links {
+export interface IconLinking {
     url: string
     icon: ReactNode
 }

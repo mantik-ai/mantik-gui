@@ -1,5 +1,5 @@
-import { Box } from '@mui/material'
 import React from 'react'
+import { Box } from '@mui/material'
 import { Footer } from '../components/footer/Footer'
 import Navbar from '../components/navbar/Navbar'
 import { Route } from '../types/route'

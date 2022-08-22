@@ -1,0 +1,24 @@
+import React from 'react'
+import { Box, useTheme } from '@mui/material'
+import { DetailsSideBar } from '../overview/components/DetailsSideBar'
+
+interface DetailsLayoutProps {
+    children: React.ReactNode
+}
+export const DetailsLayout = (props: DetailsLayoutProps) => {
+    const theme = useTheme()
+    return (
+        <Box sx={{ display: 'flex', height: 'calc(100vh - 64px)' }}>
+            <DetailsSideBar></DetailsSideBar>
+            <Box
+                sx={{
+                    flex: 4,
+                    height: '100%',
+                    p: theme.spacing(2),
+                }}
+            >
+                {props.children}
+            </Box>
+        </Box>
+    )
+}
