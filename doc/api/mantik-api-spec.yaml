@@ -115,7 +115,7 @@ components:
                 name:
                     type: string
                 artifact_location:
-                    type: strDataRepositorying
+                    type: string
                 lifecycle_stage:
                     type: string
                 last_update_time:
