@@ -3,6 +3,7 @@ description: Represents payment information
 properties:
     paymentInfoId:
         type: string
+        format: uuid
     address:
         type: string
     paymentMethod:

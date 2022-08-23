@@ -1,5 +1,6 @@
 {
-    "trainedModelId": 1,
+    "deploymentId": "c55a5b0f-3cf9-4490-b2ad-cd0243132aae",
+    "trainedModelId": "e4c9b747-2377-4e5f-9598-415c63e073e2",
     "connection": { "$ref": "connection.json" },
     "resources": { "$ref": "resources.json" },
     "cronString": "* * * 1 *"

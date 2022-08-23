@@ -1,8 +1,12 @@
 type: object
 description: Information on a deployment
 properties:
+    deploymentId:
+        type: string
+        format: uuid
     trainedModelId:
-        type: integer
+        type: string
+        format: uuid
     connection:
         $ref: './Connection.yaml'
     resources:
