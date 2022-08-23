@@ -18,6 +18,10 @@ get:
                                       type: array
                                       items:
                                           $ref: '../schemas/User.yaml'
+                    examples:
+                        exampleUsers:
+                            value:
+                                $ref: '../examples/users.json'
 put:
     summary: Creates a new user
     requestBody:

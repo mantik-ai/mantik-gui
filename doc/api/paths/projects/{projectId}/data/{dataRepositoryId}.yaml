@@ -18,6 +18,11 @@ get:
                 application/json:
                     schema:
                         $ref: '../../../../schemas/DataRepository.yaml'
+
+                    examples:
+                        exampleDataRepository:
+                            value:
+                                $ref: '../../../../examples/dataRepository.json'
 post:
     summary: Update data repository
     requestBody:

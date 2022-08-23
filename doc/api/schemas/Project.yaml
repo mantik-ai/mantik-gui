@@ -5,6 +5,8 @@ properties:
         type: integer
     name:
         type: string
+    description:
+        $ref: './Description.yaml'
     owner:
         $ref: ./User.yaml
     members:
@@ -27,6 +29,10 @@ properties:
         type: array
         items:
             $ref: ./DataRepository.yaml
+    labels:
+        type: array
+        items:
+            $ref: './Label.yaml'
 required:
     - projectId
     - owner

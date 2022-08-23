@@ -23,6 +23,10 @@ get:
                                       type: array
                                       items:
                                           $ref: '../../../schemas/ExperimentRepository.yaml'
+                    examples:
+                        exampleExperimentRepositories:
+                            value:
+                                $ref: '../../../examples/experimentRepositories.json'
 put:
     summary: Add experiment repository
     requestBody:

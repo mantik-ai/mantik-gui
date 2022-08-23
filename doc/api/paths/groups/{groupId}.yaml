@@ -13,6 +13,11 @@ get:
                 application/json:
                     schema:
                         $ref: '../../schemas/UserGroup.yaml'
+
+                    examples:
+                        exampleUserGroup:
+                            value:
+                                $ref: '../../examples/userGroup.json'
 post:
     summary: Update group
     requestBody:

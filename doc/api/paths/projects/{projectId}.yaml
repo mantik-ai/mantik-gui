@@ -13,6 +13,11 @@ get:
                 application/json:
                     schema:
                         $ref: '../../schemas/Project.yaml'
+
+                    examples:
+                        exampleProject:
+                            value:
+                                $ref: '../../examples/project.json'
 post:
     summary: Update project
     requestBody:

@@ -13,10 +13,15 @@ get:
                         allOf:
                             - $ref: '../schemas/PaginationResponse.yaml'
                             - properties:
-                                  groups:
+                                  userGroups:
                                       type: array
                                       items:
                                           $ref: '../schemas/UserGroup.yaml'
+
+                    examples:
+                        exampleUserGroups:
+                            value:
+                                $ref: '../examples/userGroups.json'
 put:
     summary: Create a new user group
     requestBody:

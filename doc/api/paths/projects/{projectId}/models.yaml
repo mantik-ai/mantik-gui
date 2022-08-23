@@ -19,10 +19,15 @@ get:
                         allOf:
                             - $ref: '../../../schemas/PaginationResponse.yaml'
                             - properties:
-                                  models:
+                                  modelRepositories:
                                       type: array
                                       items:
                                           $ref: '../../../schemas/ModelRepository.yaml'
+
+                    examples:
+                        exampleModelRepositories:
+                            value:
+                                $ref: '../../../examples/modelRepositories.json'
 put:
     summary: Add model repository
     requestBody:

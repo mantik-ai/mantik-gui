@@ -13,6 +13,10 @@ get:
                 application/json:
                     schema:
                         $ref: '../../schemas/User.yaml'
+                    examples:
+                        exampleUser:
+                            value:
+                                $ref: '../../examples/user.json'
 post:
     summary: Update user info
     requestBody:

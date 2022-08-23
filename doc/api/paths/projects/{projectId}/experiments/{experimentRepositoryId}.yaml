@@ -18,6 +18,10 @@ get:
                 application/json:
                     schema:
                         $ref: '../../../../schemas/ExperimentRepository.yaml'
+                    examples:
+                        exampleExperimentRepository:
+                            value:
+                                $ref: '../../../../examples/experimentRepository.json'
 post:
     summary: Update experiment repository
     requestBody:

@@ -22,6 +22,8 @@ PaymentInfo:
     $ref: './PaymentInfo.yaml'
 Project:
     $ref: './Project.yaml'
+Description:
+    $ref: './Description.yaml'
 Run:
     $ref: './Run.yaml'
 RunsByCodeRepository:

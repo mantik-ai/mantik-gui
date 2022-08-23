@@ -1,0 +1,7 @@
+type: object
+description: Represents the description of a project
+properties:
+    short:
+        type: string
+    long:
+        type: string

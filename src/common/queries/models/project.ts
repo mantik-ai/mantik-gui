@@ -5,11 +5,13 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
+import type { Description } from './description'
 import type { User } from './user'
 import type { UserGroup } from './userGroup'
 import type { CodeRepository } from './codeRepository'
 import type { ExperimentRepository } from './experimentRepository'
 import type { DataRepository } from './dataRepository'
+import type { Label } from './label'
 
 /**
  * A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
@@ -17,10 +19,12 @@ import type { DataRepository } from './dataRepository'
 export interface Project {
     projectId: number
     name?: string
+    description?: Description
     owner: User
     members?: User[]
     groups?: UserGroup[]
     codeRepositories?: CodeRepository[]
     experimentRepositories?: ExperimentRepository[]
     dataRepositories?: DataRepository[]
+    labels?: Label[]
 }

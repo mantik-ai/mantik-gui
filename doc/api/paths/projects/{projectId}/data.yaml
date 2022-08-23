@@ -23,6 +23,10 @@ get:
                                       type: array
                                       items:
                                           $ref: '../../../schemas/DataRepository.yaml'
+                    examples:
+                        exampleDataRepositories:
+                            value:
+                                $ref: '../../../examples/dataRepositories.json'
 put:
     summary: Add data repository
     requestBody:
