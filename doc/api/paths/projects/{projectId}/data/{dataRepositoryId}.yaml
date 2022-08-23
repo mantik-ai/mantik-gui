@@ -1,0 +1,37 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: dataRepositoryId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns data entry for given project
+    responses:
+        '200':
+            description: Data entry for given project
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../schemas/DataRepository.yaml'
+
+                    examples:
+                        exampleDataRepository:
+                            value:
+                                $ref: '../../../../examples/dataRepository.json'
+post:
+    summary: Update data repository
+    requestBody:
+        description: Updated data repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../schemas/DataRepository.yaml'
+    responses:
+        '200':
+            description: Successfully updated code repository

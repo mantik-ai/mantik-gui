@@ -1,0 +1,8 @@
+name: pagelength
+in: query
+description: Number of records to return
+schema:
+    minimum: 1
+    maximum: 200
+    default: 50
+    type: integer

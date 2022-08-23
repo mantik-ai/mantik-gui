@@ -1,0 +1,11 @@
+type: object
+description: Necessary information reproduce a run
+properties:
+    experimentRepository:
+        $ref: ./ExperimentRepository.yaml
+    modelRepository:
+        $ref: ./ModelRepository.yaml
+    dataRepository:
+        $ref: ./DataRepository.yaml
+    connection:
+        $ref: ./Connection.yaml

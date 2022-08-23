@@ -53,6 +53,7 @@ const Home: NextPage = () => {
                     endIcon={<PersonOutlineIcon />}
                     color="primary"
                     variant="outlined"
+                    href={'/register'}
                 >
                     register
                 </Button>

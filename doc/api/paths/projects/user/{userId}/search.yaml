@@ -1,0 +1,57 @@
+parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: searchString
+      in: query
+      schema:
+          type: string
+    - name: labels
+      in: query
+      schema:
+          type: array
+          items:
+              $ref: '../../../../schemas/Label.yaml'
+    - name: ownerId
+      in: query
+      description: The User that owns the project
+      schema:
+          type: integer
+    - name: memberId
+      in: query
+      description: Filter search by Members of the project
+      schema:
+          type: integer
+    - name: groupId
+      in: query
+      description: Filter search by User Group
+      schema:
+          type: integer
+    - name: organizationId
+      in: query
+      description: Filter search by Organization membership of the Owner
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../../parameters/StartIndex.yaml'
+        - $ref: '../../../../parameters/PageLength.yaml'
+    summary:
+        Return a curation of projects tailored for a specific user with a set of
+        search parameters
+    responses:
+        '200':
+            description: Successully returned projects that match the search
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../../../../schemas/Project.yaml'

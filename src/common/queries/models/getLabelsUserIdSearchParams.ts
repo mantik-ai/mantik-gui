@@ -9,6 +9,7 @@ import type { StartIndexParameter } from './startIndexParameter'
 import type { PageLengthParameter } from './pageLengthParameter'
 
 export type GetLabelsUserIdSearchParams = {
+    scope: string
     searchString?: string
     startindex?: StartIndexParameter
     pagelength?: PageLengthParameter

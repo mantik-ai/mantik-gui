@@ -8,5 +8,5 @@
 import type { ModelRepository } from './modelRepository'
 
 export type GetProjectsProjectIdModels200AllOf = {
-    models?: ModelRepository[]
+    modelRepositories?: ModelRepository[]
 }

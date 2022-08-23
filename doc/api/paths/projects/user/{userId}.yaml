@@ -1,0 +1,29 @@
+parameters:
+    - name: userId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns all projects for user with userId
+    responses:
+        '200':
+            description: OK
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/Project.yaml'
+                    examples:
+                        exampleUserProjects:
+                            value:
+                                $ref: '../../../examples/projects.json'

@@ -1,0 +1,18 @@
+type: object
+description: User settings
+properties:
+    user:
+        $ref: ./User.yaml
+    password:
+        type: string
+    token:
+        type: string
+    paymentInfo:
+        $ref: ./PaymentInfo.yaml
+    connections:
+        type: array
+        items:
+            $ref: ./Connection.yaml
+required:
+    - user
+    - password

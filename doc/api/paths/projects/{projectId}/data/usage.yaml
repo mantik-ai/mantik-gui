@@ -1,0 +1,25 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../../parameters/StartIndex.yaml'
+        - $ref: '../../../../parameters/PageLength.yaml'
+    summary: Returns data entries for given project and runs grouped by the data
+    responses:
+        '200':
+            description: Data entries for given project with their respective runs
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  dataRepositoriesWithUsage:
+                                      type: array
+                                      items:
+                                          $ref: '../../../../schemas/RunsByDataRepository.yaml'

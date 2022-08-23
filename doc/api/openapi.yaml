@@ -1,0 +1,71 @@
+openapi: '3.0.2'
+info:
+    title: Mantik minimal API
+    description: The API serves the front end with all necessary information on projects, and users.
+    version: '0.1.0'
+
+components:
+    schemas:
+        $ref: './schemas/_index.yaml'
+    parameters:
+        $ref: './parameters/_index.yaml'
+
+paths:
+    /users:
+        $ref: './paths/users.yaml'
+    /users/{userId}:
+        $ref: './paths/users/{userId}.yaml'
+    /users/{userId}/settings:
+        $ref: './paths/users/{userId}/settings.yaml'
+
+    /projects:
+        $ref: './paths/projects.yaml'
+    /projects/user/{userId}:
+        $ref: './paths/projects/user/{userId}.yaml'
+    /projects/{projectId}:
+        $ref: './paths/projects/{projectId}.yaml'
+    /projects/{projectId}/code:
+        $ref: './paths/projects/{projectId}/code.yaml'
+    /projects/{projectId}/code/usage:
+        $ref: './paths/projects/{projectId}/code/usage.yaml'
+    /projects/{projectId}/code/{codeRepositoryId}:
+        $ref: './paths/projects/{projectId}/code/{codeRepositoryId}.yaml'
+    /projects/{projectId}/data:
+        $ref: './paths/projects/{projectId}/data.yaml'
+    /projects/{projectId}/data/usage:
+        $ref: './paths/projects/{projectId}/data/usage.yaml'
+    /projects/{projectId}/data/{dataRepositoryId}:
+        $ref: './paths/projects/{projectId}/data/{dataRepositoryId}.yaml'
+    /projects/{projectId}/experiments:
+        $ref: './paths/projects/{projectId}/experiments.yaml'
+    /projects/{projectId}/experiments/usage:
+        $ref: './paths/projects/{projectId}/experiments/usage.yaml'
+    /projects/{projectId}/experiments/{experimentRepositoryId}:
+        $ref: './paths/projects/{projectId}/experiments/{experimentRepositoryId}.yaml'
+    /projects/{projectId}/models:
+        $ref: './paths/projects/{projectId}/models.yaml'
+    /projects/{projectId}/models/usage:
+        $ref: './paths/projects/{projectId}/models/usage.yaml'
+    /projects/{projectId}/models/{modelRepositoryId}:
+        $ref: './paths/projects/{projectId}/models/{modelRepositoryId}.yaml'
+    /projects/{projectId}/runs:
+        $ref: './paths/projects/{projectId}/runs.yaml'
+    /projects/user/{userId}/search:
+        $ref: './paths/projects/user/{userId}/search.yaml'
+
+    /groups:
+        $ref: './paths/groups.yaml'
+    /groups/{groupId}:
+        $ref: './paths/groups/{groupId}.yaml'
+
+    /organizations:
+        $ref: './paths/organizations.yaml'
+    /organizations/{organizationId}:
+        $ref: './paths/organizations/{organizationId}.yaml'
+
+    /labels:
+        $ref: './paths/labels.yaml'
+    /labels/{userId}/search:
+        $ref: './paths/labels/{userId}/search.yaml'
+    /labels/{userId}/{scope}:
+        $ref: './paths/labels/{userId}/{scope}.yaml'

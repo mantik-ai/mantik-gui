@@ -7,9 +7,9 @@ import GitHubIcon from '@mui/icons-material/GitHub'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import { NavbarProps } from '../../types/navbarProps'
-import { Links } from '../../types/links'
+import { IconLinking } from '../../types/linking'
 
-const links: Links[] = [
+const links: IconLinking[] = [
     { url: 'https://example.com/1', icon: <InstagramIcon /> },
     { url: 'https://example.com/2', icon: <FacebookOutlinedIcon /> },
     { url: 'https://example.com/3', icon: <GitHubIcon /> },
@@ -67,7 +67,7 @@ export const Footer = (props: NavbarProps) => {
                     display={{ xs: 'none', sm: 'flex' }}
                 >
                     {props.routes
-                        .filter((route) => route.positions.includes('footer'))
+                        .filter((route) => route.positions?.includes('footer'))
                         .map((route) => (
                             <Link href={route.path} key={route.name}>
                                 <MenuItem>

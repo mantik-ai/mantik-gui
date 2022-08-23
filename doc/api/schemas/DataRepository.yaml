@@ -1,0 +1,16 @@
+type: object
+description: Represents a data repository
+properties:
+    dataRepositoryId:
+        type: string
+    uri:
+        type: string
+    description:
+        type: string
+    labels:
+        type: array
+        items:
+            $ref: ./Label.yaml
+required:
+    - dataRepositoryId
+    - uri

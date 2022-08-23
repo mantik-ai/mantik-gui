@@ -1,0 +1,12 @@
+{
+    "userGroupId": "example-user-group",
+    "name": "Ambrosys Team Green",
+    "admin": {
+        "$ref": "user.json"
+    },
+    "members": [
+        {
+            "$ref": "user.json"
+        }
+    ]
+}

@@ -1,47 +1,194 @@
-openapi: '3.0.2'
+openapi: 3.0.2
 info:
     title: Mantik minimal API
-    description: The API serves the front end with all necessary information on projects, and users.
-    version: '0.1.0'
-
-servers:
-    - url: https://api.server.test/v1
-#    - url: https://mantik.ai/
-#      description: landing page of mantik
-#    - url: http://dev.mantik.ai
-#      description: dev infrastructure for testing until review apps do fully work with github
-
+    description: 'The API serves the front end with all necessary information on projects, and users.'
+    version: 0.1.0
 components:
     schemas:
-        errorMessage:
-            type: string
-            maxLength: 1024
-            description: An error message
-        Settings:
+        AddRun:
             type: object
-            description: User settings
+            description: Necessary information reproduce a run
             properties:
-                user:
-                    $ref: '#/components/schemas/User'
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connection:
+                    $ref: '#/components/schemas/Connection'
+        CodeRepository:
+            type: object
+            description: 'Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket'
+            properties:
+                codeRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - codeRepositoryId
+                - uri
+        Connection:
+            type: object
+            description: 'Represents a connection to a third-party platform, usually either HPC or cloud platform credentials'
+            properties:
+                connectionId:
+                    type: integer
+                connectionName:
+                    type: string
+                connectionProvider:
+                    type: string
+                loginName:
+                    type: string
                 password:
                     type: string
                 token:
                     type: string
-                paymentInfo:
-                    $ref: '#/components/schemas/paymentInfo'
-                connections:
+                authMethod:
+                    type: string
+            required:
+                - connectionId
+                - connectionName
+                - connectionProvider
+        DataRepository:
+            type: object
+            description: Represents a data repository
+            properties:
+                dataRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Connection'
+                        $ref: '#/components/schemas/Label'
             required:
-                - user
-                - password
+                - dataRepositoryId
+                - uri
+        ErrorMessage:
+            type: string
+            maxLength: 1024
+            description: An error message
+        ExperimentRepository:
+            type: object
+            description: 'Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)'
+            properties:
+                experimentId:
+                    type: string
+                name:
+                    type: string
+                artifact_location:
+                    type: string
+                lifecycle_stage:
+                    type: string
+                last_update_time:
+                    type: integer
+                creation_time:
+                    type: integer
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - experimentId
+        Label:
+            type: object
+            description: Represents a label or a Tag depending on the presence of the value parameter
+            properties:
+                scope:
+                    type: string
+                name:
+                    type: string
+                value:
+                    type: string
+            required:
+                - scope
+                - name
+        ModelRepository:
+            type: object
+            description: Represents a model
+            properties:
+                modelRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                git:
+                    $ref: '#/components/schemas/CodeRepository'
+                commit:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - modelRepositoryId
+                - uri
+        Organization:
+            type: object
+            description: 'Represents an organization, i.e. a collection of user groups and users'
+            properties:
+                organizationId:
+                    type: string
+                name:
+                    type: string
+                contact:
+                    $ref: '#/components/schemas/User'
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserGroup'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - organizationId
+                - name
+                - contact
+        PaginationResponse:
+            type: object
+            properties:
+                totalrecords:
+                    type: integer
+            required:
+                - totalrecords
+        PaymentInfo:
+            type: object
+            description: Represents payment information
+            properties:
+                paymentInfoId:
+                    type: string
+                address:
+                    type: string
+                paymentMethod:
+                    type: string
+                paymentDetails:
+                    type: string
+            required:
+                - paymentInfoId
+                - address
+                - paymentMethod
+                - paymentDetails
         Project:
             type: object
-            description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
+            description: 'A project is a collection of code, experiments, data and models with permission management (owner, members, groups)'
             properties:
                 projectId:
                     type: integer
+                name:
+                    type: string
+                description:
+                    $ref: '#/components/schemas/Description'
                 owner:
                     $ref: '#/components/schemas/User'
                 members:
@@ -64,53 +211,124 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/DataRepository'
-            required:
-                - projectId
-                - owner
-        Connection:
-            type: object
-            description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
-            properties:
-                connectionId:
-                    type: integer
-                connectionName:
-                    type: string
-                connectionProvider:
-                    type: string
-                loginName:
-                    type: string
-                password:
-                    type: string
-                token:
-                    type: string
-                authMethod:
-                    type: string
-            required:
-                - connectionId
-                - connectionName
-                - connectionProvider
-        ExperimentRepository:
-            type: object
-            description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
-            properties:
-                experimentId:
-                    type: string
-                name:
-                    type: string
-                artifact_location:
-                    type: string
-                lifecycle_stage:
-                    type: string
-                last_update_time:
-                    type: integer
-                creation_time:
-                    type: integer
                 labels:
                     type: array
                     items:
                         $ref: '#/components/schemas/Label'
             required:
-                - experimentId
+                - projectId
+                - owner
+        Description:
+            type: object
+            description: Represents the description of a project
+            properties:
+                short:
+                    type: string
+                long:
+                    type: string
+        Run:
+            type: object
+            description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connections:
+                    $ref: '#/components/schemas/Connection'
+                timestamp:
+                    type: string
+        RunsByCodeRepository:
+            type: object
+            description: Runs grouped by codeRepository used
+            properties:
+                codeRepository:
+                    $ref: '#/components/schemas/CodeRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByDataRepository:
+            type: object
+            description: Runs grouped by the data used
+            properties:
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByExperiment:
+            type: object
+            description: Runs grouped by expiment used
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByModel:
+            type: object
+            description: Runs grouped by model used
+            properties:
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        Settings:
+            type: object
+            description: User settings
+            properties:
+                user:
+                    $ref: '#/components/schemas/User'
+                password:
+                    type: string
+                token:
+                    type: string
+                paymentInfo:
+                    $ref: '#/components/schemas/PaymentInfo'
+                connections:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Connection'
+            required:
+                - user
+                - password
         User:
             type: object
             description: Represents a user
@@ -125,61 +343,6 @@ components:
                 - userId
                 - name
                 - email
-        CodeRepository:
-            type: object
-            description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
-            properties:
-                codeRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - codeRepositoryId
-                - uri
-        DataRepository:
-            type: object
-            description: Represents a data repository
-            properties:
-                dataRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - dataRepositoryId
-                - uri
-        ModelRepository:
-            type: object
-            description: Represents a model
-            properties:
-                modelRepositoryId:
-                    type: string
-                uri:
-                    type: string
-                description:
-                    type: string
-                git:
-                    $ref: '#/components/schemas/CodeRepository'
-                commit:
-                    type: string
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-            required:
-                - modelRepositoryId
-                - uri
         UserGroup:
             type: object
             description: Represents a user group
@@ -198,117 +361,23 @@ components:
                 - userGroupId
                 - name
                 - admin
-        Organization:
-            type: object
-            description: Represents an organization, i.e. a collection of user groups and users
-            properties:
-                organizationId:
-                    type: string
-                name:
-                    type: string
-                contact:
-                    $ref: '#/components/schemas/User'
-                groups:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/UserGroup'
-                members:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/User'
-            required:
-                - organizationId
-                - name
-                - contact
-        paymentInfo:
-            type: object
-            description: Represents payment information
-            properties:
-                paymentInfoId:
-                    type: string
-                address:
-                    type: string
-                paymentMethod:
-                    type: string
-                paymentDetails:
-                    type: string
-            required:
-                - paymentInfoId
-                - address
-                - paymentMethod
-                - paymentDetails
-        Label:
-            type: object
-            description: Represents a label or a Tag depending on the presence of the value parameter
-            properties:
-                scope:
-                    type: string
-                name:
-                    type: string
-                value:
-                    type: string
-            required:
-                - scope
-                - name
-        Run:
-            type: object
-            description: Represents a quadruple of experiment, code, data and hardware-configuration
-            properties:
-                experimentRepository:
-                    $ref: '#/components/schemas/ExperimentRepository'
-                modelRepository:
-                    $ref: '#/components/schemas/ModelRepository'
-                dataRepository:
-                    $ref: '#/components/schemas/DataRepository'
-                connections:
-                    $ref: '#/components/schemas/Connection'
-                timestamp:
-                    type: string
-        DeploymentInformation:
-            type: object
-            properties:
-                trainedModelId:
-                    type: integer
-                connection:
-                    $ref: '#components/schemas/Connection'
-                resources:
-                    $ref: '#components/schemas/Resources'
-                cronString:
-                    type: string
-        Resources:
-            type: object
-            additionalProperties: true # Free form dictionary
-        PredictionRequest: {} # matches any value
-        PredictionResponse: {}
-        PackagedDeployment:
-            type: object
-            apptainerImageUri:
-                type: string
-        PaginationResponse:
-            type: object
-            properties:
-                totalrecords:
-                    type: integer
-            required:
-                - totalrecords
-            parameters:
-                PageLength:
-                    name: pagelength
-                    in: query
-                    description: Number of records to return
-                    schema:
-                        minimum: 1
-                        maximum: 200
-                        default: 50
-                        type: integer
-                StartIndex:
-                    name: startindex
-                    in: query
-                    description: Start index for paging
-                    schema:
-                        minimum: 0
-                        type: integer
-
+    parameters:
+        PageLength:
+            name: pagelength
+            in: query
+            description: Number of records to return
+            schema:
+                minimum: 1
+                maximum: 200
+                default: 50
+                type: integer
+        StartIndex:
+            name: startindex
+            in: query
+            description: Start index for paging
+            schema:
+                minimum: 0
+                type: integer
 paths:
     /users:
         get:
@@ -331,6 +400,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUsers:
+                                    value:
+                                        totalrecords: 1
+                                        users:
+                                            - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
         put:
             summary: Creates a new user
             requestBody:
@@ -358,8 +433,7 @@ paths:
                                 properties:
                                     userId:
                                         type: integer
-
-    /users/{userId}:
+    '/users/{userId}':
         parameters:
             - name: userId
               in: path
@@ -375,6 +449,12 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUser:
+                                    value:
+                                        userId: 1
+                                        name: Fabian Emmerich
+                                        email: fabian.emmerich@4-cast.de
         post:
             summary: Update user info
             requestBody:
@@ -387,8 +467,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated user
-
-    /users/{userId}/settings:
+    '/users/{userId}/settings':
         parameters:
             - name: userId
               in: path
@@ -419,7 +498,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated settings
-
     /projects:
         get:
             parameters:
@@ -440,6 +518,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
+                            examples:
+                                exampleProjects:
+                                    value:
+                                        totalrecords: 1
+                                        projects:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D/get/responses/200/content/application~1json/examples/exampleProject/value'
         put:
             summary: Creates a new project
             requestBody:
@@ -459,8 +543,7 @@ paths:
                                 properties:
                                     projectId:
                                         type: integer
-
-    /projects/user/{userId}:
+    '/projects/user/{userId}':
         parameters:
             - name: userId
               in: path
@@ -486,8 +569,11 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
-
-    /projects/{projectId}:
+                            examples:
+                                exampleUserProjects:
+                                    value:
+                                        $ref: '#/paths/~1projects/get/responses/200/content/application~1json/examples/exampleProjects/value'
+    '/projects/{projectId}':
         parameters:
             - name: projectId
               in: path
@@ -503,6 +589,33 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Project'
+                            examples:
+                                exampleProject:
+                                    value:
+                                        projectId: 1
+                                        name: Maelstrom Application 6 - Large-Scale Weather Regime Classification
+                                        description:
+                                            short: Classification of large-scale weather regimes for power predicition of renewable energy resources
+                                            long: '# PCA and Clustering of Weather Data Features\n\nThe goal is to classify large-scale weather regimes (LSWRs) by performing a PCA on timeseries data containing multiple phyiscal quantities on a large grid covering the whole of Europe.\nClassification is done by applying a clustering algorithm on the data that assigns each individual time step to a cluster, where outliers are allowed.\n\nTo allow classification of timeseries grid data, we apply a dimensionality reduction algorithm (PCA) and transform the original data into PC space. The PC space is a multi-dimensional space that represents the phase space of the dynamical system described by the data. To avoid the curse of dimensions, we use only a reduced amount of PCs for the transformation such that the PCs reflect most of the variance of the data.\n\nFor clustering the states of the dynamical system in PC space, we use the [hierarchical density-based spatial clustering algorithm for applications with noise (HDBSCAN)](https://arxiv.org/abs/1911.02282), which is a modification of the [DBSCAN](https://dl.acm.org/doi/10.5555/3001460.3001507) algorithm.\n\n## PCA\n\nThe PCA is performed on the whole dataset, whereas only 3 PCs are kept for the transformation. This is because we only have `10^3` data samples. Choosing more PCs would require more data (curse of dimensions). I.e., using `N` PCs would require at least `10^N` samples.\n\n## Clustering\n\nBefore applying the clustering, the data are transformed into the 3-D sub-space of the PC-space. The result reflects the phase space containing all states of the dynamical system throughout the given time span.\n\nWithin this space, we perform a clustering to find reoccuring states of the system. Each cluster represents a LSWR, i.e. all clusters represent the ensemble of LSWRs that our system resided in during the given time range. Each data point in a cluster hence reflects the time steps within the timeseries where the LSWR of the respective cluster appeared.\n\n## Statistical Analysis of the Clusters\n\nThe clusters (LSWRs) are then statistically analyzed such that we retrieve information about the LSWRs in general (total abundance, mean and standard deviation of their duration). In addition, we visualize the appearance of individual LSWR clusters at all time steps.\n'
+                                        owner:
+                                            $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                        members:
+                                            - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                        groups:
+                                            - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                        codeRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code/get/responses/200/content/application~1json/examples/exampleProject/value'
+                                        experimentRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1experiments/get/responses/200/content/application~1json/examples/exampleExperimentRepositories/value'
+                                        dataRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1data/get/responses/200/content/application~1json/examples/exampleDataRepositories/value'
+                                        labels:
+                                            - scope: problem-type
+                                              name: Classification
+                                            - scope: problem-type
+                                              name: Dimensionality Reduction
+                                            - scope: problem-type
+                                              name: Clustering
         post:
             summary: Update project
             requestBody:
@@ -515,8 +628,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated project information
-
-    /projects/{projectId}/code:
+    '/projects/{projectId}/code':
         parameters:
             - name: projectId
               in: path
@@ -542,6 +654,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleProject:
+                                    value:
+                                        totalrecords: 1
+                                        codeRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleCodeRepository/value'
         put:
             summary: Add code repository
             requestBody:
@@ -561,8 +679,33 @@ paths:
                                 properties:
                                     codeRepositoryId:
                                         type: string
-
-    /projects/{projectId}/code/{codeRepositoryId}:
+    '/projects/{projectId}/code/usage':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all codeRepos for given project and runs that the codeRepos were used in
+            responses:
+                '200':
+                    description: CodeRepos for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          codeRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByCodeRepository'
+    '/projects/{projectId}/code/{codeRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -583,6 +726,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleCodeRepository:
+                                    value:
+                                        codeRepositoryId: mantik-tutorials-github-repo
+                                        uri: 'https://github.com/mantik-ai/tutorials'
+                                        description: GitHub repo containing examples on how to use mantik
+                                        labels:
+                                            - scope: github-repo
+                                              name: Tutorials
         post:
             summary: Updates code repository
             requestBody:
@@ -595,8 +747,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-
-    /projects/{projectId}/data:
+    '/projects/{projectId}/data':
         parameters:
             - name: projectId
               in: path
@@ -622,6 +773,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                exampleDataRepositories:
+                                    value:
+                                        totalrecords: 1
+                                        dataRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1data~1%7BdataRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleDataRepository/value'
         put:
             summary: Add data repository
             requestBody:
@@ -633,7 +790,7 @@ paths:
                             $ref: '#/components/schemas/DataRepository'
             responses:
                 '201':
-                    description: Successfully added code repository
+                    description: Successfully added data repository
                     content:
                         application/json:
                             schema:
@@ -641,8 +798,33 @@ paths:
                                 properties:
                                     dataRepositoryId:
                                         type: string
-
-    /projects/{projectId}/data/{dataRepositoryId}:
+    '/projects/{projectId}/data/usage':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns data entries for given project and runs grouped by the data
+            responses:
+                '200':
+                    description: Data entries for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          dataRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByDataRepository'
+    '/projects/{projectId}/data/{dataRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -663,6 +845,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                exampleDataRepository:
+                                    value:
+                                        dataRepositoryId: constants-ab
+                                        uri: 'https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc'
+                                        description: 'The underlying data are from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data cover a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contain `~10^3` samples.'
+                                        labels:
+                                            - scope: weather-model
+                                              name: ECMWF IFS HRES
         post:
             summary: Update data repository
             requestBody:
@@ -675,8 +866,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-
-    /projects/{projectId}/experiments:
+    '/projects/{projectId}/experiments':
         parameters:
             - name: projectId
               in: path
@@ -702,6 +892,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepositories:
+                                    value:
+                                        totalrecords: 1
+                                        codeRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1experiments~1%7BexperimentRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleExperimentRepository/value'
         put:
             summary: Add experiment repository
             requestBody:
@@ -721,8 +917,33 @@ paths:
                                 properties:
                                     experimentRepositoryId:
                                         type: string
-
-    /projects/{projectId}/experiments/{experimentRepositoryId}:
+    '/projects/{projectId}/experiments/usage':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all experiments for given project and runs that the experiments were used in
+            responses:
+                '200':
+                    description: Experiments for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          experimentsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByExperiment'
+    '/projects/{projectId}/experiments/{experimentRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -743,6 +964,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepository:
+                                    value:
+                                        experimentId: example-experiment
+                                        name: example-experiment
+                                        artifact_location: /artifacts/experiments/example-experiment
+                                        lifecycle_stage: idontknow
+                                        last_update_time: 1660744660
+                                        creation_time: 1660744660
+                                        labels:
+                                            - scope: problem-type
+                                              name: Classification
         post:
             summary: Update experiment repository
             requestBody:
@@ -755,8 +988,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated experiment repository
-
-    /projects/{projectId}/models:
+    '/projects/{projectId}/models':
         parameters:
             - name: projectId
               in: path
@@ -778,10 +1010,16 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          models:
+                                          modelRepositories:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepositories:
+                                    value:
+                                        totalrecords: 1
+                                        modelRepositories:
+                                            - $ref: '#/paths/~1projects~1%7BprojectId%7D~1models~1%7BmodelRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleModelRepository/value'
         put:
             summary: Add model repository
             requestBody:
@@ -803,8 +1041,33 @@ paths:
                                 properties:
                                     modelRepositoryId:
                                         type: string
-
-    /projects/{projectId}/models/{modelRepositoryId}:
+    '/projects/{projectId}/models/usage':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all models for given project and runs that the models were created in
+            responses:
+                '200':
+                    description: models for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          modelsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByModel'
+    '/projects/{projectId}/models/{modelRepositoryId}':
         parameters:
             - name: projectId
               in: path
@@ -825,6 +1088,17 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepository:
+                                    value:
+                                        modelRepositoryId: example-model
+                                        uri: /artifacts/models/example-model
+                                        git:
+                                            $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleCodeRepository/value'
+                                        commit: 726150341180ba37e56859c377d56aa7dd87985b
+                                        labels:
+                                            - scope: model-type
+                                              name: Convolutional Neural Network
         post:
             summary: Update model repository
             requestBody:
@@ -837,156 +1111,7 @@ paths:
             responses:
                 '200':
                     description: Successfully updated model repository
-
-    /projects/{projectId}/deployments:
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: integer
-        get:
-            parameters:
-                - $ref: '#components/schemas/StartIndex'
-                - $ref: '#components/schemas/PageLength'
-            summary: List all deployments
-            responses:
-                '200':
-                    description: Model entry for given ID
-                    content:
-                        type: object
-                        allOf:
-                            - $ref: '#components/schemas/PaginationResponse'
-                            - properties:
-                                  deployments:
-                                      type: array
-                                      items:
-                                          $ref: '#/components/schemas/DeploymentInformation'
-                        example:
-                            $ref: 'examples/deploymentInformations.json'
-        put:
-            summary: Create deployment
-            requestBody:
-                description: Deployment configuration
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DeploymentInformation'
-                example:
-                    $ref: 'examples/deploymentInformation.json'
-            responses:
-                '201':
-                    description: Successfully deployed model
-                    content:
-                        application/json:
-                            schema:
-                                deplyomentId:
-                                    type: integer
-                            example:
-                                deploymentId: 10
-
-    /projects/{projectId}/deployments/{deploymentId}:
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: integer
-            - name: deploymentId
-              in: path
-              required: true
-              schema:
-                  type: integer
-        get:
-            summary: Get deployment information
-            responses:
-                '200':
-                    description: Model entry for given ID
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/DeploymentInformation'
-                    example:
-                        $ref: 'examples/deploymentInformation.json'
-        post:
-            summary: Update deployment
-            requestBody:
-                description: Deployment configuration
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DeploymentInformation'
-                example:
-                    $ref: 'examples/deploymentInformation.json'
-            responses:
-                '200':
-                    description: Successfully updated deployment
-        delete:
-            summary: Delete deployment
-            responses:
-                '200':
-                    description: Successfully deleted deployment
-
-    /projects/{projectId}/deployments/{deploymentId}/predict:
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: integer
-            - name: deploymentId
-              in: path
-              required: true
-              schema:
-                  type: integer
-        get:
-            summary: Get deployment information
-            requestBody:
-                description: Prediction request, including data
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/PredictionRequest'
-                example:
-                    $ref: 'examples/predictionRequest.json'
-            responses:
-                '200':
-                    description: Model entry for given ID
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/PredictionResponse'
-                            example:
-                                $ref: 'examples/predictionResponse.json'
-
-    /projects/{projectId}/deployments/{deploymentId}/download:
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: integer
-            - name: deploymentId
-              in: path
-              required: true
-              schema:
-                  type: integer
-        get:
-            summary: Download packaged deployment
-            responses:
-                '200':
-                    description: Model entry for given ID
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/PackagedDeployment'
-                            example:
-                                $ref: 'examples/packagedDeployment.json'
-
-    /projects/{projectId}/runs:
+    '/projects/{projectId}/runs':
         parameters:
             - name: projectId
               in: path
@@ -1012,8 +1137,26 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Run'
-
-    /projects/user/{userId}/search:
+        put:
+            requestBody:
+                description: Run information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddRun'
+            summary: Creates a new run
+            responses:
+                '201':
+                    description: Created new run
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    timestamp:
+                                        type: string
+    '/projects/user/{userId}/search':
         parameters:
             - name: userId
               in: path
@@ -1054,9 +1197,7 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
                 - $ref: '#/components/parameters/PageLength'
-            summary:
-                Return a curation of projects tailored for a specific user with a set of
-                search parameters
+            summary: Return a curation of projects tailored for a specific user with a set of search parameters
             responses:
                 '200':
                     description: Successully returned projects that match the search
@@ -1071,7 +1212,6 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
-
     /groups:
         get:
             parameters:
@@ -1080,7 +1220,7 @@ paths:
             summary: Get all User group (admin only)
             responses:
                 '200':
-                    description: Got all user groups
+                    description: Get all user groups
                     content:
                         application/json:
                             schema:
@@ -1088,10 +1228,16 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          projects:
+                                          userGroups:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/UserGroup'
+                            examples:
+                                exampleUserGroups:
+                                    value:
+                                        totalrecords: 1
+                                        userGroups:
+                                            - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
         put:
             summary: Create a new user group
             requestBody:
@@ -1111,8 +1257,7 @@ paths:
                                 properties:
                                     groupId:
                                         type: string
-
-    /groups/{groupId}:
+    '/groups/{groupId}':
         parameters:
             - name: groupId
               in: path
@@ -1128,6 +1273,15 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UserGroup'
+                            examples:
+                                exampleUserGroup:
+                                    value:
+                                        userGroupId: example-user-group
+                                        name: Ambrosys Team Green
+                                        admin:
+                                            $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                        members:
+                                            - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
         post:
             summary: Update group
             requestBody:
@@ -1140,7 +1294,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated user group
-
     /organizations:
         get:
             parameters:
@@ -1180,8 +1333,7 @@ paths:
                                 properties:
                                     organizationId:
                                         type: integer
-
-    /organizations/{organizationId}:
+    '/organizations/{organizationId}':
         parameters:
             - name: organizationId
               in: path
@@ -1209,7 +1361,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated organization info
-
     /labels:
         get:
             parameters:
@@ -1246,14 +1397,18 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Label'
-
-    /labels/{userId}/search:
+    '/labels/{userId}/search':
         parameters:
             - name: userId
               in: path
               required: true
               schema:
                   type: integer
+            - name: scope
+              in: query
+              required: true
+              schema:
+                  type: string
             - name: searchString
               in: query
               schema:
@@ -1266,6 +1421,37 @@ paths:
             responses:
                 '200':
                     description: Successully returned labels that match the search
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'
+    '/labels/{userId}/{scope}':
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: scope
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Return all labels of the given scope
+            responses:
+                '200':
+                    description: Successully returned labels that match the scope
                     content:
                         application/json:
                             schema:
