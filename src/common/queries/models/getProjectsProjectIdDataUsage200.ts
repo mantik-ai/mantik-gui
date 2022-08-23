@@ -6,7 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { PaginationResponse } from './paginationResponse'
-import type { GetRunsUserUserId200AllOf } from './getRunsUserUserId200AllOf'
+import type { GetProjectsProjectIdDataUsage200AllOf } from './getProjectsProjectIdDataUsage200AllOf'
 
-export type GetRunsUserUserId200 = PaginationResponse &
-    GetRunsUserUserId200AllOf
+export type GetProjectsProjectIdDataUsage200 = PaginationResponse &
+    GetProjectsProjectIdDataUsage200AllOf

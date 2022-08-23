@@ -16,6 +16,7 @@ import type { DataRepository } from './dataRepository'
  */
 export interface Project {
     projectId: number
+    name?: string
     owner: User
     members?: User[]
     groups?: UserGroup[]

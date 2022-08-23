@@ -281,7 +281,89 @@ components:
                     $ref: '#/components/schemas/Connection'
                 timestamp:
                     type: string
+        AddRun:
+            type: object
+            description: Necessary information reproduce a run
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                connection:
+                    $ref: '#/components/schemas/Connection'
+        RunsByDataRepository:
+            type: object
+            description: Runs grouped by the data used
+            properties:
+                dataRepository:
+                    $ref: '#/components/schemas/DataRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByModel:
+            type: object
+            description: Runs grouped by model used
+            properties:
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
+        RunsByExperiment:
+            type: object
+            description: Runs grouped by expiment used
+            properties:
+                experimentRepository:
+                    $ref: '#/components/schemas/ExperimentRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
 
+        RunsByCodeRepository:
+            type: object
+            description: Runs grouped by codeRepository used
+            properties:
+                codeRepository:
+                    $ref: '#/components/schemas/CodeRepository'
+                usage:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            experimentRepository:
+                                $ref: '#/components/schemas/ExperimentRepository'
+                            modelRepository:
+                                $ref: '#/components/schemas/ModelRepository'
+                            dataRepository:
+                                $ref: '#/components/schemas/DataRepository'
+                            connection:
+                                $ref: '#/components/schemas/Connection'
         PaginationResponse:
             type: object
             properties:
@@ -289,6 +371,7 @@ components:
                     type: integer
             required:
                 - totalrecords
+
     parameters:
         PageLength:
             name: pagelength
@@ -584,6 +667,33 @@ paths:
                                     codeRepositoryId:
                                         type: string
 
+    /projects/{projectId}/code/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all codeRepos for given project and runs that the codeRepos were used in
+            responses:
+                '200':
+                    description: CodeRepos for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          codeRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByCodeRepository'
+
     /projects/{projectId}/code/{codeRepositoryId}:
         parameters:
             - name: projectId
@@ -663,7 +773,7 @@ paths:
                             $ref: '#/components/schemas/DataRepository'
             responses:
                 '201':
-                    description: Successfully added code repository
+                    description: Successfully added data repository
                     content:
                         application/json:
                             schema:
@@ -671,6 +781,33 @@ paths:
                                 properties:
                                     dataRepositoryId:
                                         type: string
+
+    /projects/{projectId}/data/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns data entries for given project and runs grouped by the data
+            responses:
+                '200':
+                    description: Data entries for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          dataRepositoriesWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByDataRepository'
 
     /projects/{projectId}/data/{dataRepositoryId}:
         parameters:
@@ -759,6 +896,33 @@ paths:
                                 properties:
                                     experimentRepositoryId:
                                         type: string
+
+    /projects/{projectId}/experiments/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all experiments for given project and runs that the experiments were used in
+            responses:
+                '200':
+                    description: Experiments for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          experimentsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByExperiment'
 
     /projects/{projectId}/experiments/{experimentRepositoryId}:
         parameters:
@@ -850,6 +1014,33 @@ paths:
                                     modelRepositoryId:
                                         type: string
 
+    /projects/{projectId}/models/usage:
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: integer
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Returns all models for given project and runs that the models were created in
+            responses:
+                '200':
+                    description: models for given project with their respective runs
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          modelsWithUsage:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/RunsByModel'
+
     /projects/{projectId}/models/{modelRepositoryId}:
         parameters:
             - name: projectId
@@ -914,6 +1105,25 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Run'
+        put:
+            requestBody:
+                description: Run information
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddRun'
+            summary: Creates a new run
+            responses:
+                '201':
+                    description: Created new run
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    timestamp:
+                                        type: string
 
     /projects/user/{userId}/search:
         parameters:
@@ -982,7 +1192,7 @@ paths:
             summary: Get all User group (admin only)
             responses:
                 '200':
-                    description: Got all user groups
+                    description: Get all user groups
                     content:
                         application/json:
                             schema:
@@ -990,7 +1200,7 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          userGroups:
+                                        userGroups:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/UserGroup'
@@ -1164,6 +1374,11 @@ paths:
               required: true
               schema:
                   type: integer
+            - name: scope
+              in: query
+              required: true
+              schema:
+                  type: string
             - name: searchString
               in: query
               schema:
@@ -1176,6 +1391,38 @@ paths:
             responses:
                 '200':
                     description: Successully returned labels that match the search
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          projects:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'
+
+    /labels/{userId}/{scope}:
+        parameters:
+            - name: userId
+              in: path
+              required: true
+              schema:
+                  type: integer
+            - name: scope
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Return all labels of the given scope
+            responses:
+                '200':
+                    description: Successully returned labels that match the scope
                     content:
                         application/json:
                             schema:
