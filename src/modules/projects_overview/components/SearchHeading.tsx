@@ -18,12 +18,12 @@ export const SearchHeading = (props: SearchHeadingProps) => {
             }}
         >
             <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h2" gutterBottom>
                     {props.children}
                 </Typography>
                 <Spacing horizontal value={theme.spacing(2)}></Spacing>
 
-                <Typography variant="body1">{props.description}</Typography>
+                <Typography variant="h5">{props.description}</Typography>
             </Box>
             <Divider />
         </Box>
