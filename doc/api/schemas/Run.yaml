@@ -1,6 +1,8 @@
 type: object
 description: Represents a quadruple of experiment, code, data and hardware-configuration
 properties:
+    run_id:
+        type: string
     experimentRepository:
         $ref: ./ExperimentRepository.yaml
     modelRepository:
@@ -9,5 +11,23 @@ properties:
         $ref: ./DataRepository.yaml
     connections:
         $ref: ./Connection.yaml
-    timestamp:
+    experiment_id:
+        type: string
+    user_id:
+        type: string
+    status:
+        type: string
+        enum:
+            - RUNNING
+            - SCHEDULED
+            - FINISHED
+            - FAILED
+            - KILLED
+    start_time:
+        type: integer
+    end_time:
+        type: integer
+    artifact_uri:
+        type: string
+    lifecycle_stage:
         type: string
