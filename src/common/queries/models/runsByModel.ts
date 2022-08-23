@@ -6,7 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ModelRepository } from './modelRepository'
+import type { RunsByModelUsageItem } from './runsByModelUsageItem'
 
-export type GetProjectsProjectIdModels200AllOf = {
-    modelRepositories?: ModelRepository[]
+/**
+ * Runs grouped by model used
+ */
+export interface RunsByModel {
+    modelRepository?: ModelRepository
+    usage?: RunsByModelUsageItem[]
 }

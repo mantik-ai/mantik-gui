@@ -1,0 +1,48 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: Returns data entries for given project
+    responses:
+        '200':
+            description: Data entries for given project
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  dataRepositories:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/DataRepository.yaml'
+                    examples:
+                        exampleDataRepositories:
+                            value:
+                                $ref: '../../../examples/dataRepositories.json'
+put:
+    summary: Add data repository
+    requestBody:
+        description: Added data repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../schemas/DataRepository.yaml'
+    responses:
+        '201':
+            description: Successfully added data repository
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            dataRepositoryId:
+                                type: string

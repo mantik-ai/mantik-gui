@@ -1,0 +1,27 @@
+parameters:
+    - name: organizationId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Get info on specified organization
+    responses:
+        '200':
+            description: Successully retrieved organization info
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../schemas/Organization.yaml'
+post:
+    summary: Update organization info
+    requestBody:
+        description: Updated organization info
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../schemas/Organization.yaml'
+    responses:
+        '200':
+            description: Successfully updated organization info

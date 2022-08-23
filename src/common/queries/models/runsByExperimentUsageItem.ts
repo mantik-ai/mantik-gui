@@ -6,7 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ModelRepository } from './modelRepository'
+import type { DataRepository } from './dataRepository'
+import type { Connection } from './connection'
 
-export type GetProjectsProjectIdModels200AllOf = {
-    modelRepositories?: ModelRepository[]
+export type RunsByExperimentUsageItem = {
+    modelRepository?: ModelRepository
+    dataRepository?: DataRepository
+    connection?: Connection
 }

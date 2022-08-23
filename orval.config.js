@@ -8,7 +8,7 @@ module.exports = {
             mode: 'tags-split',
         },
         input: {
-            target: './doc/api/mantik-api-spec.yaml',
+            target: './doc/api/concatenated_openapi_spec.yaml',
         },
     },
 }

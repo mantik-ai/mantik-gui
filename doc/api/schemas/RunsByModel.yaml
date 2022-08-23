@@ -1,0 +1,16 @@
+type: object
+description: Runs grouped by model used
+properties:
+    modelRepository:
+        $ref: ./ModelRepository.yaml
+    usage:
+        type: array
+        items:
+            type: object
+            properties:
+                experimentRepository:
+                    $ref: ./ExperimentRepository.yaml
+                dataRepository:
+                    $ref: ./DataRepository.yaml
+                connection:
+                    $ref: ./Connection.yaml

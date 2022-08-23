@@ -1,0 +1,32 @@
+parameters:
+    - name: groupId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Get Group information
+    responses:
+        '200':
+            description: Get group information
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../schemas/UserGroup.yaml'
+
+                    examples:
+                        exampleUserGroup:
+                            value:
+                                $ref: '../../examples/userGroup.json'
+post:
+    summary: Update group
+    requestBody:
+        description: Updated user group information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../schemas/UserGroup.yaml'
+    responses:
+        '200':
+            description: Successfully updated user group

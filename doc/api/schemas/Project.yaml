@@ -1,0 +1,38 @@
+type: object
+description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
+properties:
+    projectId:
+        type: integer
+    name:
+        type: string
+    description:
+        $ref: './Description.yaml'
+    owner:
+        $ref: ./User.yaml
+    members:
+        type: array
+        items:
+            $ref: ./User.yaml
+    groups:
+        type: array
+        items:
+            $ref: ./UserGroup.yaml
+    codeRepositories:
+        type: array
+        items:
+            $ref: ./CodeRepository.yaml
+    experimentRepositories:
+        type: array
+        items:
+            $ref: ./ExperimentRepository.yaml
+    dataRepositories:
+        type: array
+        items:
+            $ref: ./DataRepository.yaml
+    labels:
+        type: array
+        items:
+            $ref: './Label.yaml'
+required:
+    - projectId
+    - owner

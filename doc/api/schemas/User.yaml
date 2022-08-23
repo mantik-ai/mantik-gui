@@ -1,0 +1,13 @@
+type: object
+description: Represents a user
+properties:
+    userId:
+        type: integer
+    name:
+        type: string
+    email:
+        type: string
+required:
+    - userId
+    - name
+    - email

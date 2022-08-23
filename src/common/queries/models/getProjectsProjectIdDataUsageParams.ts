@@ -8,7 +8,7 @@
 import type { StartIndexParameter } from './startIndexParameter'
 import type { PageLengthParameter } from './pageLengthParameter'
 
-export type GetRunsUserUserIdParams = {
+export type GetProjectsProjectIdDataUsageParams = {
     startindex?: StartIndexParameter
     pagelength?: PageLengthParameter
 }

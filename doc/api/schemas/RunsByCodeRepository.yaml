@@ -1,0 +1,18 @@
+type: object
+description: Runs grouped by codeRepository used
+properties:
+    codeRepository:
+        $ref: ./CodeRepository.yaml
+    usage:
+        type: array
+        items:
+            type: object
+            properties:
+                experimentRepository:
+                    $ref: ./ExperimentRepository.yaml
+                modelRepository:
+                    $ref: ./ModelRepository.yaml
+                dataRepository:
+                    $ref: ./DataRepository.yaml
+                connection:
+                    $ref: ./Connection.yaml

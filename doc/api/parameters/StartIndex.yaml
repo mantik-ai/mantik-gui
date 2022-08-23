@@ -1,0 +1,6 @@
+name: startindex
+in: query
+description: Start index for paging
+schema:
+    minimum: 0
+    type: integer
