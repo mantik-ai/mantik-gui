@@ -7,26 +7,22 @@ import {
     useState,
 } from 'react'
 import useDebounce from '../../../common/hooks/useDebounce'
+import { Label } from '../../../common/queries'
 
 interface ProblemType {
     name: string
     active: boolean
 }
-export enum SortType {
-    ALPHABETICAL,
-    BY_POPULARITY,
-}
 
 export interface SearchParameters {
-    sortType: SortType
-    setSortType: Dispatch<SetStateAction<SortType>>
-
     searchString: string
     debouncedSearchString: string
     setSearchString: Dispatch<SetStateAction<string>>
 
     problemTypes: ProblemType[]
     setProblemType: (idx: number, value: boolean) => void
+
+    searchLabels: Label[]
 }
 const SearchParamerterContext = createContext<Partial<SearchParameters>>({})
 
@@ -38,8 +34,9 @@ const { publicRuntimeConfig } = getConfig()
 export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
     props
 ) => {
-    const [sortType, setSortType] = useState(SortType.ALPHABETICAL)
     const [searchString, setSearchString] = useState('')
+
+    const [searchLabels, setSearchLabels] = useState<Label[]>([])
 
     const debouncedSearchString = useDebounce(
         searchString,
@@ -47,7 +44,6 @@ export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
     )
     const [problemTypes, setProblemTypes] = useState<ProblemType[]>([])
     useEffect(() => {
-        setSortType(SortType.ALPHABETICAL)
         setProblemTypes([
             { name: 'Regression', active: false },
             { name: 'Classification', active: false },
@@ -56,18 +52,20 @@ export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
 
     const setProblemType = (idx: number, value: boolean) => {
         problemTypes[idx].active = value
+        if (value) {
+            setSearchLabels([...searchLabels])
+        }
         setProblemTypes((_) => [...problemTypes])
     }
     return (
         <SearchParamerterContext.Provider
             value={{
-                sortType,
-                setSortType,
                 searchString,
                 debouncedSearchString,
                 setSearchString,
                 problemTypes,
                 setProblemType,
+                searchLabels,
             }}
         >
             {props.children}

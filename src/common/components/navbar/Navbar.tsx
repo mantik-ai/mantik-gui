@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { MenuItem, Stack } from '@mui/material'
 import { NavbarProps } from '../../types/navbarProps'
 import AccountMenu from '../AccountMenu'
+import { useRouter } from 'next/router'
 
 const drawerWidth = 240
 
@@ -34,7 +35,7 @@ export default function Navbar(props: NavbarProps) {
             <Divider />
             <List>
                 {props.routes
-                    .filter((route) => route.positions.includes('drawer'))
+                    .filter((route) => route.positions?.includes('drawer'))
                     .map((route) => (
                         <Link href={route.path} key={route.name}>
                             <MenuItem>
@@ -47,6 +48,9 @@ export default function Navbar(props: NavbarProps) {
             </List>
         </Box>
     )
+
+    const router = useRouter()
+    const activeRoute = router.pathname.split('/').at(-1)
 
     return (
         <>
@@ -78,7 +82,7 @@ export default function Navbar(props: NavbarProps) {
                         <Stack direction={'row'}>
                             {props.routes
                                 .filter((route) =>
-                                    route.positions.includes('navbar')
+                                    route.positions?.includes('navbar')
                                 )
                                 .map((route) => (
                                     <Link href={route.path} key={route.name}>
@@ -86,6 +90,13 @@ export default function Navbar(props: NavbarProps) {
                                             <Typography
                                                 variant="h5"
                                                 color="secondary"
+                                                sx={{
+                                                    textDecoration:
+                                                        route.name.toLowerCase() ===
+                                                        activeRoute
+                                                            ? 'underline'
+                                                            : null,
+                                                }}
                                             >
                                                 {route.name}
                                             </Typography>

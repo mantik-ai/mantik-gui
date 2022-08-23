@@ -35,7 +35,10 @@ describe('Linking of projects', () => {
             }
         ).as('projectsStub')
         cy.visit('http://localhost:4000/projects')
-        cy.wait('@projectsStub')
+        cy.wait('@projectsStub').then((interception) => {
+            console.log('------------------------------')
+            console.log(interception.state)
+        })
         cy.fixture('projects').then((projects) => {
             cy.contains('view details')
                 .click()
