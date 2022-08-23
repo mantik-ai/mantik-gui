@@ -23,6 +23,7 @@ interface RunRepeatDialogProps {
     projectId: number
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
+
 export const RunDialog = (props: RunRepeatDialogProps) => {
     const theme = useTheme()
     const { data: dataRepository } = useGetProjectsProjectIdData(
@@ -55,7 +56,7 @@ export const RunDialog = (props: RunRepeatDialogProps) => {
                 <DialogContentText>
                     Select the parameter you want your run to start with
                 </DialogContentText>
-                <Spacing value={theme.spacing(2)}></Spacing>
+                <Spacing value={theme.spacing(2)} />
                 <FormGroup>
                     <RunDialogFormInput
                         options={
@@ -65,22 +66,22 @@ export const RunDialog = (props: RunRepeatDialogProps) => {
                         name="Experiment"
                         fieldSelector={(x) => x.name ?? '<No Name>'}
                         onChange={(e) => runContext.setExperiment!(e)}
-                    ></RunDialogFormInput>
-                    <Spacing value={theme.spacing(2)}></Spacing>
+                    />
+                    <Spacing value={theme.spacing(2)} />
                     <RunDialogFormInput
                         options={dataRepository?.data.dataRepositories ?? []}
                         name="Dataset"
                         fieldSelector={(x) => x.uri ?? '<No Name>'}
                         onChange={(e) => runContext.setData!(e)}
-                    ></RunDialogFormInput>
-                    <Spacing value={theme.spacing(2)}></Spacing>
+                    />
+                    <Spacing value={theme.spacing(2)} />
                     <RunDialogFormInput
                         options={modelRepository?.data.models ?? []}
                         name="Model"
                         fieldSelector={(x) => x.uri ?? '<No Name>'}
                         onChange={(e) => runContext.setModel!(e)}
-                    ></RunDialogFormInput>
-                    <Spacing value={theme.spacing(2)}></Spacing>
+                    />
+                    <Spacing value={theme.spacing(2)} />
                 </FormGroup>
             </DialogContent>
             <DialogActions>

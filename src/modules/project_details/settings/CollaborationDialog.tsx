@@ -9,7 +9,12 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { Autocomplete, CircularProgress, TextField } from '@mui/material'
 import { useEffect } from 'react'
-import { useGetGroups, useGetUsers, User, UserGroup } from '../queries'
+import {
+    useGetGroups,
+    useGetUsers,
+    User,
+    UserGroup,
+} from '../../../common/queries'
 
 interface AddUserDialogProps {
     handleClose: () => void
@@ -32,6 +37,9 @@ const CollaborationDialog = ({
     const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
     const [openSearch, setOpenSearch] = React.useState(false)
     const [selection, setSelection] = React.useState([])
+    const users = useGetUsers()
+    const groups = useGetGroups()
+
     let data: {
         title: string
         message: string
@@ -59,8 +67,8 @@ const CollaborationDialog = ({
                 message: `Please select a user to designate him as the owner of this project.`,
                 buttonText: 'Change Owner',
                 multiple: false,
-                options: useGetUsers().data?.data.users,
-                loading: useGetUsers().status === 'loading',
+                options: users.data?.data.users,
+                loading: users.status === 'loading',
             }
             break
         case CollaborationDialogType.GROUPS:
@@ -69,8 +77,8 @@ const CollaborationDialog = ({
                 message: `Search for usergroups you want to invite collaborating on the project. Removing usergroups has no effect on individual members added separately.`,
                 buttonText: 'Edit Groups',
                 multiple: true,
-                options: useGetGroups().data?.data.projects,
-                loading: useGetGroups().status === 'loading',
+                options: groups.data?.data.projects,
+                loading: groups.status === 'loading',
             }
             break
         default:
@@ -79,8 +87,8 @@ const CollaborationDialog = ({
                 message: `Search for users you want to invite to the project or remove them from the list of members.`,
                 buttonText: 'Edit Members',
                 multiple: true,
-                options: useGetUsers().data?.data.users,
-                loading: useGetUsers().status === 'loading',
+                options: users.data?.data.users,
+                loading: users.status === 'loading',
             }
             break
     }
@@ -105,7 +113,7 @@ const CollaborationDialog = ({
                         option.name === value.name
                     }
                     getOptionLabel={(option) => option.name}
-                    options={data.options || []}
+                    options={data.options ?? []}
                     loading={data.loading}
                     renderInput={(params) => (
                         <TextField

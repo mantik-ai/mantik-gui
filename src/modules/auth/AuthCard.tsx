@@ -10,7 +10,7 @@ import {
 import React, { ReactNode } from 'react'
 import { SvgIconComponent } from '@mui/icons-material'
 import { signIn } from 'next-auth/react'
-import { COGNITO_PROVIDER_ID } from '../constants'
+import { COGNITO_PROVIDER_ID } from '../../common/constants'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',

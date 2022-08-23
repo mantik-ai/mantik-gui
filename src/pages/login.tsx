@@ -2,7 +2,7 @@ import React from 'react'
 import type { NextPage } from 'next'
 import { TextField } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { AuthCard, AuthCardTypes } from '../common/components/AuthCard'
+import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 
 const Login: NextPage = () => {
     return (

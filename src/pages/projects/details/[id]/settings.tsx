@@ -2,12 +2,18 @@ import * as React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import { Button, Stack, Typography } from '@mui/material'
+import {
+    Autocomplete,
+    CircularProgress,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material'
 import { useRouter } from 'next/router'
-import CollaborationDialog, {
-    CollaborationDialogType,
-} from '../../../../common/components/CollaborationDialog'
-import { useGetProjectsProjectId } from '../../../../common/queries'
+import { GeneralSettings } from '../../../../modules/project_details/settings/GeneralSettings'
+import { CollaborationSettings } from '../../../../modules/project_details/settings/CollaborationSettings'
+import { useGetProjectsProjectIdCode } from '../../../../common/queries'
+import { DataSettings } from '../../../../modules/project_details/settings/DataSettings'
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -29,118 +35,95 @@ function TabPanel(props: TabPanelProps) {
     )
 }
 
+function CodeSettings() {
+    return null
+}
+
 const Settings = () => {
     const router = useRouter()
     const { id } = router.query
+    const repos = useGetProjectsProjectIdCode(parseInt(id, 10))
     const [value, setValue] = React.useState(0)
-    const [open, setOpen] = React.useState(false)
-    const [dialogType, setDialogType] =
-        React.useState<CollaborationDialogType>()
-
-    const { data, error, status } = useGetProjectsProjectId(
-        Number(typeof id === 'number' ? id : 1234)
-    )
-
-    const handleClose = () => setOpen(false)
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
         setValue(newValue)
+
+    console.log(repos)
+
+    // const [open, setOpen] = React.useState(false)
+    // const [dialogType, setDialogType] = React.useState<CollaborationDialogType>(
+    //     CollaborationDialogType.MEMBERS
+    // )
+    //
+    // const handleClose = () => setOpen(false)
 
     return (
         <div>
             <Box p={4} sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Typography fontSize="2rem" fontWeight="500">
-                        Settings
-                    </Typography>
+                    <Stack
+                        direction={'row'}
+                        alignItems={'center'}
+                        gap={'1rem'}
+                        pb={2}
+                    >
+                        <Typography fontSize="2rem" fontWeight="500">
+                            Settings for
+                        </Typography>
+                        <Autocomplete
+                            disablePortal
+                            getOptionLabel={(repo) => repo.codeRepositoryId}
+                            loading={repos.isLoading}
+                            sx={{ width: 300, py: 4 }}
+                            options={repos.data?.data.codeRepositories ?? []}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Repository"
+                                    size="small"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: (
+                                            <>
+                                                {repos.isLoading ? (
+                                                    <CircularProgress
+                                                        color="inherit"
+                                                        size={16}
+                                                        sx={{
+                                                            position:
+                                                                'relative',
+                                                            right: '40px',
+                                                        }}
+                                                    />
+                                                ) : null}
+                                                {params.InputProps.endAdornment}
+                                            </>
+                                        ),
+                                    }}
+                                />
+                            )}
+                        />
+                    </Stack>
+
                     <Tabs value={value} onChange={onTabChange}>
+                        <Tab label="general" />
                         <Tab label="collaboration" />
-                        <Tab label="credentials" />
-                        <Tab label="repositories" />
+                        <Tab label="data" />
+                        <Tab label="code" />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <div>
-                        <Typography variant={'h5'}>Owner</Typography>
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                        >
-                            <Typography variant={'body1'}>
-                                The project is currently owned by:{' '}
-                            </Typography>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    setDialogType(CollaborationDialogType.OWNER)
-                                    setOpen(true)
-                                }}
-                            >
-                                Change Owner
-                            </Button>
-                        </Stack>
-                    </div>
-
-                    <div>
-                        <Typography variant={'h5'}>Groups</Typography>
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                        >
-                            <Typography variant={'body1'}>
-                                No usergroups added yet.
-                            </Typography>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    setDialogType(
-                                        CollaborationDialogType.GROUPS
-                                    )
-                                    setOpen(true)
-                                }}
-                            >
-                                Edit Groups
-                            </Button>
-                        </Stack>
-                    </div>
-
-                    <div>
-                        <Typography variant={'h5'}>Members</Typography>
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                        >
-                            <Typography variant={'body1'}>
-                                No members added yet.
-                            </Typography>
-                            <Button
-                                variant="outlined"
-                                onClick={() => {
-                                    setDialogType(
-                                        CollaborationDialogType.MEMBERS
-                                    )
-                                    setOpen(true)
-                                }}
-                            >
-                                Edit Members
-                            </Button>
-                        </Stack>
-                    </div>
+                    <GeneralSettings />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    Item Two
+                    <CollaborationSettings />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    Item Three
+                    <DataSettings />
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <CodeSettings />
                 </TabPanel>
             </Box>
-            <CollaborationDialog
-                dialogType={dialogType}
-                isOpen={open}
-                handleClose={handleClose}
-            />
         </div>
     )
 }

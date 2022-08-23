@@ -2,7 +2,7 @@ import React from 'react'
 import type { NextPage } from 'next'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import { TextField } from '@mui/material'
-import { AuthCard, AuthCardTypes } from '../common/components/AuthCard'
+import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 
 const Register: NextPage = () => {
     return (
