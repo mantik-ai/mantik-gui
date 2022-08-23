@@ -1,0 +1,43 @@
+get:
+    parameters:
+        - $ref: '../parameters/StartIndex.yaml'
+        - $ref: '../parameters/PageLength.yaml'
+    summary: Get all User group (admin only)
+    responses:
+        '200':
+            description: Get all user groups
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  userGroups:
+                                      type: array
+                                      items:
+                                          $ref: '../schemas/UserGroup.yaml'
+
+                    examples:
+                        exampleUserGroups:
+                            value:
+                                $ref: '../examples/userGroups.json'
+put:
+    summary: Create a new user group
+    requestBody:
+        description: User group information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/UserGroup.yaml'
+    responses:
+        '201':
+            description: Created
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            groupId:
+                                type: string

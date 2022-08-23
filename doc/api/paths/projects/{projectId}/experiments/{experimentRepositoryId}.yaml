@@ -1,0 +1,36 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: experimentRepositoryId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns experiment entry for given project
+    responses:
+        '200':
+            description: Experiment entry for given project
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../schemas/ExperimentRepository.yaml'
+                    examples:
+                        exampleExperimentRepository:
+                            value:
+                                $ref: '../../../../examples/experimentRepository.json'
+post:
+    summary: Update experiment repository
+    requestBody:
+        description: Updated data repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../schemas/ExperimentRepository.yaml'
+    responses:
+        '200':
+            description: Successfully updated experiment repository

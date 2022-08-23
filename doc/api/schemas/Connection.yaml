@@ -1,0 +1,21 @@
+type: object
+description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
+properties:
+    connectionId:
+        type: integer
+    connectionName:
+        type: string
+    connectionProvider:
+        type: string
+    loginName:
+        type: string
+    password:
+        type: string
+    token:
+        type: string
+    authMethod:
+        type: string
+required:
+    - connectionId
+    - connectionName
+    - connectionProvider

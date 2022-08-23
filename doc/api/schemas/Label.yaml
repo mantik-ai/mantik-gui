@@ -1,0 +1,12 @@
+type: object
+description: Represents a label or a Tag depending on the presence of the value parameter
+properties:
+    scope:
+        type: string
+    name:
+        type: string
+    value:
+        type: string
+required:
+    - scope
+    - name

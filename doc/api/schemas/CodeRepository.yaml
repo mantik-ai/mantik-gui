@@ -1,0 +1,16 @@
+type: object
+description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
+properties:
+    codeRepositoryId:
+        type: string
+    uri:
+        type: string
+    description:
+        type: string
+    labels:
+        type: array
+        items:
+            $ref: ./Label.yaml
+required:
+    - codeRepositoryId
+    - uri

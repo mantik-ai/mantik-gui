@@ -1,0 +1,36 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: modelRepositoryId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Returns model entry for given ID
+    responses:
+        '200':
+            description: Model entry for given ID
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../schemas/ModelRepository.yaml'
+                    examples:
+                        exampleModelRepository:
+                            value:
+                                $ref: '../../../../examples/modelRepository.json'
+post:
+    summary: Update model repository
+    requestBody:
+        description: Updated model repository information
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../schemas/ModelRepository.yaml'
+    responses:
+        '200':
+            description: Successfully updated model repository

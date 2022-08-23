@@ -1,0 +1,13 @@
+type: object
+description: Represents a quadruple of experiment, code, data and hardware-configuration
+properties:
+    experimentRepository:
+        $ref: ./ExperimentRepository.yaml
+    modelRepository:
+        $ref: ./ModelRepository.yaml
+    dataRepository:
+        $ref: ./DataRepository.yaml
+    connections:
+        $ref: ./Connection.yaml
+    timestamp:
+        type: string

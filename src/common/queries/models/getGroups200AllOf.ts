@@ -8,5 +8,5 @@
 import type { UserGroup } from './userGroup'
 
 export type GetGroups200AllOf = {
-    groups?: UserGroup[]
+    userGroups?: UserGroup[]
 }

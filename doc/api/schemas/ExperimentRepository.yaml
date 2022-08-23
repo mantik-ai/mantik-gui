@@ -1,0 +1,21 @@
+type: object
+description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
+properties:
+    experimentId:
+        type: string
+    name:
+        type: string
+    artifact_location:
+        type: string
+    lifecycle_stage:
+        type: string
+    last_update_time:
+        type: integer
+    creation_time:
+        type: integer
+    labels:
+        type: array
+        items:
+            $ref: ./Label.yaml
+required:
+    - experimentId

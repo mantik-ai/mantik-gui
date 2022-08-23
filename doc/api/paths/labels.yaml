@@ -1,0 +1,35 @@
+get:
+    parameters:
+        - $ref: '../parameters/StartIndex.yaml'
+        - $ref: '../parameters/PageLength.yaml'
+    summary: Get all labels (admin only)
+    responses:
+        '200':
+            description: List of labels
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  projects:
+                                      type: array
+                                      items:
+                                          $ref: '../schemas/Label.yaml'
+put:
+    summary: add label
+    requestBody:
+        description: label info
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../schemas/Label.yaml'
+    responses:
+        '201':
+            description: Sucessfully added label
+            content:
+                application/json:
+                    schema:
+                        $ref: '../schemas/Label.yaml'

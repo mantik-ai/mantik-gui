@@ -5,8 +5,11 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
-import type { ModelRepository } from './modelRepository'
 
-export type GetProjectsProjectIdModels200AllOf = {
-    modelRepositories?: ModelRepository[]
+/**
+ * Represents the description of a project
+ */
+export interface Description {
+    short?: string
+    long?: string
 }

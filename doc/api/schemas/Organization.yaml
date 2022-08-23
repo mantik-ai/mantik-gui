@@ -1,0 +1,21 @@
+type: object
+description: Represents an organization, i.e. a collection of user groups and users
+properties:
+    organizationId:
+        type: string
+    name:
+        type: string
+    contact:
+        $ref: ./User.yaml
+    groups:
+        type: array
+        items:
+            $ref: ./UserGroup.yaml
+    members:
+        type: array
+        items:
+            $ref: ./User.yaml
+required:
+    - organizationId
+    - name
+    - contact
