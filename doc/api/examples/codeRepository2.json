@@ -1,0 +1,11 @@
+{
+    "codeRepositoryId": "idcode2",
+    "uri": "https://gl.ambrosys.de/mantik/maelstrom/a2",
+    "description": "GitLab repository of code used for Maelstrom Application 2 - Social Media Analysis of Weather Data",
+    "labels": [
+        {
+            "scope": "gitlab-repo",
+            "name": "A2 repository"
+        }
+    ]
+}

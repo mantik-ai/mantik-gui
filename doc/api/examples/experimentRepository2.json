@@ -1,0 +1,14 @@
+{
+    "experimentId": "idexperiment2",
+    "name": "fakeexample2",
+    "artifact_location": "/artifacts/experiments/fakeexample2",
+    "lifecycle_stage": "idontknow",
+    "last_update_time": 1,
+    "creation_time": 0,
+    "labels": [
+        {
+            "scope": "problem-type",
+            "name": "Classification"
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "projectId": 2,
+    "name": "Maelstrom Application 2 - Incorporate social media data into the prediction framework",
+    "description": {
+        "$ref": "description2.json"
+    },
+    "owner": {
+        "$ref": "user2.json"
+    },
+    "members": [
+        {
+            "$ref": "user2.json"
+        }
+    ],
+    "groups": [
+        {
+            "$ref": "userGroup2.json"
+        }
+    ],
+    "codeRepositories": [
+        {
+            "$ref": "codeRepositories2.json"
+        }
+    ],
+    "experimentRepositories": [
+        {
+            "$ref": "experimentRepositories2.json"
+        }
+    ],
+    "dataRepositories": [
+        {
+            "$ref": "dataRepositories2.json"
+        }
+    ],
+    "labels": [
+        {
+            "scope": "problem-type",
+            "name": "Classification"
+        },
+        {
+            "scope": "problem-type",
+            "name": "Natural Language Processing"
+        },
+        {
+            "scope": "problem-type",
+            "name": "Text Classification"
+        }
+    ]
+}

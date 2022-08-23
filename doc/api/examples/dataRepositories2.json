@@ -1,0 +1,11 @@
+{
+    "totalrecords": 2,
+    "dataRepositories": [
+        {
+            "$ref": "dataRepository.json"
+        },
+        {
+            "$ref": "dataRepository2.json"
+        }
+    ]
+}

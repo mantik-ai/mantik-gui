@@ -1,0 +1,15 @@
+{
+    "userGroupId": "example2-user-group",
+    "name": "Maelstrom group",
+    "admin": {
+        "$ref": "user2.json"
+    },
+    "members": [
+        {
+            "$ref": "user.json"
+        },
+        {
+            "$ref": "user2.json"
+        }
+    ]
+}
