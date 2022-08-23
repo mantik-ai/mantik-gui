@@ -1,0 +1,50 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    parameters:
+        - $ref: '../../../parameters/StartIndex.yaml'
+        - $ref: '../../../parameters/PageLength.yaml'
+    summary: List all deployments
+    responses:
+        '200':
+            description: Model entry for given ID
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        allOf:
+                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - properties:
+                                  deployments:
+                                      type: array
+                                      items:
+                                          $ref: '../../../schemas/DeploymentInformation.yaml'
+                    example:
+                        $ref: '../../../examples/deploymentInformations.json'
+put:
+    summary: Create deployment
+    requestBody:
+        description: Deployment configuration
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../schemas/DeploymentInformation.yaml'
+                example:
+                    $ref: '../../../examples/deploymentInformation.json'
+    responses:
+        '201':
+            description: Successfully deployed model
+            content:
+                application/json:
+                    schema:
+                        type: object
+                        properties:
+                            deplyomentId:
+                                type: integer
+                    example:
+                        deploymentId: 10

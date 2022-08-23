@@ -1,0 +1,31 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: deploymentId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Get deployment information
+    requestBody:
+        description: Prediction request, including data
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../../schemas/PredictionRequest.yaml'
+                example:
+                    $ref: '../../../../../examples/predictionRequest.json'
+    responses:
+        '200':
+            description: Model entry for given ID
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../../schemas/PredictionResponse.yaml'
+                    example:
+                        $ref: '../../../../../examples/predictionResponse.json'

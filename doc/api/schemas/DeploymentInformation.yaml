@@ -1,0 +1,11 @@
+type: object
+description: Information on a deployment
+properties:
+    trainedModelId:
+        type: integer
+    connection:
+        $ref: './Connection.yaml'
+    resources:
+        $ref: './Resources.yaml'
+    cronString:
+        type: string

@@ -1,0 +1,41 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: integer
+    - name: deploymentId
+      in: path
+      required: true
+      schema:
+          type: integer
+get:
+    summary: Get deployment information
+    responses:
+        '200':
+            description: Model entry for given ID
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../schemas/DeploymentInformation.yaml'
+                    example:
+                        $ref: '../../../../examples/deploymentInformation.json'
+post:
+    summary: Update deployment
+    requestBody:
+        description: Deployment configuration
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '../../../../schemas/DeploymentInformation.yaml'
+                example:
+                    $ref: '../../../../examples/deploymentInformation.json'
+    responses:
+        '200':
+            description: Successfully updated deployment
+delete:
+    summary: Delete deployment
+    responses:
+        '200':
+            description: Successfully deleted deployment
