@@ -187,6 +187,8 @@ components:
                     type: integer
                 name:
                     type: string
+                description:
+                    $ref: '#/components/schemas/Description'
                 owner:
                     $ref: '#/components/schemas/User'
                 members:
@@ -209,9 +211,205 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/DataRepository'
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
             required:
                 - projectId
+                - name
                 - owner
+        Description:
+            type: object
+            description: Represents the description of a project
+            properties:
+                short:
+                    type: string
+                long:
+                    type: string
+        Connection:
+            type: object
+            description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
+            properties:
+                connectionId:
+                    type: integer
+                connectionName:
+                    type: string
+                connectionProvider:
+                    type: string
+                loginName:
+                    type: string
+                password:
+                    type: string
+                token:
+                    type: string
+                authMethod:
+                    type: string
+            required:
+                - connectionId
+                - connectionName
+                - connectionProvider
+        ExperimentRepository:
+            type: object
+            description: Represents an mlflow experiment, see also [mlflow API specification](https://www.mlflow.org/docs/latest/rest-api.html#mlflowexperiment)
+            properties:
+                experimentId:
+                    type: string
+                name:
+                    type: string
+                artifact_location:
+                    type: string
+                lifecycle_stage:
+                    type: string
+                last_update_time:
+                    type: integer
+                creation_time:
+                    type: integer
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - experimentId
+        User:
+            type: object
+            description: Represents a user
+            properties:
+                userId:
+                    type: integer
+                name:
+                    type: string
+                email:
+                    type: string
+            required:
+                - userId
+                - name
+                - email
+        CodeRepository:
+            type: object
+            description: Represents a code repository, usually (but not exclusively) one of github, gitlab, bitbucket
+            properties:
+                codeRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - codeRepositoryId
+                - uri
+        DataRepository:
+            type: object
+            description: Represents a data repository
+            properties:
+                dataRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - dataRepositoryId
+                - uri
+        ModelRepository:
+            type: object
+            description: Represents a model
+            properties:
+                modelRepositoryId:
+                    type: string
+                uri:
+                    type: string
+                description:
+                    type: string
+                git:
+                    $ref: '#/components/schemas/CodeRepository'
+                commit:
+                    type: string
+                labels:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Label'
+            required:
+                - modelRepositoryId
+                - uri
+        UserGroup:
+            type: object
+            description: Represents a user group
+            properties:
+                userGroupId:
+                    type: string
+                name:
+                    type: string
+                admin:
+                    $ref: '#/components/schemas/User'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - userGroupId
+                - name
+                - admin
+        Organization:
+            type: object
+            description: Represents an organization, i.e. a collection of user groups and users
+            properties:
+                organizationId:
+                    type: string
+                name:
+                    type: string
+                contact:
+                    $ref: '#/components/schemas/User'
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserGroup'
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/User'
+            required:
+                - organizationId
+                - name
+                - contact
+        paymentInfo:
+            type: object
+            description: Represents payment information
+            properties:
+                paymentInfoId:
+                    type: string
+                address:
+                    type: string
+                paymentMethod:
+                    type: string
+                paymentDetails:
+                    type: string
+            required:
+                - paymentInfoId
+                - address
+                - paymentMethod
+                - paymentDetails
+        Label:
+            type: object
+            description: Represents a label or a Tag depending on the presence of the value parameter
+            properties:
+                scope:
+                    type: string
+                name:
+                    type: string
+                value:
+                    type: string
+            required:
+                - scope
+                - name
         Run:
             type: object
             description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
@@ -386,6 +584,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUsers:
+                                    value:
+                                        $ref: examples/users.json
         put:
             summary: Creates a new user
             requestBody:
@@ -429,6 +631,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUser:
+                                    value:
+                                        $ref: examples/user.json
         post:
             summary: Update user info
             requestBody:
@@ -492,6 +698,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
+                            examples:
+                                exampleProjects:
+                                    value:
+                                        $ref: examples/projects.json
         put:
             summary: Creates a new project
             requestBody:
@@ -537,7 +747,12 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
-    '/projects/{projectId}':
+                            examples:
+                                exampleUserProjects:
+                                    value:
+                                        $ref: examples/projects.json
+
+    /projects/{projectId}:
         parameters:
             - name: projectId
               in: path
@@ -553,6 +768,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Project'
+                            examples:
+                                exampleProject:
+                                    value:
+                                        $ref: examples/project.json
         post:
             summary: Update project
             requestBody:
@@ -591,6 +810,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleCodeRepositories:
+                                    value:
+                                        $ref: examples/codeRepositories.json
         put:
             summary: Add code repository
             requestBody:
@@ -657,6 +880,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/CodeRepository'
+                            examples:
+                                exampleCodeRepository:
+                                    value:
+                                        $ref: examples/codeRepository.json
         post:
             summary: Updates code repository
             requestBody:
@@ -695,6 +922,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                exampleDataRepositories:
+                                    value:
+                                        $ref: examples/dataRepositories.json
         put:
             summary: Add data repository
             requestBody:
@@ -761,6 +992,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/DataRepository'
+                            examples:
+                                exampleDataRepository:
+                                    value:
+                                        $ref: examples/dataRepository.json
         post:
             summary: Update data repository
             requestBody:
@@ -799,6 +1034,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepositories:
+                                    value:
+                                        $ref: examples/experimentRepositories.json
         put:
             summary: Add experiment repository
             requestBody:
@@ -865,6 +1104,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ExperimentRepository'
+                            examples:
+                                exampleExperimentRepository:
+                                    value:
+                                        $ref: examples/experimentRepository.json
         post:
             summary: Update experiment repository
             requestBody:
@@ -899,10 +1142,14 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          models:
+                                          modelRepositories:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepositories:
+                                    value:
+                                        $ref: examples/modelRepositories.json
         put:
             summary: Add model repository
             requestBody:
@@ -971,6 +1218,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ModelRepository'
+                            examples:
+                                exampleModelRepository:
+                                    value:
+                                        $ref: examples/modelRepository.json
         post:
             summary: Update model repository
             requestBody:
@@ -1100,10 +1351,14 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          groups:
+                                        userGroups:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/UserGroup'
+                            examples:
+                                exampleUserGroups:
+                                    value:
+                                        $ref: examples/userGroups.json
         put:
             summary: Create a new user group
             requestBody:
@@ -1139,6 +1394,10 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UserGroup'
+                            examples:
+                                exampleUserGroup:
+                                    value:
+                                        $ref: examples/userGroup.json
         post:
             summary: Update group
             requestBody:
