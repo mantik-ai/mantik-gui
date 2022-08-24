@@ -1,5 +1,5 @@
 {
-    "projectId": 2,
+    "projectId": "3691ce5e-ee97-4aad-ae16-4ff1b3f1a98d",
     "name": "Maelstrom Application 2 - Incorporate social media data into the prediction framework",
     "description": {
         "$ref": "description2.json"
