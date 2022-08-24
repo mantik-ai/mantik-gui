@@ -1,0 +1,11 @@
+{
+    "totalrecords": 2,
+    "modelRepositories": [
+        {
+            "$ref": "modelRepository2.json"
+        },
+        {
+            "$ref": "modelRepository1.json"
+        }
+    ]
+}
