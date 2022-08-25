@@ -1,5 +1,5 @@
 type: object
-description: Represents a untrained model definition
+description: Represents an untrained model definition
 properties:
     modelRepositoryId:
         type: string
