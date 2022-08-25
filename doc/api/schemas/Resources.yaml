@@ -1,2 +1,2 @@
 type: object
-additionalProperties: true # Free form dictionary
+additionalProperties: {} # Free form dictionary
