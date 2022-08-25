@@ -17,10 +17,13 @@ interface ProjectEntryProps {
 export const ProjectEntry = (props: ProjectEntryProps) => {
     return (
         <Card>
-            <CardHeader title={props.project.projectId}></CardHeader>
+            <CardHeader
+                title={props.project.name}
+                subheader={`from ${props.project.owner.name}`}
+            ></CardHeader>
             <CardContent>
                 <Typography variant="body1">
-                    from {props.project.owner.name}
+                    {props.project.description?.short}
                 </Typography>
             </CardContent>
             <CardActions>

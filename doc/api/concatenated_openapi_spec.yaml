@@ -403,9 +403,12 @@ paths:
                             examples:
                                 exampleUsers:
                                     value:
-                                        totalrecords: 1
+                                        totalrecords: 2
                                         users:
                                             - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            - userId: 58e40243-6dc1-42c6-bbab-cd39f087c86b
+                                              name: Kristian Ehlert
+                                              email: kristian.ehlert@4-cast.de
         put:
             summary: Creates a new user
             requestBody:
@@ -524,6 +527,62 @@ paths:
                                         totalrecords: 1
                                         projects:
                                             - $ref: '#/paths/~1projects~1%7BprojectId%7D/get/responses/200/content/application~1json/examples/exampleProject/value'
+                                            - projectId: 3691ce5e-ee97-4aad-ae16-4ff1b3f1a98d
+                                              name: Maelstrom Application 2 - Incorporate social media data into the prediction framework
+                                              description:
+                                                  short: Predict presence of precipitation based on text of tweets
+                                                  long: '# Obtain weather related information from Tweets\n\nTo improve predictions of the weather, we would like to harvest weather related information from social media sources. In practice, we aim to predict the presence of rain based on tweets. \nWe employ transformer based deep learning models like [DeBerta](https://arxiv.org/abs/2006.03654) with a classification head. \nDatasets\nWe use historical tweets from the years 2017-2020 that include keywords related to the presence of rain, e.g. rain, sunny or drizzle. Location needs to be attached to these tweets such that we can assign weather data to them. Locations can be assigned to Tweets in two ways. The user may opt in to be tracked by Twitter such that GPS data is assigned to every tweet of the location of the user. Alternatively, users can tag their tweets from a curated list of locations by Twitter. We use Tweets with locations from either method.  However, we exclude tweets that are tagged with a location with surface area greater than 100 km2, which corresponds to the spatial resolution of our weather data.  Here, we focus on tweets in the English language that originate from any location within the United Kingdom. This allows us to resort to the most popular pretrained models in natural language processing (NLP), which are usually trained in English. \nTo improve results, texts are preprocessed to match vocabulary of the model and the input as well as focusing the model''s attention on the relevant parts of the text. We remove hyperlinks and hashtags (unless they represent a keyword) and rephrase colloquial terms. If emojis are directly related to precipitation, e.g. umbrella, rain cloud, these emojis are converted to text. Remaining emojis are removed from the text. For training, we only retain texts that still contain at least one keyword after preprocessing.\nMetrics and loss function\nWe use cross entropy as our loss function. The proficiency of the model is evaluated via the f1 score of the minority class (not raining). The f1 score is the harmonic mean of the precision and recall.\nOverview models\nGenerally, our problem can be phrased as a text classification task, where deep learning models based on the  transformer architecture (Vaswani et al. 2017) achieve state of the art results (e.g., Yang et al. 2019). Transformers use self-attention to attribute varying relevance to different parts of the text. Based on transformers the BERT model was developed (Devlin et al. 2019), which includes crucial pre-training steps to familiarise the model with relevant vocabulary and semantics. In addition, the DeBERTa model (He et al. 2021a) adds additional pre-training steps and disentangles how positional and text information is stored in the model to improve performance. For this experiment we rely on the most recent version of the model, which is DeBERTaV3 (He et al. 2021b).\nWe use the default version of DeBERTaV3_small as described in He et al. 2021b with an adopted head for text classification. For this, we add a dropout layer with user-specified dropout rate and a pooling layer that passes the embedding of the special initial token, which supposedly comprises the meaning of the whole Tweet, to the loss function.\n'
+                                              owner:
+                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                              members:
+                                                  - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                              groups:
+                                                  - userGroupId: 50d8fafb-2541-44ea-a012-da377dcbd9c0
+                                                    name: Maelstrom group
+                                                    admin:
+                                                        $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                                    members:
+                                                        - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                                        - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                              codeRepositories:
+                                                  - totalrecords: 2
+                                                    codeRepositories:
+                                                        - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleCodeRepository/value'
+                                                        - codeRepositoryId: a52bd0da-603e-4c77-a948-b9141b305246
+                                                          uri: 'https://gl.ambrosys.de/mantik/maelstrom/a2'
+                                                          description: GitLab repository of code used for Maelstrom Application 2 - Social Media Analysis of Weather Data
+                                                          labels:
+                                                              - scope: gitlab-repo
+                                                                name: A2 repository
+                                              experimentRepositories:
+                                                  - totalrecords: 1
+                                                    codeRepositories:
+                                                        - experimentId: d0da456c-f3d7-4486-a9d0-397d1ae22d93
+                                                          name: fakeexample2
+                                                          artifact_location: /artifacts/experiments/fakeexample2
+                                                          lifecycle_stage: idontknow
+                                                          last_update_time: 1
+                                                          creation_time: 0
+                                                          labels:
+                                                              - scope: problem-type
+                                                                name: Classification
+                                              dataRepositories:
+                                                  - totalrecords: 2
+                                                    dataRepositories:
+                                                        - $ref: '#/paths/~1projects~1%7BprojectId%7D~1data~1%7BdataRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleDataRepository/value'
+                                                        - dataRepositoryId: f51d6933-5718-464f-8252-8821ed2bf725
+                                                          uri: 'https://twitter.com'
+                                                          description: 'Dataset comprises tweets that include weather related keywords and/or emojis. In addition, only tweets with an assigned location are included. The tweets cover years from 2017-2020. The data contains around 2 million tweets.'
+                                                          labels:
+                                                              - scope: tweets
+                                                                name: rain keyword tweets
+                                              labels:
+                                                  - scope: problem-type
+                                                    name: Classification
+                                                  - scope: problem-type
+                                                    name: Natural Language Processing
+                                                  - scope: problem-type
+                                                    name: Text Classification
         put:
             summary: Creates a new project
             requestBody:
@@ -595,7 +654,7 @@ paths:
                                         projectId: 1
                                         name: Maelstrom Application 6 - Large-Scale Weather Regime Classification
                                         description:
-                                            short: Classification of large-scale weather regimes for power predicition of renewable energy resources
+                                            short: Classification of large-scale weather regimes for power prediction of renewable energy resources
                                             long: '# PCA and Clustering of Weather Data Features\n\nThe goal is to classify large-scale weather regimes (LSWRs) by performing a PCA on timeseries data containing multiple phyiscal quantities on a large grid covering the whole of Europe.\nClassification is done by applying a clustering algorithm on the data that assigns each individual time step to a cluster, where outliers are allowed.\n\nTo allow classification of timeseries grid data, we apply a dimensionality reduction algorithm (PCA) and transform the original data into PC space. The PC space is a multi-dimensional space that represents the phase space of the dynamical system described by the data. To avoid the curse of dimensions, we use only a reduced amount of PCs for the transformation such that the PCs reflect most of the variance of the data.\n\nFor clustering the states of the dynamical system in PC space, we use the [hierarchical density-based spatial clustering algorithm for applications with noise (HDBSCAN)](https://arxiv.org/abs/1911.02282), which is a modification of the [DBSCAN](https://dl.acm.org/doi/10.5555/3001460.3001507) algorithm.\n\n## PCA\n\nThe PCA is performed on the whole dataset, whereas only 3 PCs are kept for the transformation. This is because we only have `10^3` data samples. Choosing more PCs would require more data (curse of dimensions). I.e., using `N` PCs would require at least `10^N` samples.\n\n## Clustering\n\nBefore applying the clustering, the data are transformed into the 3-D sub-space of the PC-space. The result reflects the phase space containing all states of the dynamical system throughout the given time span.\n\nWithin this space, we perform a clustering to find reoccuring states of the system. Each cluster represents a LSWR, i.e. all clusters represent the ensemble of LSWRs that our system resided in during the given time range. Each data point in a cluster hence reflects the time steps within the timeseries where the LSWR of the respective cluster appeared.\n\n## Statistical Analysis of the Clusters\n\nThe clusters (LSWRs) are then statistically analyzed such that we retrieve information about the LSWRs in general (total abundance, mean and standard deviation of their duration). In addition, we visualize the appearance of individual LSWR clusters at all time steps.\n'
                                         owner:
                                             $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
@@ -850,7 +909,7 @@ paths:
                                     value:
                                         dataRepositoryId: constants-ab
                                         uri: 'https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc'
-                                        description: 'The underlying data are from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data cover a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contain `~10^3` samples.'
+                                        description: 'The underlying data is taken from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data covers a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contains `~10^3` samples.'
                                         labels:
                                             - scope: weather-model
                                               name: ECMWF IFS HRES
@@ -1212,6 +1271,10 @@ paths:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Project'
+                            examples:
+                                exampleProjects:
+                                    value:
+                                        $ref: '#/paths/~1projects/get/responses/200/content/application~1json/examples/exampleProjects/value'
     /groups:
         get:
             parameters:

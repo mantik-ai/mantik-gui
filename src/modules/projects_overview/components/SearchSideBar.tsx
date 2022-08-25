@@ -96,7 +96,7 @@ export const SearchSideBar = () => {
                                     underline="none"
                                     sx={{ cursor: 'pointer' }}
                                 >
-                                    {project.projectId}
+                                    {project.name}
                                 </MUILink>
                             </Link>
                         ))}
