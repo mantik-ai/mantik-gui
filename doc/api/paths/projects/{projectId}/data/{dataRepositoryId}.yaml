@@ -3,12 +3,14 @@ parameters:
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: dataRepositoryId
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
 get:
     summary: Returns data entry for given project
     responses:

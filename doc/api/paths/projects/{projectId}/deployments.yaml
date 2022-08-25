@@ -46,6 +46,7 @@ put:
                         type: object
                         properties:
                             deplyomentId:
-                                type: integer
+                                type: string
+                                format: uuid
                     example:
                         deploymentId: 10

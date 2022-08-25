@@ -39,4 +39,5 @@ put:
                         type: object
                         properties:
                             projectId:
-                                type: integer
+                                type: string
+                                format: uuid
