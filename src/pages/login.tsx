@@ -1,100 +1,46 @@
-import { Formik } from 'formik'
-import { useRouter } from 'next/router'
-import InputLayout from '../components/layouts/InputLayout'
-import Label from '../components/Label'
-import InputField from '../components/InputField'
-import InputHelperText from '../components/InputHelperText'
-import AuthLinkText from '../components/AuthLinkText'
-import SubmitButton from '../components/SubmitButton'
-import useAuth from '../common/hooks/useAuth'
-import useValidationSchema from '../common/hooks/useValidationSchema'
+import React, { useState } from 'react'
+import type { NextPage } from 'next'
+import { TextField } from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import { signIn } from 'next-auth/react'
+import { AuthCard, AuthCardTypes } from '../common/components/AuthCard'
+import { COGNITO_PROVIDER_ID } from '../common/constants'
 
-export default function Login() {
-    const router = useRouter()
-    const { success } = router.query
-
-    const { loginSchema } = useValidationSchema()
-    const { login } = useAuth()
+const Login: NextPage = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     return (
-        <div
-            style={{
-                padding: '10px',
-            }}
-        >
-            {success === 'true' && (
-                <div
-                    style={{
-                        paddingTop: '10px',
-                        paddingBottom: '10px',
-                        color: 'green',
-                    }}
-                >
-                    {"You're signed up!"}
-                </div>
-            )}
-            <Formik
-                initialValues={{
-                    username: '',
-                    password: '',
-                }}
-                validationSchema={loginSchema}
-                onSubmit={login}
-                validateOnMount={false}
-                validateOnChange={false}
-                validateOnBlur={false}
-            >
-                {({
-                    isSubmitting,
-                    errors,
-                    values,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                }) => (
-                    <form onSubmit={handleSubmit}>
-                        <InputLayout>
-                            <Label>Username</Label>
-                            <InputField
-                                type="text"
-                                name="username"
-                                placeholder="Username or email"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values?.username}
-                            />
-                            <InputHelperText isError>
-                                {errors?.username}
-                            </InputHelperText>
-                        </InputLayout>
-                        <InputLayout>
-                            <Label>Password</Label>
-                            <InputField
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values?.password}
-                            />
-                            <InputHelperText isError>
-                                {errors?.password}
-                            </InputHelperText>
-                        </InputLayout>
-                        <InputLayout>
-                            <AuthLinkText href="/password/reset_code">
-                                {'Forgot password?'}
-                            </AuthLinkText>
-                        </InputLayout>
-                        <InputLayout>
-                            <AuthLinkText href="/register">
-                                {"Don't have an account? Register."}
-                            </AuthLinkText>
-                        </InputLayout>
-                        <SubmitButton isSubmitting={isSubmitting} />
-                    </form>
-                )}
-            </Formik>
-        </div>
+        <AuthCard
+            icon={LockOutlinedIcon}
+            onClick={() =>
+                signIn(COGNITO_PROVIDER_ID, {
+                    email,
+                    password,
+                    callbackUrl: `${window.location.origin}`,
+                })
+            }
+            fields={[
+                <TextField
+                    key="login-email"
+                    label="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />,
+                <TextField
+                    key="login-password"
+                    label="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />,
+            ]}
+            type={AuthCardTypes.LOGIN}
+        />
     )
 }
+
+export default Login

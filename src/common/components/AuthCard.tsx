@@ -21,6 +21,7 @@ interface AuthCardProps {
     icon: SvgIconComponent
     fields: ReactNode[]
     type: AuthCardTypes
+    onClick: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export const AuthCard = (props: AuthCardProps) => {
@@ -99,11 +100,7 @@ export const AuthCard = (props: AuthCardProps) => {
                             style={{
                                 color: 'white',
                             }}
-                            onClick={() =>
-                                signIn(COGNITO_PROVIDER_ID, {
-                                    redirect: false,
-                                })
-                            }
+                            onClick={props.onClick}
                         >
                             {props.type}
                         </Button>

@@ -7,6 +7,10 @@ const nextConfig = {
             process.env.DEBOUNCE_TIMER_SEARCH_QUERY
         ),
         mockDynamically: Boolean(process.env.MOCK_DYNAMICALLY),
+        cognitoUserPoolId: process.env.COGNITO_USER_POOL_ID,
+        cognitoRegion: process.env.COGNITO_REGION,
+        cognitoClientId: process.env.COGNITO_CLIENT_ID,
+        cognitoClientSecret: process.env.COGNITO_CLIENT_SECRET,
     },
 }
 

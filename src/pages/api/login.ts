@@ -1,18 +1,22 @@
 import {
     CognitoIdentityProviderClient,
-    AdminInitiateAuthCommand,
+    InitiateAuthCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
+import { NextApiRequest, NextApiResponse } from 'next'
+import getConfig from 'next/config'
 
-const { COGNITO_REGION, COGNITO_APP_CLIENT_ID, COGNITO_USER_POOL_ID } =
-    process.env
+const { publicRuntimeConfig } = getConfig()
 
-export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).send()
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse
+) {
+    if (req.method !== 'POST') return res.status(405).send({})
 
     const params = {
-        AuthFlow: 'ADMIN_USER_PASSWORD_AUTH',
-        ClientId: COGNITO_APP_CLIENT_ID,
-        UserPoolId: COGNITO_USER_POOL_ID,
+        AuthFlow: 'USER_PASSWORD_AUTH',
+        ClientId: publicRuntimeConfig.cognitoClientId,
+        UserPoolId: publicRuntimeConfig.cognitoUserPoolId,
         AuthParameters: {
             USERNAME: req.body.username,
             PASSWORD: req.body.password,
@@ -20,20 +24,18 @@ export default async function handler(req, res) {
     }
 
     const cognitoClient = new CognitoIdentityProviderClient({
-        region: COGNITO_REGION,
+        region: publicRuntimeConfig.cognitoRegion,
     })
-    const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params)
+    const initiateAuthCommand = new InitiateAuthCommand(params)
 
     try {
-        const response = await cognitoClient.send(adminInitiateAuthCommand)
+        const response = await cognitoClient.send(initiateAuthCommand)
         console.log(response)
-        return res.status(response['$metadata'].httpStatusCode).json({
+        return res.status(response.$metadata.httpStatusCode!).json({
             ...response.AuthenticationResult,
         })
-    } catch (err) {
+    } catch (err: unknown) {
         console.log(err)
-        return res
-            .status(err['$metadata'].httpStatusCode)
-            .json({ message: err.toString() })
+        return res.status(500).json({ message: err })
     }
 }
