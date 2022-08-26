@@ -577,12 +577,9 @@ paths:
                                                               - scope: tweets
                                                                 name: rain keyword tweets
                                               labels:
-                                                  - scope: problem-type
-                                                    name: Classification
-                                                  - scope: problem-type
-                                                    name: Natural Language Processing
-                                                  - scope: problem-type
-                                                    name: Text Classification
+                                                  - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/0'
+                                                  - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/3'
+                                                  - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/4'
         put:
             summary: Creates a new project
             requestBody:
@@ -669,12 +666,9 @@ paths:
                                         dataRepositories:
                                             - $ref: '#/paths/~1projects~1%7BprojectId%7D~1data/get/responses/200/content/application~1json/examples/exampleDataRepositories/value'
                                         labels:
-                                            - scope: problem-type
-                                              name: Classification
-                                            - scope: problem-type
-                                              name: Dimensionality Reduction
-                                            - scope: problem-type
-                                              name: Clustering
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/0'
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/1'
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/2'
         post:
             summary: Update project
             requestBody:
@@ -1460,16 +1454,40 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Label'
-    '/labels/{userId}/search':
+    '/labels/{scope}':
         parameters:
-            - name: userId
+            - name: scope
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: Return all labels of the given scope
+            responses:
+                '200':
+                    description: Successully returned labels that match the scope
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          labels:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/Label'
+                            examples:
+                                exampleLabels:
+                                    value:
+                                        $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value'
+    /labels/search:
+        parameters:
             - name: scope
               in: query
-              required: true
               schema:
                   type: string
             - name: searchString
@@ -1491,38 +1509,22 @@ paths:
                                 allOf:
                                     - $ref: '#/components/schemas/PaginationResponse'
                                     - properties:
-                                          projects:
+                                          labels:
                                               type: array
                                               items:
                                                   $ref: '#/components/schemas/Label'
-    '/labels/{userId}/{scope}':
-        parameters:
-            - name: userId
-              in: path
-              required: true
-              schema:
-                  type: integer
-            - name: scope
-              in: path
-              required: true
-              schema:
-                  type: string
-        get:
-            parameters:
-                - $ref: '#/components/parameters/StartIndex'
-                - $ref: '#/components/parameters/PageLength'
-            summary: Return all labels of the given scope
-            responses:
-                '200':
-                    description: Successully returned labels that match the scope
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                allOf:
-                                    - $ref: '#/components/schemas/PaginationResponse'
-                                    - properties:
-                                          projects:
-                                              type: array
-                                              items:
-                                                  $ref: '#/components/schemas/Label'
+                            examples:
+                                exampleLabels:
+                                    value:
+                                        totalrecords: 6
+                                        labels:
+                                            - scope: problem-type
+                                              name: Classification
+                                            - scope: problem-type
+                                              name: Dimensionality Reduction
+                                            - scope: problem-type
+                                              name: Clustering
+                                            - scope: problem-type
+                                              name: Natural Language Processing
+                                            - scope: problem-type
+                                              name: Text Classification

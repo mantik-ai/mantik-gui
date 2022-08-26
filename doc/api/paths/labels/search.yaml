@@ -1,12 +1,6 @@
 parameters:
-    - name: userId
-      in: path
-      required: true
-      schema:
-          type: integer
     - name: scope
       in: query
-      required: true
       schema:
           type: string
     - name: searchString
@@ -15,8 +9,8 @@ parameters:
           type: string
 get:
     parameters:
-        - $ref: '../../../parameters/StartIndex.yaml'
-        - $ref: '../../../parameters/PageLength.yaml'
+        - $ref: '../../parameters/StartIndex.yaml'
+        - $ref: '../../parameters/PageLength.yaml'
     summary: Return a collection of labels appropriate for the user's search
     responses:
         '200':
@@ -26,9 +20,13 @@ get:
                     schema:
                         type: object
                         allOf:
-                            - $ref: '../../../schemas/PaginationResponse.yaml'
+                            - $ref: '../../schemas/PaginationResponse.yaml'
                             - properties:
-                                  projects:
+                                  labels:
                                       type: array
                                       items:
-                                          $ref: '../../../schemas/Label.yaml'
+                                          $ref: '../../schemas/Label.yaml'
+                    examples:
+                        exampleLabels:
+                            value:
+                                $ref: '../../examples/labels.json'

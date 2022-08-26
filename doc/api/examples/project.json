@@ -32,18 +32,5 @@
             "$ref": "dataRepositories.json"
         }
     ],
-    "labels": [
-        {
-            "scope": "problem-type",
-            "name": "Classification"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Dimensionality Reduction"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Clustering"
-        }
-    ]
+    "labels": { "$ref": "labels1.json" }
 }

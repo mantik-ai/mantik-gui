@@ -65,7 +65,7 @@ paths:
 
     /labels:
         $ref: './paths/labels.yaml'
-    /labels/{userId}/search:
-        $ref: './paths/labels/{userId}/search.yaml'
-    /labels/{userId}/{scope}:
-        $ref: './paths/labels/{userId}/{scope}.yaml'
+    /labels/{scope}:
+        $ref: './paths/labels/{scope}.yaml'
+    /labels/search:
+        $ref: './paths/labels/search.yaml'
