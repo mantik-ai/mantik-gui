@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
+import { LabelArray } from '../../../common/components/LabelArray'
 import { Project } from '../../../common/queries'
 
 interface ProjectEntryProps {
@@ -21,10 +22,11 @@ export const ProjectEntry = (props: ProjectEntryProps) => {
                 title={props.project.name}
                 subheader={`from ${props.project.owner.name}`}
             ></CardHeader>
-            <CardContent>
+            <CardContent sx={{ pb: 0 }}>
                 <Typography variant="body1">
                     {props.project.description?.short}
                 </Typography>
+                <LabelArray labels={props.project.labels}></LabelArray>
             </CardContent>
             <CardActions>
                 <Link

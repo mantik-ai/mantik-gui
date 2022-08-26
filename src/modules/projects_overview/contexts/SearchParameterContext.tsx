@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import getConfig from 'next/config'
 import {
     createContext,
@@ -6,8 +7,16 @@ import {
     useEffect,
     useState,
 } from 'react'
+import { QueryStatus } from 'react-query'
 import useDebounce from '../../../common/hooks/useDebounce'
-import { Label } from '../../../common/queries'
+import {
+    GetProjectsUserUserIdSearch200,
+    Label,
+    useGetLabelsScope,
+    useGetProjectsUserUserIdSearch,
+} from '../../../common/queries'
+
+const { publicRuntimeConfig } = getConfig()
 
 interface ProblemType {
     name: string
@@ -16,56 +25,79 @@ interface ProblemType {
 
 export interface SearchParameters {
     searchString: string
-    debouncedSearchString: string
     setSearchString: Dispatch<SetStateAction<string>>
 
     problemTypes: ProblemType[]
     setProblemType: (idx: number, value: boolean) => void
 
-    searchLabels: Label[]
+    setSearchLabels: Dispatch<SetStateAction<Label[]>>
+
+    projectsResultStatus: QueryStatus
+    projectsResult:
+        | AxiosResponse<GetProjectsUserUserIdSearch200, unknown>
+        | undefined
 }
 const SearchParamerterContext = createContext<Partial<SearchParameters>>({})
 
 interface SearchParameterProviderProps {
     children: React.ReactNode
 }
-
-const { publicRuntimeConfig } = getConfig()
 export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
     props
 ) => {
     const [searchString, setSearchString] = useState('')
-
-    const [searchLabels, setSearchLabels] = useState<Label[]>([])
-
     const debouncedSearchString = useDebounce(
         searchString,
-        publicRuntimeConfig.debounceTimerSearchQuery
+        Number(publicRuntimeConfig.debounceTimerSearchQuery)
     )
+
+    const [searchLabels, setSearchLabels] = useState<Label[]>([])
     const [problemTypes, setProblemTypes] = useState<ProblemType[]>([])
+
+    const { data: problemTypeLabel } = useGetLabelsScope('problem-type')
     useEffect(() => {
-        setProblemTypes([
-            { name: 'Regression', active: false },
-            { name: 'Classification', active: false },
-        ])
-    }, [])
+        if (problemTypeLabel) {
+            setProblemTypes(
+                problemTypeLabel.data.labels?.map((label) => {
+                    return { name: label.name, active: false } as ProblemType
+                }) ?? []
+            )
+        }
+    }, [problemTypeLabel])
+
+    const {
+        data: projectsResult,
+        status: projectsResultStatus,
+        refetch,
+    } = useGetProjectsUserUserIdSearch(500, {
+        searchString: debouncedSearchString,
+        labels: [
+            ...searchLabels,
+            ...problemTypes
+                .filter((pt) => pt.active)
+                .map((pt) => ({
+                    scope: 'problem-type',
+                    name: pt.name,
+                })),
+        ],
+    })
 
     const setProblemType = (idx: number, value: boolean) => {
         problemTypes[idx].active = value
-        if (value) {
-            setSearchLabels([...searchLabels])
-        }
-        setProblemTypes((_) => [...problemTypes])
+        setProblemTypes(problemTypes)
+        refetch().catch((e) => console.log(e))
     }
+
     return (
         <SearchParamerterContext.Provider
             value={{
                 searchString,
-                debouncedSearchString,
                 setSearchString,
                 problemTypes,
                 setProblemType,
-                searchLabels,
+                setSearchLabels,
+                projectsResult,
+                projectsResultStatus,
             }}
         >
             {props.children}

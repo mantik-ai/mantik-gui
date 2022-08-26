@@ -71,10 +71,10 @@ import type {
     GetLabels200,
     GetLabelsParams,
     Label,
-    GetLabelsUserIdSearch200,
-    GetLabelsUserIdSearchParams,
-    GetLabelsUserIdScope200,
-    GetLabelsUserIdScopeParams,
+    GetLabelsScope200,
+    GetLabelsScopeParams,
+    GetLabelsSearch200,
+    GetLabelsSearchParams,
 } from '.././models'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -2642,38 +2642,38 @@ export const usePutLabels = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Return a collection of labels appropriate for the user's search
+ * @summary Return all labels of the given scope
  */
-export const getLabelsUserIdSearch = (
-    userId: number,
-    params?: GetLabelsUserIdSearchParams,
+export const getLabelsScope = (
+    scope: string,
+    params?: GetLabelsScopeParams,
     options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetLabelsUserIdSearch200>> => {
-    return axios.get(`/labels/${userId}/search`, {
+): Promise<AxiosResponse<GetLabelsScope200>> => {
+    return axios.get(`/labels/${scope}`, {
         params,
         ...options,
     })
 }
 
-export const getGetLabelsUserIdSearchQueryKey = (
-    userId: number,
-    params?: GetLabelsUserIdSearchParams
-) => [`/labels/${userId}/search`, ...(params ? [params] : [])]
+export const getGetLabelsScopeQueryKey = (
+    scope: string,
+    params?: GetLabelsScopeParams
+) => [`/labels/${scope}`, ...(params ? [params] : [])]
 
-export type GetLabelsUserIdSearchQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getLabelsUserIdSearch>>
+export type GetLabelsScopeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLabelsScope>>
 >
-export type GetLabelsUserIdSearchQueryError = AxiosError<unknown>
+export type GetLabelsScopeQueryError = AxiosError<unknown>
 
-export const useGetLabelsUserIdSearch = <
-    TData = Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+export const useGetLabelsScope = <
+    TData = Awaited<ReturnType<typeof getLabelsScope>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
-    params?: GetLabelsUserIdSearchParams,
+    scope: string,
+    params?: GetLabelsScopeParams,
     options?: {
         query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+            Awaited<ReturnType<typeof getLabelsScope>>,
             TError,
             TData
         >
@@ -2683,19 +2683,18 @@ export const useGetLabelsUserIdSearch = <
     const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
     const queryKey =
-        queryOptions?.queryKey ??
-        getGetLabelsUserIdSearchQueryKey(userId, params)
+        queryOptions?.queryKey ?? getGetLabelsScopeQueryKey(scope, params)
 
     const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getLabelsUserIdSearch>>
+        Awaited<ReturnType<typeof getLabelsScope>>
     > = ({ signal }) =>
-        getLabelsUserIdSearch(userId, params, { signal, ...axiosOptions })
+        getLabelsScope(scope, params, { signal, ...axiosOptions })
 
     const query = useQuery<
-        Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+        Awaited<ReturnType<typeof getLabelsScope>>,
         TError,
         TData
-    >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+    >(queryKey, queryFn, { enabled: !!scope, ...queryOptions })
 
     return {
         queryKey,
@@ -2704,41 +2703,36 @@ export const useGetLabelsUserIdSearch = <
 }
 
 /**
- * @summary Return all labels of the given scope
+ * @summary Return a collection of labels appropriate for the user's search
  */
-export const getLabelsUserIdScope = (
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams,
+export const getLabelsSearch = (
+    params?: GetLabelsSearchParams,
     options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetLabelsUserIdScope200>> => {
-    return axios.get(`/labels/${userId}/${scope}`, {
+): Promise<AxiosResponse<GetLabelsSearch200>> => {
+    return axios.get(`/labels/search`, {
         params,
         ...options,
     })
 }
 
-export const getGetLabelsUserIdScopeQueryKey = (
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams
-) => [`/labels/${userId}/${scope}`, ...(params ? [params] : [])]
+export const getGetLabelsSearchQueryKey = (params?: GetLabelsSearchParams) => [
+    `/labels/search`,
+    ...(params ? [params] : []),
+]
 
-export type GetLabelsUserIdScopeQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getLabelsUserIdScope>>
+export type GetLabelsSearchQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLabelsSearch>>
 >
-export type GetLabelsUserIdScopeQueryError = AxiosError<unknown>
+export type GetLabelsSearchQueryError = AxiosError<unknown>
 
-export const useGetLabelsUserIdScope = <
-    TData = Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+export const useGetLabelsSearch = <
+    TData = Awaited<ReturnType<typeof getLabelsSearch>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams,
+    params?: GetLabelsSearchParams,
     options?: {
         query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+            Awaited<ReturnType<typeof getLabelsSearch>>,
             TError,
             TData
         >
@@ -2748,19 +2742,17 @@ export const useGetLabelsUserIdScope = <
     const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
     const queryKey =
-        queryOptions?.queryKey ??
-        getGetLabelsUserIdScopeQueryKey(userId, scope, params)
+        queryOptions?.queryKey ?? getGetLabelsSearchQueryKey(params)
 
     const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getLabelsUserIdScope>>
-    > = ({ signal }) =>
-        getLabelsUserIdScope(userId, scope, params, { signal, ...axiosOptions })
+        Awaited<ReturnType<typeof getLabelsSearch>>
+    > = ({ signal }) => getLabelsSearch(params, { signal, ...axiosOptions })
 
     const query = useQuery<
-        Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+        Awaited<ReturnType<typeof getLabelsSearch>>,
         TError,
         TData
-    >(queryKey, queryFn, { enabled: !!(userId && scope), ...queryOptions })
+    >(queryKey, queryFn, queryOptions)
 
     return {
         queryKey,
