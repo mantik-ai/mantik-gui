@@ -4,9 +4,8 @@ properties:
     deploymentId:
         type: string
         format: uuid
-    trainedModelId:
-        type: string
-        format: uuid
+    savedModelId:
+        $ref: './SavedModelRepository.yaml'
     connection:
         $ref: './Connection.yaml'
     resources:
