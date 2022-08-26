@@ -7,6 +7,8 @@ properties:
         $ref: ./ExperimentRepository.yaml
     modelRepository:
         $ref: ./ModelRepository.yaml
+    savedModel:
+        $ref: ./SavedModelRepository.yaml
     dataRepository:
         $ref: ./DataRepository.yaml
     connections:
