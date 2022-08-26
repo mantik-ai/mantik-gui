@@ -1,5 +1,5 @@
 type: object
-description: Represents a label or a Tag depending on the presence of the value parameter
+description: Represents a label or a (MLFlow-)Tag depending on the presence of the value parameter
 properties:
     scope:
         type: string
