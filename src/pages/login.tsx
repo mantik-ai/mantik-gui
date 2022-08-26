@@ -1,30 +1,100 @@
-import React from 'react'
-import type { NextPage } from 'next'
-import { TextField } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { AuthCard, AuthCardTypes } from '../common/components/AuthCard'
+import { Formik } from 'formik'
+import { useRouter } from 'next/router'
+import InputLayout from '../components/layouts/InputLayout'
+import Label from '../components/Label'
+import InputField from '../components/InputField'
+import InputHelperText from '../components/InputHelperText'
+import AuthLinkText from '../components/AuthLinkText'
+import SubmitButton from '../components/SubmitButton'
+import useAuth from '../common/hooks/useAuth'
+import useValidationSchema from '../common/hooks/useValidationSchema'
 
-const Login: NextPage = () => {
+export default function Login() {
+    const router = useRouter()
+    const { success } = router.query
+
+    const { loginSchema } = useValidationSchema()
+    const { login } = useAuth()
+
     return (
-        <AuthCard
-            icon={LockOutlinedIcon}
-            fields={[
-                <TextField
-                    key="login-email"
-                    label="email"
-                    type="email"
-                    required
-                />,
-                <TextField
-                    key="login-password"
-                    label="password"
-                    type="password"
-                    required
-                />,
-            ]}
-            type={AuthCardTypes.LOGIN}
-        />
+        <div
+            style={{
+                padding: '10px',
+            }}
+        >
+            {success === 'true' && (
+                <div
+                    style={{
+                        paddingTop: '10px',
+                        paddingBottom: '10px',
+                        color: 'green',
+                    }}
+                >
+                    {"You're signed up!"}
+                </div>
+            )}
+            <Formik
+                initialValues={{
+                    username: '',
+                    password: '',
+                }}
+                validationSchema={loginSchema}
+                onSubmit={login}
+                validateOnMount={false}
+                validateOnChange={false}
+                validateOnBlur={false}
+            >
+                {({
+                    isSubmitting,
+                    errors,
+                    values,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                }) => (
+                    <form onSubmit={handleSubmit}>
+                        <InputLayout>
+                            <Label>Username</Label>
+                            <InputField
+                                type="text"
+                                name="username"
+                                placeholder="Username or email"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values?.username}
+                            />
+                            <InputHelperText isError>
+                                {errors?.username}
+                            </InputHelperText>
+                        </InputLayout>
+                        <InputLayout>
+                            <Label>Password</Label>
+                            <InputField
+                                type="password"
+                                name="password"
+                                placeholder="Password"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values?.password}
+                            />
+                            <InputHelperText isError>
+                                {errors?.password}
+                            </InputHelperText>
+                        </InputLayout>
+                        <InputLayout>
+                            <AuthLinkText href="/password/reset_code">
+                                {'Forgot password?'}
+                            </AuthLinkText>
+                        </InputLayout>
+                        <InputLayout>
+                            <AuthLinkText href="/register">
+                                {"Don't have an account? Register."}
+                            </AuthLinkText>
+                        </InputLayout>
+                        <SubmitButton isSubmitting={isSubmitting} />
+                    </form>
+                )}
+            </Formik>
+        </div>
     )
 }
-
-export default Login

@@ -1,49 +1,48 @@
 import nextAuth from 'next-auth'
-import cognitoProvider from 'next-auth/providers/cognito'
-import githubProvider from 'next-auth/providers/github'
-import googleProvider from 'next-auth/providers/google'
-import appleProvider from 'next-auth/providers/apple'
-import {
-    APPLE_PROVIDER_ID,
-    COGNITO_PROVIDER_ID,
-    GITHUB_PROVIDER_ID,
-    GOOGLE_PROVIDER_ID,
-} from '../../../common/constants'
+import CredentialsProvider from 'next-auth/providers'
 import { assertEnv } from '../../../common/helpers'
+import { COGNITO_PROVIDER_ID } from '../../../common/constants'
+
 export default nextAuth({
     providers: [
-        cognitoProvider({
-            id: COGNITO_PROVIDER_ID,
-            clientId: assertEnv(process.env.COGNITO_CLIENT_ID),
-            clientSecret: assertEnv(process.env.COGNITO_CLIENT_SECRET),
-            // domain: assertEnv(process.env.COGNITO_DOMAIN),
-        }),
-        githubProvider({
-            id: GITHUB_PROVIDER_ID,
-            clientId: assertEnv(process.env.GITHUB_ID),
-            clientSecret: assertEnv(process.env.GITHUB_SECRET),
-        }),
-        googleProvider({
-            id: GOOGLE_PROVIDER_ID,
-            clientId: assertEnv(process.env.GOOGLE_CLIENT_ID),
-            clientSecret: assertEnv(process.env.GOOGLE_CLIENT_SECRET),
-            authorization: {
-                params: {
-                    prompt: 'consent',
-                    access_type: 'offline',
-                    response_type: 'code',
+        CredentialsProvider({
+            // The name to display on the sign in form (e.g. "Sign in with...")
+            name: 'Credentials',
+            // The credentials is used to generate a suitable form on the sign in page.
+            // You can specify whatever fields you are expecting to be submitted.
+            // e.g. domain, username, password, 2FA token, etc.
+            // You can pass any HTML attribute to the <input> tag through the object.
+            credentials: {
+                username: {
+                    label: 'Username',
+                    type: 'text',
+                    placeholder: 'jsmith',
                 },
+                password: { label: 'Password', type: 'password' },
+            },
+            async authorize(credentials, req) {
+                // Add logic here to look up the user from the credentials supplied
+                const user = {
+                    id: 1,
+                    name: 'J Smith',
+                    email: 'jsmith@example.com',
+                }
+
+                if (user) {
+                    // Any object returned will be saved in `user` property of the JWT
+                    return user
+                } else {
+                    // If you return null then an error will be displayed advising the user to check their details.
+                    return null
+
+                    // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+                }
             },
         }),
-        appleProvider({
-            id: APPLE_PROVIDER_ID,
-            clientId: assertEnv(process.env.APPLE_ID),
-            clientSecret: assertEnv(process.env.APPLE_SECRET),
-        }),
     ],
-    secret: process.env.SECRET,
     callbacks: {
         async jwt({ token, account }) {
+            console.log('1')
             // Persist the OAuth access_token to the token right after signin
             if (account) {
                 token.accessToken = account.access_token
@@ -51,25 +50,10 @@ export default nextAuth({
             return token
         },
         async session({ token, session }) {
+            console.log('2')
             // Send properties to the client, like an access_token from a provider.
             session.accessToken = token.accessToken
             return session
-        },
-        redirect: () => '/projects',
-        async signIn({ account, profile }): Promise<string | boolean> {
-            switch (account.provider) {
-                case COGNITO_PROVIDER_ID:
-                    console.log(profile)
-                    return ''
-                case GOOGLE_PROVIDER_ID:
-                    return profile.email_verified as boolean
-                case APPLE_PROVIDER_ID:
-                    return ''
-                case GITHUB_PROVIDER_ID:
-                    return ''
-                default:
-                    return true
-            }
         },
     },
 })

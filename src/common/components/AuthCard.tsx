@@ -23,13 +23,6 @@ interface AuthCardProps {
     type: AuthCardTypes
 }
 
-/*unnecessary at first, but will be useful later*/
-/*const providers: Providers[] = [
-    { id: GOOGLE_PROVIDER_ID, icon: <GoogleIcon /> },
-    { id: GITHUB_PROVIDER_ID, icon: <GitHubIcon /> },
-    { id: APPLE_PROVIDER_ID, icon: <AppleIcon /> },
-]*/
-
 export const AuthCard = (props: AuthCardProps) => {
     let linkText = ''
     let link = ''
@@ -106,36 +99,14 @@ export const AuthCard = (props: AuthCardProps) => {
                             style={{
                                 color: 'white',
                             }}
-                            onClick={() => signIn(COGNITO_PROVIDER_ID)}
+                            onClick={() =>
+                                signIn(COGNITO_PROVIDER_ID, {
+                                    redirect: false,
+                                })
+                            }
                         >
                             {props.type}
                         </Button>
-
-                        {/*Login/Register with oauth2 provider is not supported in the first release */}
-                        {/*<Divider sx={{ py: 1 }}>
-                            <Typography
-                                variant="body2"
-                                color="textSecondary"
-                                align="center"
-                            >
-                                or {props.type} with
-                            </Typography>
-                        </Divider>
-                        <Stack
-                            direction="row"
-                            justifyContent="center"
-                            spacing={1}
-                        >
-                            {providers.map(({ id, icon }) => (
-                                <IconButton
-                                    style={{ border: '1px solid #80808066' }}
-                                    key={id}
-                                    onClick={() => signIn(id)}
-                                >
-                                    {icon}
-                                </IconButton>
-                            ))}
-                        </Stack>*/}
                     </Stack>
                 </CardContent>
             </Card>
