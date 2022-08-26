@@ -2,7 +2,8 @@ type: object
 description: Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
 properties:
     connectionId:
-        type: integer
+        type: string
+        format: uuid
     connectionName:
         type: string
     connectionProvider:

@@ -3,12 +3,14 @@ parameters:
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: modelRepositoryId
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
 get:
     summary: Returns model entry for given ID
     responses:

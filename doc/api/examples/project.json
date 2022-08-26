@@ -1,5 +1,5 @@
 {
-    "projectId": 1,
+    "projectId": "fe02e72c-ea75-4d31-a154-381e83c6bf13",
     "name": "Maelstrom Application 6 - Large-Scale Weather Regime Classification",
     "description": {
         "$ref": "description.json"

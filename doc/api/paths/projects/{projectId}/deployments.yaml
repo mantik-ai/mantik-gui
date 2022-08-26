@@ -9,10 +9,10 @@ get:
     parameters:
         - $ref: '../../../parameters/StartIndex.yaml'
         - $ref: '../../../parameters/PageLength.yaml'
-    summary: Returns code entries for given project
+    summary: List all deployments
     responses:
         '200':
-            description: Code entries for given project
+            description: Model entry for given ID
             content:
                 application/json:
                     schema:
@@ -20,30 +20,33 @@ get:
                         allOf:
                             - $ref: '../../../schemas/PaginationResponse.yaml'
                             - properties:
-                                  codeRepositories:
+                                  deployments:
                                       type: array
                                       items:
-                                          $ref: '../../../schemas/CodeRepository.yaml'
-                    examples:
-                        exampleProject:
-                            value:
-                                $ref: '../../../examples/codeRepositories.json'
+                                          $ref: '../../../schemas/DeploymentInformation.yaml'
+                    example:
+                        $ref: '../../../examples/deploymentInformations.json'
 put:
-    summary: Add code repository
+    summary: Create deployment
     requestBody:
-        description: Added code repository information
+        description: Deployment configuration
         required: true
         content:
             application/json:
                 schema:
-                    $ref: '../../../schemas/CodeRepository.yaml'
+                    $ref: '../../../schemas/DeploymentInformation.yaml'
+                example:
+                    $ref: '../../../examples/deploymentInformation.json'
     responses:
         '201':
-            description: Successfully added code repository
+            description: Successfully deployed model
             content:
                 application/json:
                     schema:
                         type: object
                         properties:
-                            codeRepositoryId:
+                            deplyomentId:
                                 type: string
+                                format: uuid
+                    example:
+                        deploymentId: 10

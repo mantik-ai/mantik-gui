@@ -1,0 +1,8 @@
+{
+    "totalrecords": 1,
+    "deployments": [
+        {
+            "$ref": "deploymentInformation.json"
+        }
+    ]
+}

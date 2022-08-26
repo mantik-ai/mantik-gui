@@ -3,6 +3,9 @@ description: Represents a data repository
 properties:
     dataRepositoryId:
         type: string
+        format: uuid
+    dataRepositoryName:
+        type: string
     uri:
         type: string
     description:

@@ -1,0 +1,4 @@
+type: object
+properties:
+    apptainerImageUri:
+        type: string

@@ -3,6 +3,9 @@ description: Represents a code repository, usually (but not exclusively) one of 
 properties:
     codeRepositoryId:
         type: string
+        format: uuid
+    codeRepositoryName:
+        type: string
     uri:
         type: string
     description:

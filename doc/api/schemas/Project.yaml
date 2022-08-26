@@ -2,7 +2,8 @@ type: object
 description: A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
 properties:
     projectId:
-        type: integer
+        type: string
+        format: uuid
     name:
         type: string
     description:

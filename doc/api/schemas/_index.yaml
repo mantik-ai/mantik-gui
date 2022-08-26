@@ -42,3 +42,13 @@ User:
     $ref: './User.yaml'
 UserGroup:
     $ref: './UserGroup.yaml'
+DeploymentInformation:
+    $ref: './DeploymentInformation.yaml'
+Resources:
+    $ref: './Resources.yaml'
+PredictionRequest:
+    $ref: './PredictionRequest.yaml'
+PredictionResponse:
+    $ref: './PredictionResponse.yaml'
+PackagedDeployment:
+    $ref: './PackagedDeployment.yaml'

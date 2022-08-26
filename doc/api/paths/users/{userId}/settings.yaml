@@ -3,7 +3,8 @@ parameters:
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
 get:
     summary: Returns the settings for a specific user
     responses:

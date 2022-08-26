@@ -1,5 +1,5 @@
 {
-    "modelRepositoryId": "example-model",
+    "modelRepositoryId": "fb60b3a9-de33-40cc-ac3e-5ec3f684e85e",
     "uri": "/artifacts/models/example-model",
     "git": {
         "$ref": "codeRepository.json"

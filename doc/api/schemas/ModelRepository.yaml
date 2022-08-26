@@ -3,6 +3,9 @@ description: Represents an untrained model definition
 properties:
     modelRepositoryId:
         type: string
+        format: uuid
+    uri:
+        type: string
     description:
         type: string
     git:

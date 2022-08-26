@@ -3,6 +3,7 @@ description: Represents an organization, i.e. a collection of user groups and us
 properties:
     organizationId:
         type: string
+        format: uuid
     name:
         type: string
     contact:
