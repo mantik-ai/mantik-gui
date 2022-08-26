@@ -75,7 +75,7 @@ export const RunDialog = (props: RunRepeatDialogProps) => {
                     ></RunDialogFormInput>
                     <Spacing value={theme.spacing(2)}></Spacing>
                     <RunDialogFormInput
-                        options={modelRepository?.data.models ?? []}
+                        options={modelRepository?.data.modelRepositories ?? []}
                         name="Model"
                         fieldSelector={(x) => x.uri ?? '<No Name>'}
                         onChange={(e) => runContext.setModel!(e)}

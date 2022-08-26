@@ -1,0 +1,15 @@
+{
+    "userGroupId": "50d8fafb-2541-44ea-a012-da377dcbd9c0",
+    "name": "Maelstrom group",
+    "admin": {
+        "$ref": "user2.json"
+    },
+    "members": [
+        {
+            "$ref": "user.json"
+        },
+        {
+            "$ref": "user2.json"
+        }
+    ]
+}

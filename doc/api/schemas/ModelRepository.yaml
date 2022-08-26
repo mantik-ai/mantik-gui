@@ -1,5 +1,5 @@
 type: object
-description: Represents a model
+description: Represents an untrained model definition
 properties:
     modelRepositoryId:
         type: string
@@ -18,4 +18,3 @@ properties:
             $ref: ./Label.yaml
 required:
     - modelRepositoryId
-    - uri

@@ -9,11 +9,10 @@ import type { CodeRepository } from './codeRepository'
 import type { Label } from './label'
 
 /**
- * Represents a model
+ * Represents a untrained model definition
  */
 export interface ModelRepository {
     modelRepositoryId: string
-    uri: string
     description?: string
     git?: CodeRepository
     commit?: string
