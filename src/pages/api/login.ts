@@ -30,12 +30,10 @@ export default async function handler(
 
     try {
         const response = await cognitoClient.send(initiateAuthCommand)
-        console.log(response)
         return res.status(response.$metadata.httpStatusCode!).json({
             ...response.AuthenticationResult,
         })
     } catch (err: unknown) {
-        console.log(err)
         return res.status(500).json({ message: err })
     }
 }

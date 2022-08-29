@@ -1,18 +1,16 @@
 import axios from 'axios'
 import nextAuth from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
+import getConfig from 'next/config'
 import { COGNITO_PROVIDER_ID } from '../../../common/constants'
+
+const { publicRuntimeConfig } = getConfig()
 
 export default nextAuth({
     providers: [
         credentialsProvider({
             id: COGNITO_PROVIDER_ID,
-            // The name to display on the sign in form (e.g. "Sign in with...")
             name: 'Credentials',
-            // The credentials is used to generate a suitable form on the sign in page.
-            // You can specify whatever fields you are expecting to be submitted.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
                 email: {
                     label: 'Email',
@@ -35,29 +33,42 @@ export default nextAuth({
                         },
                     }
                 )
-                console.log(res)
-                return null
 
-                // if (user) {
-                //     return user
-                // } else {
-                //     return null
-                // }
+                if (res.status !== 200) return null
+                const dataSent = JSON.parse(res.config.data as string)
+
+                const cognitoTokens = res.data as Record<string, unknown>
+                cognitoTokens.name = dataSent.username
+                return cognitoTokens
             },
         }),
     ],
+    secret: String(publicRuntimeConfig.nextAuthSecret),
+    pages: {
+        signIn: '/login',
+    },
     callbacks: {
-        async jwt({ token, account }) {
-            // Persist the OAuth access_token to the token right after signin
-            if (account) {
-                token.accessToken = account.access_token
+        async jwt({ token, user, account }) {
+            if (account && user) {
+                return {
+                    ...token,
+                    name: user.name,
+                    accessToken: user.AccessToken,
+                    refreshToken: user.RefreshToken,
+                    accessTokenExpires: user.ExpiresIn,
+                }
             }
+
             return token
         },
-        async session({ token, session }) {
-            // Send properties to the client, like an access_token from a provider.
-            session.accessToken = token.accessToken
+        async session({ session, token }) {
+            // session.user?.name = token.accessToken
+            session.user.name = token.name
+            session.user.accessToken = token.accessToken
+            session.user.refreshToken = token.refreshToken
+            session.user.accessTokenExpires = token.accessTokenExpires
             return session
         },
     },
+    debug: process.env.NODE_ENV === 'development',
 })
