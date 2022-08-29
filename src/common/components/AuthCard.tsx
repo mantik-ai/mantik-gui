@@ -9,8 +9,6 @@ import {
 } from '@mui/material'
 import React, { ReactNode } from 'react'
 import { SvgIconComponent } from '@mui/icons-material'
-import { signIn } from 'next-auth/react'
-import { COGNITO_PROVIDER_ID } from '../constants'
 
 export const enum AuthCardTypes {
     LOGIN = 'login',
@@ -21,7 +19,7 @@ interface AuthCardProps {
     icon: SvgIconComponent
     fields: ReactNode[]
     type: AuthCardTypes
-    onClick: React.MouseEventHandler<HTMLButtonElement>
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export const AuthCard = (props: AuthCardProps) => {

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import nextAuth from 'next-auth'
+import nextAuth, { ISODateString } from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
 import getConfig from 'next/config'
 import { COGNITO_PROVIDER_ID } from '../../../common/constants'
@@ -64,11 +64,27 @@ export default nextAuth({
         async session({ session, token }) {
             // session.user?.name = token.accessToken
             session.user.name = token.name
-            session.user.accessToken = token.accessToken
-            session.user.refreshToken = token.refreshToken
-            session.user.accessTokenExpires = token.accessTokenExpires
+            session.user.accessToken = String(token.accessToken)
+            session.user.refreshToken = String(token.refreshToken)
+            session.user.accessTokenExpires = String(token.accessTokenExpires)
             return session
         },
     },
-    debug: process.env.NODE_ENV === 'development',
 })
+
+declare module 'next-auth' {
+    /**
+     * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+     */
+    interface Session {
+        user: {
+            name?: string | null
+            email?: string | null
+            image?: string | null
+            accessToken: string
+            refreshToken: string | null
+            accessTokenExpires: string | null
+        }
+        expires: ISODateString
+    }
+}
