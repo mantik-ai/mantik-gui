@@ -2,7 +2,7 @@ import { Stack, useTheme } from '@mui/material'
 import React, { useContext } from 'react'
 import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
-import { ProjectEntry } from './ProjectEntry'
+import { ProjectCard } from './ProjectCard'
 
 export const ProjectList = () => {
     const theme = useTheme()
@@ -16,10 +16,10 @@ export const ProjectList = () => {
             <Stack spacing={theme.spacing(2)}>
                 {searchParameterContext.projectsResult?.data.projects?.map(
                     (project) => (
-                        <ProjectEntry
+                        <ProjectCard
                             key={project.projectId}
                             project={project}
-                        ></ProjectEntry>
+                        ></ProjectCard>
                     )
                 )}
             </Stack>

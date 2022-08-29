@@ -15,7 +15,7 @@ import { Project } from '../../../common/queries'
 interface ProjectEntryProps {
     project: Project
 }
-export const ProjectEntry = (props: ProjectEntryProps) => {
+export const ProjectCard = (props: ProjectEntryProps) => {
     return (
         <Card>
             <CardHeader
