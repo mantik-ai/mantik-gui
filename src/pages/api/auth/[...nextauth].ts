@@ -1,3 +1,4 @@
+import { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider'
 import axios from 'axios'
 import nextAuth, { ISODateString } from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
@@ -35,10 +36,8 @@ export default nextAuth({
                 )
 
                 if (res.status !== 200) return null
-                const dataSent = JSON.parse(res.config.data as string)
 
                 const cognitoTokens = res.data as Record<string, unknown>
-                cognitoTokens.name = dataSent.username
                 return cognitoTokens
             },
         }),
@@ -52,7 +51,7 @@ export default nextAuth({
             if (account && user) {
                 return {
                     ...token,
-                    name: user.name,
+                    name: (user.User as GetUserCommandOutput).Username,
                     accessToken: user.AccessToken,
                     refreshToken: user.RefreshToken,
                     accessTokenExpires: user.ExpiresIn,
