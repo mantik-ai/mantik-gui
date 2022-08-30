@@ -17,12 +17,17 @@ export const SearchHeading = (props: SearchHeadingProps) => {
                 alignItems: 'stretch',
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    justifyContent: 'center',
+                }}
+            >
                 <Typography variant="h2" gutterBottom>
                     {props.children}
                 </Typography>
                 <Spacing horizontal value={theme.spacing(2)}></Spacing>
-
                 <Typography variant="h5">{props.description}</Typography>
             </Box>
             <Divider />

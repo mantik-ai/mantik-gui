@@ -17,7 +17,7 @@ const Projects: NextPage = () => {
                     flexDirection: 'column',
                 }}
             >
-                <SearchHeading description="For further elaboration check out the documentation">
+                <SearchHeading description="Search through all project accessible to you.">
                     Project Overview
                 </SearchHeading>
                 <Box
