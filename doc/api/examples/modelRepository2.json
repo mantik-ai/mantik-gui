@@ -1,0 +1,14 @@
+{
+    "modelRepositoryId": "32c22b3f-d89a-4846-9eeb-5c72c41c8f37",
+    "uri": "/artifacts/models/example-model",
+    "git": {
+        "$ref": "codeRepository2.json"
+    },
+    "commit": "726150341180ba37e56859c377d56aa7dd87985b",
+    "labels": [
+        {
+            "scope": "model-type",
+            "name": "Convolutional Neural Network"
+        }
+    ]
+}

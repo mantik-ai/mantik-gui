@@ -1,8 +1,11 @@
 {
-    "totalrecords": 1,
+    "totalrecords": 2,
     "users": [
         {
             "$ref": "user.json"
+        },
+        {
+            "$ref": "user2.json"
         }
     ]
 }

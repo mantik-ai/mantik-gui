@@ -3,6 +3,9 @@
     "projects": [
         {
             "$ref": "project.json"
+        },
+        {
+            "$ref": "project2.json"
         }
     ]
 }

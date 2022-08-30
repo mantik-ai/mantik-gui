@@ -3,7 +3,8 @@ parameters:
       in: path
       required: true
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: searchString
       in: query
       schema:
@@ -18,22 +19,26 @@ parameters:
       in: query
       description: The User that owns the project
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: memberId
       in: query
       description: Filter search by Members of the project
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: groupId
       in: query
       description: Filter search by User Group
       schema:
-          type: integer
+          type: string
+          format: uuid
     - name: organizationId
       in: query
       description: Filter search by Organization membership of the Owner
       schema:
-          type: integer
+          type: string
+          format: uuid
 get:
     parameters:
         - $ref: '../../../../parameters/StartIndex.yaml'
@@ -55,3 +60,7 @@ get:
                                       type: array
                                       items:
                                           $ref: '../../../../schemas/Project.yaml'
+                    examples:
+                        exampleProjects:
+                            value:
+                                $ref: '../../../../examples/projects.json'

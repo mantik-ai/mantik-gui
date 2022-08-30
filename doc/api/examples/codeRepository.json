@@ -1,5 +1,6 @@
 {
-    "codeRepositoryId": "mantik-tutorials-github-repo",
+    "codeRepositoryId": "9de98a78-ff41-4148-97e7-ebe893979c66",
+    "codeRepositoryName": "mantik-tutorials-github-repo",
     "uri": "https://github.com/mantik-ai/tutorials",
     "description": "GitHub repo containing examples on how to use mantik",
     "labels": [

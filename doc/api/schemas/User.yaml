@@ -2,7 +2,8 @@ type: object
 description: Represents a user
 properties:
     userId:
-        type: integer
+        type: string
+        format: uuid
     name:
         type: string
     email:

@@ -1,0 +1,24 @@
+parameters:
+    - name: projectId
+      in: path
+      required: true
+      schema:
+          type: string
+          format: uuid
+    - name: deploymentId
+      in: path
+      required: true
+      schema:
+          type: string
+          format: uuid
+get:
+    summary: Download packaged deployment
+    responses:
+        '200':
+            description: Model entry for given ID
+            content:
+                application/json:
+                    schema:
+                        $ref: '../../../../../schemas/PackagedDeployment.yaml'
+                    example:
+                        $ref: '../../../../../examples/packagedDeployment.json'

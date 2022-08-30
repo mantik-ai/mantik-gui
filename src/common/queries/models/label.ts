@@ -7,7 +7,7 @@
  */
 
 /**
- * Represents a label or a Tag depending on the presence of the value parameter
+ * Represents a label or a (MLFlow-)Tag depending on the presence of the value parameter
  */
 export interface Label {
     scope: string

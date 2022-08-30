@@ -9,14 +9,22 @@ import type { ExperimentRepository } from './experimentRepository'
 import type { ModelRepository } from './modelRepository'
 import type { DataRepository } from './dataRepository'
 import type { Connection } from './connection'
+import type { RunStatus } from './runStatus'
 
 /**
  * Represents a quadruple of experiment, code, data and hardware-configuration
  */
 export interface Run {
+    run_id?: string
     experimentRepository?: ExperimentRepository
     modelRepository?: ModelRepository
     dataRepository?: DataRepository
     connections?: Connection
-    timestamp?: string
+    experiment_id?: string
+    user_id?: string
+    status?: RunStatus
+    start_time?: number
+    end_time?: number
+    artifact_uri?: string
+    lifecycle_stage?: string
 }
