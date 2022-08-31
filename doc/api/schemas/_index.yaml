@@ -24,6 +24,8 @@ PaymentInfo:
     $ref: './PaymentInfo.yaml'
 Project:
     $ref: './Project.yaml'
+CodeRepositorySettings:
+    $ref: './CodeRepositorySettings.yaml'
 Description:
     $ref: './Description.yaml'
 Run:
@@ -36,8 +38,8 @@ RunsByExperiment:
     $ref: './RunsByExperiment.yaml'
 RunsByModel:
     $ref: './RunsByModel.yaml'
-Settings:
-    $ref: './Settings.yaml'
+UserSettings:
+    $ref: './UserSettings.yaml'
 User:
     $ref: './User.yaml'
 UserGroup:
@@ -52,3 +54,7 @@ PredictionResponse:
     $ref: './PredictionResponse.yaml'
 PackagedDeployment:
     $ref: './PackagedDeployment.yaml'
+EntryPoint:
+    $ref: './EntryPoint.yaml'
+DeploymentMode:
+    $ref: './DeploymentMode.yaml'

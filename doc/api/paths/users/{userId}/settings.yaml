@@ -16,7 +16,7 @@ get:
                         type: object
                         properties:
                             settings:
-                                $ref: '../../../schemas/Settings.yaml'
+                                $ref: '../../../schemas/UserSettings.yaml'
 post:
     summary: Updates user settings
     requestBody:
@@ -25,7 +25,7 @@ post:
         content:
             application/json:
                 schema:
-                    $ref: '../../../schemas/Settings.yaml'
+                    $ref: '../../../schemas/UserSettings.yaml'
     responses:
         '200':
             description: Successfully updated settings

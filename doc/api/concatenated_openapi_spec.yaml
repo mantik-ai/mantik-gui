@@ -23,6 +23,9 @@ components:
             properties:
                 codeRepositoryId:
                     type: string
+                    format: uuid
+                codeRepositoryName:
+                    type: string
                 uri:
                     type: string
                 description:
@@ -39,7 +42,8 @@ components:
             description: 'Represents a connection to a third-party platform, usually either HPC or cloud platform credentials'
             properties:
                 connectionId:
-                    type: integer
+                    type: string
+                    format: uuid
                 connectionName:
                     type: string
                 connectionProvider:
@@ -62,7 +66,12 @@ components:
             properties:
                 dataRepositoryId:
                     type: string
+                    format: uuid
+                dataRepositoryName:
+                    type: string
                 uri:
+                    type: string
+                commitHash:
                     type: string
                 description:
                     type: string
@@ -83,6 +92,7 @@ components:
             properties:
                 experimentId:
                     type: string
+                    format: uuid
                 name:
                     type: string
                 artifact_location:
@@ -118,6 +128,9 @@ components:
             properties:
                 modelRepositoryId:
                     type: string
+                    format: uuid
+                uri:
+                    type: string
                 description:
                     type: string
                 git:
@@ -141,7 +154,7 @@ components:
                 uri:
                     type: string
             required:
-                - savedModelRepositoryId
+                - trainedModelRepositoryId
                 - uri
         Organization:
             type: object
@@ -149,6 +162,7 @@ components:
             properties:
                 organizationId:
                     type: string
+                    format: uuid
                 name:
                     type: string
                 contact:
@@ -178,6 +192,7 @@ components:
             properties:
                 paymentInfoId:
                     type: string
+                    format: uuid
                 address:
                     type: string
                 paymentMethod:
@@ -194,7 +209,8 @@ components:
             description: 'A project is a collection of code, experiments, data and models with permission management (owner, members, groups)'
             properties:
                 projectId:
-                    type: integer
+                    type: string
+                    format: uuid
                 name:
                     type: string
                 description:
@@ -228,6 +244,47 @@ components:
             required:
                 - projectId
                 - owner
+        CodeRepositorySettings:
+            type: object
+            description: Code Repository Settings
+            properties:
+                projectUrl:
+                    type: string
+                environment:
+                    type: string
+                deploymentModes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DeploymentMode'
+                entryPoints:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/EntryPoint'
+                public:
+                    type: boolean
+                owner:
+                    $ref: '#/components/schemas/User'
+                userGroups:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            userGroup:
+                                $ref: '#/components/schemas/UserGroup'
+                users:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            user:
+                                $ref: '#/components/schemas/User'
+                accessToken:
+                    type: string
+            required: null
         Description:
             type: object
             description: Represents the description of a project
@@ -240,13 +297,14 @@ components:
             type: object
             description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
             properties:
-                runId:
+                run_id:
                     type: string
-                    format: uuid
                 experimentRepository:
                     $ref: '#/components/schemas/ExperimentRepository'
                 modelRepository:
                     $ref: '#/components/schemas/ModelRepository'
+                savedModel:
+                    $ref: '#/components/schemas/SavedModelRepository'
                 dataRepository:
                     $ref: '#/components/schemas/DataRepository'
                 connections:
@@ -341,7 +399,7 @@ components:
                                 $ref: '#/components/schemas/DataRepository'
                             connection:
                                 $ref: '#/components/schemas/Connection'
-        Settings:
+        UserSettings:
             type: object
             description: User settings
             properties:
@@ -365,7 +423,8 @@ components:
             description: Represents a user
             properties:
                 userId:
-                    type: integer
+                    type: string
+                    format: uuid
                 name:
                     type: string
                 email:
@@ -380,6 +439,7 @@ components:
             properties:
                 userGroupId:
                     type: string
+                    format: uuid
                 name:
                     type: string
                 admin:
@@ -392,6 +452,68 @@ components:
                 - userGroupId
                 - name
                 - admin
+        DeploymentInformation:
+            type: object
+            description: Information on a deployment
+            properties:
+                deploymentId:
+                    type: string
+                    format: uuid
+                savedModelId:
+                    $ref: '#/components/schemas/SavedModelRepository'
+                connection:
+                    $ref: '#/components/schemas/Connection'
+                resources:
+                    $ref: '#/components/schemas/Resources'
+                cronString:
+                    type: string
+        Resources:
+            type: object
+            additionalProperties: {}
+        PredictionRequest:
+            type: object
+            additionalProperties: {}
+        PredictionResponse:
+            type: object
+            additionalProperties: {}
+        PackagedDeployment:
+            type: object
+            properties:
+                apptainerImageUri:
+                    type: string
+        EntryPoint:
+            type: object
+            description: Represents an entry point of a repository
+            properties:
+                name:
+                    type: string
+                parameters:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                            type:
+                                type: string
+                            default:
+                                type: string
+                        required:
+                            - name
+                            - type
+            required:
+                - name
+        DeploymentMode:
+            type: object
+            description: Represents an deployment mode of a repository
+            properties:
+                name:
+                    type: string
+                parameters:
+                    type: object
+                    additionalProperties: {}
+            required:
+                - name
     parameters:
         PageLength:
             name: pagelength
@@ -466,14 +588,16 @@ paths:
                                 type: object
                                 properties:
                                     userId:
-                                        type: integer
+                                        type: string
+                                        format: uuid
     '/users/{userId}':
         parameters:
             - name: userId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns the information on a specific user
             responses:
@@ -486,7 +610,7 @@ paths:
                             examples:
                                 exampleUser:
                                     value:
-                                        userId: 1
+                                        userId: c9de9883-5efc-4b4d-b156-9fe5acce8975
                                         name: Fabian Emmerich
                                         email: fabian.emmerich@4-cast.de
         post:
@@ -507,7 +631,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns the settings for a specific user
             responses:
@@ -519,7 +644,7 @@ paths:
                                 type: object
                                 properties:
                                     settings:
-                                        $ref: '#/components/schemas/Settings'
+                                        $ref: '#/components/schemas/UserSettings'
         post:
             summary: Updates user settings
             requestBody:
@@ -528,7 +653,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Settings'
+                            $ref: '#/components/schemas/UserSettings'
             responses:
                 '200':
                     description: Successfully updated settings
@@ -632,14 +757,16 @@ paths:
                                 type: object
                                 properties:
                                     projectId:
-                                        type: integer
+                                        type: string
+                                        format: uuid
     '/projects/user/{userId}':
         parameters:
             - name: userId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -669,7 +796,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns the information on a specific project
             responses:
@@ -682,7 +810,7 @@ paths:
                             examples:
                                 exampleProject:
                                     value:
-                                        projectId: 1
+                                        projectId: fe02e72c-ea75-4d31-a154-381e83c6bf13
                                         name: Maelstrom Application 6 - Large-Scale Weather Regime Classification
                                         description:
                                             short: Classification of large-scale weather regimes for power prediction of renewable energy resources
@@ -724,7 +852,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -775,7 +904,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -801,12 +931,14 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: codeRepositoryId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns code entry for given project
             responses:
@@ -819,7 +951,8 @@ paths:
                             examples:
                                 exampleCodeRepository:
                                     value:
-                                        codeRepositoryId: mantik-tutorials-github-repo
+                                        codeRepositoryId: 9de98a78-ff41-4148-97e7-ebe893979c66
+                                        codeRepositoryName: mantik-tutorials-github-repo
                                         uri: 'https://github.com/mantik-ai/tutorials'
                                         description: GitHub repo containing examples on how to use mantik
                                         labels:
@@ -837,13 +970,52 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
+    '/projects/{projectId}/code/{codeRepositoryId}/settings':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: codeRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            summary: Returns the settings for a specific code repository of a given project
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    settings:
+                                        $ref: '#/components/schemas/CodeRepositorySettings'
+        post:
+            summary: Updates project settings
+            requestBody:
+                description: Update project settings
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CodeRepositorySettings'
+            responses:
+                '200':
+                    description: Successfully updated project settings
     '/projects/{projectId}/data':
         parameters:
             - name: projectId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -894,7 +1066,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -920,12 +1093,14 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: dataRepositoryId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns data entry for given project
             responses:
@@ -938,7 +1113,8 @@ paths:
                             examples:
                                 exampleDataRepository:
                                     value:
-                                        dataRepositoryId: constants-ab
+                                        dataRepositoryId: 1b367c25-341a-41a9-8a80-554c43a69ff5
+                                        dataRepositoryName: constants-ab
                                         uri: 'https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc'
                                         description: 'The underlying data is taken from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data covers a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contains `~10^3` samples.'
                                         labels:
@@ -962,7 +1138,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1013,7 +1190,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1039,12 +1217,14 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: experimentRepositoryId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns experiment entry for given project
             responses:
@@ -1057,7 +1237,7 @@ paths:
                             examples:
                                 exampleExperimentRepository:
                                     value:
-                                        experimentId: example-experiment
+                                        experimentId: 61cf7b16-c9b5-458c-9e1c-d5c74587ad1d
                                         name: example-experiment
                                         artifact_location: /artifacts/experiments/example-experiment
                                         lifecycle_stage: idontknow
@@ -1084,7 +1264,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1137,7 +1318,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1163,12 +1345,14 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: modelRepositoryId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Returns model entry for given ID
             responses:
@@ -1181,7 +1365,7 @@ paths:
                             examples:
                                 exampleModelRepository:
                                     value:
-                                        modelRepositoryId: example-model
+                                        modelRepositoryId: fb60b3a9-de33-40cc-ac3e-5ec3f684e85e
                                         uri: /artifacts/models/example-model
                                         git:
                                             $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D/get/responses/200/content/application~1json/examples/exampleCodeRepository/value'
@@ -1207,7 +1391,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1252,7 +1437,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: searchString
               in: query
               schema:
@@ -1267,22 +1453,26 @@ paths:
               in: query
               description: The User that owns the project
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: memberId
               in: query
               description: Filter search by Members of the project
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: groupId
               in: query
               description: Filter search by User Group
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: organizationId
               in: query
               description: Filter search by Organization membership of the Owner
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             parameters:
                 - $ref: '#/components/parameters/StartIndex'
@@ -1306,6 +1496,187 @@ paths:
                                 exampleProjects:
                                     value:
                                         $ref: '#/paths/~1projects/get/responses/200/content/application~1json/examples/exampleProjects/value'
+    '/projects/{projectId}/deployments':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            parameters:
+                - $ref: '#/components/parameters/StartIndex'
+                - $ref: '#/components/parameters/PageLength'
+            summary: List all deployments
+            responses:
+                '200':
+                    description: Model entry for given ID
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                allOf:
+                                    - $ref: '#/components/schemas/PaginationResponse'
+                                    - properties:
+                                          deployments:
+                                              type: array
+                                              items:
+                                                  $ref: '#/components/schemas/DeploymentInformation'
+                            example:
+                                totalrecords: 1
+                                deployments:
+                                    - $ref: '#/paths/~1projects~1%7BprojectId%7D~1deployments/put/requestBody/content/application~1json/example'
+        put:
+            summary: Create deployment
+            requestBody:
+                description: Deployment configuration
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeploymentInformation'
+                        example:
+                            deploymentId: c55a5b0f-3cf9-4490-b2ad-cd0243132aae
+                            trainedModelId: e4c9b747-2377-4e5f-9598-415c63e073e2
+                            connection:
+                                connectionId: 161f7a85-d45a-4823-b2eb-7e8c83afec3b
+                                connectionName: JUWELS-JUDOOR
+                                connectionProvider: UNICORE
+                            resources:
+                                Queue: devel
+                                Nodes: 2
+                            cronString: '* * * 1 *'
+            responses:
+                '201':
+                    description: Successfully deployed model
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    deplyomentId:
+                                        type: string
+                                        format: uuid
+                            example:
+                                deploymentId: 10
+    '/projects/{projectId}/deployments/{deploymentId}':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: deploymentId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            summary: Get deployment information
+            responses:
+                '200':
+                    description: Model entry for given ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeploymentInformation'
+                            example:
+                                $ref: '#/paths/~1projects~1%7BprojectId%7D~1deployments/put/requestBody/content/application~1json/example'
+        post:
+            summary: Update deployment
+            requestBody:
+                description: Deployment configuration
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeploymentInformation'
+                        example:
+                            $ref: '#/paths/~1projects~1%7BprojectId%7D~1deployments/put/requestBody/content/application~1json/example'
+            responses:
+                '200':
+                    description: Successfully updated deployment
+        delete:
+            summary: Delete deployment
+            responses:
+                '200':
+                    description: Successfully deleted deployment
+    '/projects/{projectId}/deployments/{deploymentId}/download':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: deploymentId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            summary: Download packaged deployment
+            responses:
+                '200':
+                    description: Model entry for given ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PackagedDeployment'
+                            example:
+                                apptainerImageUri: 'https://cloud.mantik.ai/registry/deployments/2'
+    '/projects/{projectId}/deployments/{deploymentId}/predict':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: deploymentId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            summary: Get deployment information
+            requestBody:
+                description: 'Prediction request, including data'
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PredictionRequest'
+                        example:
+                            x:
+                                '0': 0
+                                '1': 1
+                                '2': 2
+                            'y':
+                                '0': 3
+                                '1': 4
+                                '2': 5
+            responses:
+                '200':
+                    description: Model entry for given ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PredictionResponse'
+                            example:
+                                x:
+                                    '0': 0
+                                    '1': 1
+                                    '2': 2
+                                'y':
+                                    '0': 3
+                                    '1': 4
+                                    '2': 5
     /groups:
         get:
             parameters:
@@ -1357,7 +1728,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Get Group information
             responses:
@@ -1370,7 +1742,7 @@ paths:
                             examples:
                                 exampleUserGroup:
                                     value:
-                                        userGroupId: example-user-group
+                                        userGroupId: 3d27324b-fc31-4367-99b3-f9dc007768ee
                                         name: Ambrosys Team Green
                                         admin:
                                             $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
@@ -1426,14 +1798,16 @@ paths:
                                 type: object
                                 properties:
                                     organizationId:
-                                        type: integer
+                                        type: string
+                                        format: uuid
     '/organizations/{organizationId}':
         parameters:
             - name: organizationId
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
         get:
             summary: Get info on specified organization
             responses:
@@ -1497,7 +1871,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: scope
               in: query
               required: true
@@ -1532,7 +1907,8 @@ paths:
               in: path
               required: true
               schema:
-                  type: integer
+                  type: string
+                  format: uuid
             - name: scope
               in: path
               required: true
