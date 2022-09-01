@@ -1,0 +1,20 @@
+{
+    "name": "JUWELS",
+    "parameters": {
+        "UnicoreApiUrl": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core",
+        "Environment": {
+            "TEST_ENV_VAR": "variable value"
+        },
+        "Resources": {
+            "Runtime": "12h",
+            "Queue": "batch",
+            "Nodes": 1,
+            "CPUs": 1,
+            "CPUsPerNode": 1,
+            "Memory": "12GiB",
+            "Reservation": "<batch system reservation ID>",
+            "NodeConstraints": "<node constraints>",
+            "QoS": "<batch system QoS>"
+        }
+    }
+}
