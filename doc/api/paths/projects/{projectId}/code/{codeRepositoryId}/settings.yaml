@@ -23,6 +23,11 @@ get:
                         properties:
                             settings:
                                 $ref: '../../../../../schemas/CodeRepositorySettings.yaml'
+
+                    examples:
+                        exampleModelRepositories:
+                            value:
+                                $ref: '../../../../../examples/codeRepositorySettings.json'
 post:
     summary: Updates project settings
     requestBody:
