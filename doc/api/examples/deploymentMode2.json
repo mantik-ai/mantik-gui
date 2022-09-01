@@ -1,0 +1,60 @@
+{
+    "name": "AWS",
+    "parameters": [
+        {
+            "name": "region",
+            "description": "AWS region where to deploy the Sakemaker Endpoint",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "imageUri",
+            "description": "URI to the ECR image",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "modelUri",
+            "description": "URI to the registered model",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "bucket",
+            "description": "Name of the S3 bucket",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "role",
+            "description": "AWS role with the necessary permissions for SageMaker",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "vpcSecurityGroupIds",
+            "description": "VPC security group IDs",
+            "type": "array",
+            "required": true
+        },
+        {
+            "name": "vpcSubnetIds",
+            "description": "VPC subnets IDs",
+            "type": "array",
+            "required": true
+        },
+        {
+            "name": "instanceType",
+            "description": "SageMaker instance type",
+            "type": "string",
+            "default": "ml.t3.medium",
+            "required": true
+        },
+        {
+            "name": "instanceCount",
+            "description": "Number of instances to use",
+            "type": "int",
+            "required": false
+        }
+    ]
+}

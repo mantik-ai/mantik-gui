@@ -3,7 +3,10 @@
     "environment": "HPC",
     "deploymentModes": [
         {
-            "$ref": "deploymentMode.json"
+            "$ref": "deploymentMode1.json"
+        },
+        {
+            "$ref": "deploymentMode2.json"
         }
     ],
     "entryPoints": [
@@ -16,7 +19,7 @@
     ],
     "public": true,
     "owner": {
-        "$ref": "entryPoint.json"
+        "$ref": "user.json"
     },
     "userGroups": [
         {
