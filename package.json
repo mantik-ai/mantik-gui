@@ -20,6 +20,7 @@
         "validate:spec": "swagger-cli validate doc/api/openapi.yaml --type yaml"
     },
     "dependencies": {
+        "@aws-sdk/client-cognito-identity-provider": "^3.154.0",
         "@emotion/react": "^11.9.3",
         "@emotion/styled": "^11.9.3",
         "@fontsource/blinker": "^4.5.7",
@@ -27,6 +28,7 @@
         "@mui/icons-material": "^5.8.4",
         "@mui/material": "^5.8.6",
         "axios": "^0.27.2",
+        "formik": "^2.2.9",
         "next": "12.1.6",
         "next-auth": "^4.10.0",
         "react": "18.1.0",
