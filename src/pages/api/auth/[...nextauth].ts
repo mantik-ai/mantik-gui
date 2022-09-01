@@ -1,76 +1,89 @@
-import nextAuth from 'next-auth'
-import cognitoProvider from 'next-auth/providers/cognito'
-import githubProvider from 'next-auth/providers/github'
-import googleProvider from 'next-auth/providers/google'
-import appleProvider from 'next-auth/providers/apple'
-import {
-    APPLE_PROVIDER_ID,
-    COGNITO_PROVIDER_ID,
-    GITHUB_PROVIDER_ID,
-    GOOGLE_PROVIDER_ID,
-} from '../../../common/constants'
-import { assertEnv } from '../../../common/helpers'
+import { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider'
+import axios from 'axios'
+import nextAuth, { ISODateString } from 'next-auth'
+import credentialsProvider from 'next-auth/providers/credentials'
+import getConfig from 'next/config'
+import { COGNITO_PROVIDER_ID } from '../../../common/constants'
+
+const { publicRuntimeConfig } = getConfig()
 
 export default nextAuth({
     providers: [
-        cognitoProvider({
+        credentialsProvider({
             id: COGNITO_PROVIDER_ID,
-            clientId: assertEnv(process.env.COGNITO_CLIENT_ID),
-            clientSecret: assertEnv(process.env.COGNITO_CLIENT_SECRET),
-            // domain: assertEnv(process.env.COGNITO_DOMAIN),
-        }),
-        githubProvider({
-            id: GITHUB_PROVIDER_ID,
-            clientId: assertEnv(process.env.GITHUB_ID),
-            clientSecret: assertEnv(process.env.GITHUB_SECRET),
-        }),
-        googleProvider({
-            id: GOOGLE_PROVIDER_ID,
-            clientId: assertEnv(process.env.GOOGLE_CLIENT_ID),
-            clientSecret: assertEnv(process.env.GOOGLE_CLIENT_SECRET),
-            authorization: {
-                params: {
-                    prompt: 'consent',
-                    access_type: 'offline',
-                    response_type: 'code',
+            name: 'Credentials',
+            credentials: {
+                email: {
+                    label: 'Email',
+                    type: 'text',
                 },
+                password: { label: 'Password', type: 'password' },
+            },
+            async authorize(credentials, _) {
+                // Add logic here to look up the user from the credentials supplied
+                const res = await axios.post(
+                    `${process.env.NEXTAUTH_URL}/api/login`,
+                    {
+                        username: credentials?.email,
+                        password: credentials?.password,
+                    },
+                    {
+                        headers: {
+                            accept: '*/*',
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                )
+
+                if (res.status !== 200) return null
+
+                const cognitoTokens = res.data as Record<string, unknown>
+                return cognitoTokens
             },
         }),
-        appleProvider({
-            id: APPLE_PROVIDER_ID,
-            clientId: assertEnv(process.env.APPLE_ID),
-            clientSecret: assertEnv(process.env.APPLE_SECRET),
-        }),
     ],
-    secret: process.env.SECRET,
+    secret: String(publicRuntimeConfig.nextAuthSecret),
+    pages: {
+        signIn: '/login',
+    },
     callbacks: {
-        async jwt({ token, account }) {
-            // Persist the OAuth access_token to the token right after signin
-            if (account) {
-                token.accessToken = account.access_token
+        async jwt({ token, user, account }) {
+            if (account && user) {
+                return {
+                    ...token,
+                    name: (user.User as GetUserCommandOutput).Username,
+                    accessToken: user.AccessToken,
+                    refreshToken: user.RefreshToken,
+                    accessTokenExpires: user.ExpiresIn,
+                }
             }
+
             return token
         },
-        async session({ token, session }) {
-            // Send properties to the client, like an access_token from a provider.
-            session.accessToken = token.accessToken
+        async session({ session, token }) {
+            // session.user?.name = token.accessToken
+            session.user.name = token.name
+            session.user.accessToken = String(token.accessToken)
+            session.user.refreshToken = String(token.refreshToken)
+            session.user.accessTokenExpires = String(token.accessTokenExpires)
             return session
-        },
-        redirect: () => '/projects',
-        async signIn({ account, profile }): Promise<string | boolean> {
-            switch (account.provider) {
-                case COGNITO_PROVIDER_ID:
-                    console.log(profile)
-                    return ''
-                case GOOGLE_PROVIDER_ID:
-                    return profile.email_verified as boolean
-                case APPLE_PROVIDER_ID:
-                    return ''
-                case GITHUB_PROVIDER_ID:
-                    return ''
-                default:
-                    return true
-            }
         },
     },
 })
+
+declare module 'next-auth' {
+    /**
+     * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+     */
+    interface Session {
+        user: {
+            name?: string | null
+            email?: string | null
+            image?: string | null
+            accessToken: string
+            refreshToken: string | null
+            accessTokenExpires: string | null
+        }
+        expires: ISODateString
+    }
+}
