@@ -28,7 +28,7 @@ export const DetailsRunsTable = () => {
     const { id } = router.query
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(PageLengthOptions[0])
-    const { data, status } = useGetProjectsProjectIdRuns(Number(id), {
+    const { data, status } = useGetProjectsProjectIdRuns(id as string, {
         pagelength: rowsPerPage,
         startindex: page,
     })
@@ -71,7 +71,7 @@ export const DetailsRunsTable = () => {
                     </TableHead>
                     <TableBody>
                         {data?.data.runs?.map((run) => (
-                            <TableRow key={run.timestamp}>
+                            <TableRow key={run.run_id}>
                                 <TableCell>
                                     <Link
                                         href={
@@ -115,7 +115,7 @@ export const DetailsRunsTable = () => {
                 />
             </TableContainer>
             <RunDialog
-                projectId={43254} //TODO: set programmatically after api-spec fix
+                projectId={''} //TODO: set programmatically after api-spec fix
                 open={openRunDialog}
                 setOpen={setOpenRunDialog}
             ></RunDialog>

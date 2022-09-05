@@ -69,7 +69,7 @@ export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
         data: projectsResult,
         status: projectsResultStatus,
         refetch,
-    } = useGetProjectsUserUserIdSearch(500, {
+    } = useGetProjectsUserUserIdSearch('', {
         searchString: debouncedSearchString,
         labels: [
             ...searchLabels,
@@ -80,7 +80,7 @@ export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
                     name: pt.name,
                 })),
         ],
-    })
+    }) //TODO: set userid programmatically
 
     const setProblemType = (idx: number, value: boolean) => {
         problemTypes[idx].active = value

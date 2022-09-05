@@ -25,7 +25,7 @@ export const SearchSideBar = () => {
     const searchParameterContext = useContext(SearchParamerterContext)
 
     const upToMediumSize = useMediaQuery(theme.breakpoints.up('md'))
-    const { data } = useGetProjectsUserUserId(500)
+    const { data } = useGetProjectsUserUserId('') //TODO: set userid programmatically
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
