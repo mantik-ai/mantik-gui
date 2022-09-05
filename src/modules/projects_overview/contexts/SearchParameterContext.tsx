@@ -69,7 +69,7 @@ export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
         data: projectsResult,
         status: projectsResultStatus,
         refetch,
-    } = useGetProjectsUserUserIdSearch('', {
+    } = useGetProjectsUserUserIdSearch('c9de9883-5efc-4b4d-b156-9fe5acce8975', {
         searchString: debouncedSearchString,
         labels: [
             ...searchLabels,
