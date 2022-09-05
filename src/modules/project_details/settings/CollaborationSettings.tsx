@@ -1,9 +1,17 @@
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Switch, Typography } from '@mui/material'
 import * as React from 'react'
 
 export const CollaborationSettings = () => {
     return (
         <>
+            <div>
+                <Typography variant={'h5'}>Visibility</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography>private</Typography>
+                    <Switch checked={false} color="primary" />
+                    <Typography>public</Typography>
+                </Stack>
+            </div>
             <div>
                 <Typography variant={'h5'}>Owner</Typography>
                 <Stack
