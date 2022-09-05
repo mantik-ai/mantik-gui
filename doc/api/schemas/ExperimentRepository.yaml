@@ -3,6 +3,7 @@ description: Represents an mlflow experiment, see also [mlflow API specification
 properties:
     experimentId:
         type: string
+        format: uuid
     name:
         type: string
     artifact_location:

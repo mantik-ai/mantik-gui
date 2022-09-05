@@ -3,5 +3,5 @@ export const assertEnv = (value: unknown) => {
         return value
     }
 
-    throw Error(`env variable ${value} is not defined`)
+    throw Error(`env variable is not defined`)
 }

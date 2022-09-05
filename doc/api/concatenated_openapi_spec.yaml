@@ -101,7 +101,7 @@ components:
                 - experimentId
         Label:
             type: object
-            description: Represents a label or a Tag depending on the presence of the value parameter
+            description: Represents a label or a (MLFlow-)Tag depending on the presence of the value parameter
             properties:
                 scope:
                     type: string
@@ -114,11 +114,9 @@ components:
                 - name
         ModelRepository:
             type: object
-            description: Represents a model
+            description: Represents an untrained model definition
             properties:
                 modelRepositoryId:
-                    type: string
-                uri:
                     type: string
                 description:
                     type: string
@@ -132,6 +130,18 @@ components:
                         $ref: '#/components/schemas/Label'
             required:
                 - modelRepositoryId
+        SavedModelRepository:
+            type: object
+            description: Represents a trained model
+            properties:
+                trainedModelRepositoryId:
+                    type: string
+                modelRepository:
+                    $ref: '#/components/schemas/ModelRepository'
+                uri:
+                    type: string
+            required:
+                - savedModelRepositoryId
                 - uri
         Organization:
             type: object
@@ -230,6 +240,9 @@ components:
             type: object
             description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
             properties:
+                runId:
+                    type: string
+                    format: uuid
                 experimentRepository:
                     $ref: '#/components/schemas/ExperimentRepository'
                 modelRepository:
@@ -238,7 +251,25 @@ components:
                     $ref: '#/components/schemas/DataRepository'
                 connections:
                     $ref: '#/components/schemas/Connection'
-                timestamp:
+                experiment_id:
+                    type: string
+                user_id:
+                    type: string
+                status:
+                    type: string
+                    enum:
+                        - RUNNING
+                        - SCHEDULED
+                        - FINISHED
+                        - FAILED
+                        - KILLED
+                start_time:
+                    type: integer
+                end_time:
+                    type: integer
+                artifact_uri:
+                    type: string
+                lifecycle_stage:
                     type: string
         RunsByCodeRepository:
             type: object

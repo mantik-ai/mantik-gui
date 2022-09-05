@@ -3,6 +3,7 @@ description: Represents a user group
 properties:
     userGroupId:
         type: string
+        format: uuid
     name:
         type: string
     admin:

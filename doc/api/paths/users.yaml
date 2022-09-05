@@ -48,4 +48,5 @@ put:
                         type: object
                         properties:
                             userId:
-                                type: integer
+                                type: string
+                                format: uuid

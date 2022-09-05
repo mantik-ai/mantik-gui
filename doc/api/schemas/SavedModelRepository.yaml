@@ -1,0 +1,13 @@
+type: object
+description: Represents a trained model
+properties:
+    trainedModelRepositoryId:
+        type: string
+    modelRepository:
+        $ref: ./ModelRepository.yaml
+    uri:
+        type: string
+
+required:
+    - trainedModelRepositoryId
+    - uri

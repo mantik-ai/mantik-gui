@@ -35,4 +35,5 @@ put:
                         type: object
                         properties:
                             organizationId:
-                                type: integer
+                                type: string
+                                format: uuid

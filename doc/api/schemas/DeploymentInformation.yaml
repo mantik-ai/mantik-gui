@@ -1,0 +1,14 @@
+type: object
+description: Information on a deployment
+properties:
+    deploymentId:
+        type: string
+        format: uuid
+    savedModelId:
+        $ref: './SavedModelRepository.yaml'
+    connection:
+        $ref: './Connection.yaml'
+    resources:
+        $ref: './Resources.yaml'
+    cronString:
+        type: string

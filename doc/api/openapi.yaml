@@ -52,6 +52,14 @@ paths:
         $ref: './paths/projects/{projectId}/runs.yaml'
     /projects/user/{userId}/search:
         $ref: './paths/projects/user/{userId}/search.yaml'
+    /projects/{projectId}/deployments:
+        $ref: './paths/projects/{projectId}/deployments.yaml'
+    /projects/{projectId}/deployments/{deploymentId}:
+        $ref: './paths/projects/{projectId}/deployments/{deploymentId}.yaml'
+    /projects/{projectId}/deployments/{deploymentId}/download:
+        $ref: './paths/projects/{projectId}/deployments/{deploymentId}/download.yaml'
+    /projects/{projectId}/deployments/{deploymentId}/predict:
+        $ref: './paths/projects/{projectId}/deployments/{deploymentId}/predict.yaml'
 
     /groups:
         $ref: './paths/groups.yaml'
