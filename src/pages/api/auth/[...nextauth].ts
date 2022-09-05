@@ -22,7 +22,9 @@ export default nextAuth({
             async authorize(credentials, _) {
                 // Add logic here to look up the user from the credentials supplied
                 const res = await axios.post(
-                    `${process.env.NEXTAUTH_URL}/api/login`,
+                    `${
+                        process.env.NEXTAUTH_URL ?? process.env.VERCEL_URL
+                    }/api/login`,
                     {
                         username: credentials?.email,
                         password: credentials?.password,
