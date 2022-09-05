@@ -1,5 +1,4 @@
-import { Box, Divider, Typography } from '@mui/material'
-import { useTheme } from '@mui/system'
+import { Box, Divider, Typography, useTheme } from '@mui/material'
 import React from 'react'
 import { Spacing } from '../../../common/components/Spacing'
 
@@ -21,6 +20,7 @@ export const SearchHeading = (props: SearchHeadingProps) => {
                 sx={{
                     display: 'flex',
                     alignItems: 'baseline',
+                    flexDirection: { xs: 'column', md: 'row' },
                     justifyContent: 'center',
                 }}
             >
