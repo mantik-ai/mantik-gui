@@ -3,9 +3,6 @@ import { Grid, TextField, Typography } from '@mui/material'
 export const GeneralSettings = () => {
     return (
         <>
-            <Typography variant="h6" gutterBottom>
-                General
-            </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <TextField
