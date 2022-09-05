@@ -1,11 +1,8 @@
 import { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider'
-import axios from 'axios'
 import nextAuth, { ISODateString } from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
-import getConfig from 'next/config'
+import axios from '../../../modules/auth/axios'
 import { COGNITO_PROVIDER_ID } from '../../../common/constants'
-
-const { publicRuntimeConfig } = getConfig()
 
 export default nextAuth({
     providers: [
@@ -25,10 +22,8 @@ export default nextAuth({
                 console.log(process.env.NEXTAUTH_URL)
                 console.log(process.env.VERCEL_URL)
                 console.log(credentials)
-                const res = await axios.post(
-                    `${
-                        process.env.NEXTAUTH_URL ?? process.env.VERCEL_URL
-                    }/api/login`,
+                const req = axios.post(
+                    '/api/login',
                     {
                         username: credentials?.email,
                         password: credentials?.password,
@@ -41,17 +36,26 @@ export default nextAuth({
                     }
                 )
 
-                console.log('pre print')
-                console.log(res)
-                console.log('Post print')
-                if (res.status !== 200) return null
+                console.log('Request: ')
+                try {
+                    const res = await req
+                    console.log('pre print')
+                    console.log(res)
+                    console.log('Post print')
+                    if (res.status !== 200) return null
 
-                const cognitoTokens = res.data as Record<string, unknown>
-                return cognitoTokens
+                    const cognitoTokens = res.data as Record<string, unknown>
+                    return cognitoTokens
+                } catch (e: unknown) {
+                    console.log('ERRROR')
+                    console.log(e)
+                    console.log('ERRROR END')
+                    return null
+                }
             },
         }),
     ],
-    secret: String(publicRuntimeConfig.nextAuthSecret),
+    secret: process.env.SECRET,
     pages: {
         signIn: '/login',
     },
