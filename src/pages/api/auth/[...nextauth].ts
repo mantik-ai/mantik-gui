@@ -21,6 +21,10 @@ export default nextAuth({
             },
             async authorize(credentials, _) {
                 // Add logic here to look up the user from the credentials supplied
+                console.log('--> !!ENTER AUTH routine')
+                console.log(process.env.NEXTAUTH_URL)
+                console.log(process.env.VERCEL_URL)
+                console.log(credentials)
                 const res = await axios.post(
                     `${
                         process.env.NEXTAUTH_URL ?? process.env.VERCEL_URL
@@ -37,6 +41,9 @@ export default nextAuth({
                     }
                 )
 
+                console.log('pre print')
+                console.log(res)
+                console.log('Post print')
                 if (res.status !== 200) return null
 
                 const cognitoTokens = res.data as Record<string, unknown>
