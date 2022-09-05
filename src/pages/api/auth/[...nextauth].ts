@@ -1,11 +1,9 @@
 import { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider'
-import axios from 'axios'
 import nextAuth, { ISODateString } from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
-import getConfig from 'next/config'
+import { AxiosError } from 'axios'
+import axios from '../../../modules/auth/axios'
 import { COGNITO_PROVIDER_ID } from '../../../common/constants'
-
-const { publicRuntimeConfig } = getConfig()
 
 export default nextAuth({
     providers: [
@@ -19,30 +17,35 @@ export default nextAuth({
                 },
                 password: { label: 'Password', type: 'password' },
             },
-            async authorize(credentials, _) {
-                // Add logic here to look up the user from the credentials supplied
-                const res = await axios.post(
-                    `${process.env.NEXTAUTH_URL}/api/login`,
-                    {
-                        username: credentials?.email,
-                        password: credentials?.password,
-                    },
-                    {
-                        headers: {
-                            accept: '*/*',
-                            'Content-Type': 'application/json',
+            async authorize(credentials, req) {
+                try {
+                    const res = await axios.post(
+                        '/api/login',
+                        {
+                            username: credentials?.email,
+                            password: credentials?.password,
                         },
-                    }
-                )
+                        {
+                            headers: {
+                                accept: '*/*',
+                                'Content-Type': 'application/json',
+                                cookie: req.headers?.cookie ?? '',
+                            },
+                        }
+                    )
 
-                if (res.status !== 200) return null
+                    if (res.status !== 200) return null
 
-                const cognitoTokens = res.data as Record<string, unknown>
-                return cognitoTokens
+                    const cognitoTokens = res.data as Record<string, unknown>
+                    return cognitoTokens
+                } catch (e: unknown) {
+                    console.log((e as AxiosError).message)
+                    return null
+                }
             },
         }),
     ],
-    secret: String(publicRuntimeConfig.nextAuthSecret),
+    secret: process.env.SECRET,
     pages: {
         signIn: '/login',
     },

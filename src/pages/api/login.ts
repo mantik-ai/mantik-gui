@@ -4,10 +4,7 @@ import {
     GetUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider'
 import { NextApiRequest, NextApiResponse } from 'next'
-import getConfig from 'next/config'
 import { AuthPayload } from '../../modules/auth/authPayload'
-
-const { publicRuntimeConfig } = getConfig()
 
 export default async function handler(
     req: NextApiRequest,
@@ -17,16 +14,16 @@ export default async function handler(
 
     const params = {
         AuthFlow: 'USER_PASSWORD_AUTH',
-        ClientId: publicRuntimeConfig.cognitoClientId,
-        UserPoolId: publicRuntimeConfig.cognitoUserPoolId,
+        ClientId: process.env.COGNITO_CLIENT_ID,
+        UserPoolId: process.env.COGNITO_USERPOOL_ID,
         AuthParameters: {
-            USERNAME: req.body.username,
-            PASSWORD: req.body.password,
+            USERNAME: req.body.username as string,
+            PASSWORD: req.body.password as string,
         },
     }
 
     const cognitoClient = new CognitoIdentityProviderClient({
-        region: publicRuntimeConfig.cognitoRegion,
+        region: process.env.COGNITO_REGION,
     })
     const initiateAuthCommand = new InitiateAuthCommand(params)
 
