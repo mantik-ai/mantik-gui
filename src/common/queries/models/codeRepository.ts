@@ -12,6 +12,7 @@ import type { Label } from './label'
  */
 export interface CodeRepository {
     codeRepositoryId: string
+    codeRepositoryName?: string
     uri: string
     description?: string
     labels?: Label[]

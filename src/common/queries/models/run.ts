@@ -7,6 +7,7 @@
  */
 import type { ExperimentRepository } from './experimentRepository'
 import type { ModelRepository } from './modelRepository'
+import type { SavedModelRepository } from './savedModelRepository'
 import type { DataRepository } from './dataRepository'
 import type { Connection } from './connection'
 import type { RunStatus } from './runStatus'
@@ -18,6 +19,7 @@ export interface Run {
     run_id?: string
     experimentRepository?: ExperimentRepository
     modelRepository?: ModelRepository
+    savedModel?: SavedModelRepository
     dataRepository?: DataRepository
     connections?: Connection
     experiment_id?: string

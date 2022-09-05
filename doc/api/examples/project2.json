@@ -32,18 +32,5 @@
             "$ref": "dataRepositories2.json"
         }
     ],
-    "labels": [
-        {
-            "scope": "problem-type",
-            "name": "Classification"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Natural Language Processing"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Text Classification"
-        }
-    ]
+    "labels": { "$ref": "labels2.json" }
 }

@@ -60,6 +60,13 @@ import type {
     AddRun,
     GetProjectsUserUserIdSearch200,
     GetProjectsUserUserIdSearchParams,
+    GetProjectsProjectIdDeployments200,
+    GetProjectsProjectIdDeploymentsParams,
+    PutProjectsProjectIdDeployments201,
+    DeploymentInformation,
+    PackagedDeployment,
+    PredictionResponse,
+    PredictionRequest,
     GetGroups200,
     GetGroupsParams,
     PutGroups201,
@@ -71,10 +78,10 @@ import type {
     GetLabels200,
     GetLabelsParams,
     Label,
-    GetLabelsUserIdSearch200,
-    GetLabelsUserIdSearchParams,
-    GetLabelsUserIdScope200,
-    GetLabelsUserIdScopeParams,
+    GetLabelsScope200,
+    GetLabelsScopeParams,
+    GetLabelsSearch200,
+    GetLabelsSearchParams,
 } from '.././models'
 
 type AwaitedInput<T> = PromiseLike<T> | T
@@ -189,13 +196,13 @@ export const usePutUsers = <
  * @summary Returns the information on a specific user
  */
 export const getUsersUserId = (
-    userId: number,
+    userId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<User>> => {
     return axios.get(`/users/${userId}`, options)
 }
 
-export const getGetUsersUserIdQueryKey = (userId: number) => [
+export const getGetUsersUserIdQueryKey = (userId: string) => [
     `/users/${userId}`,
 ]
 
@@ -208,7 +215,7 @@ export const useGetUsersUserId = <
     TData = Awaited<ReturnType<typeof getUsersUserId>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
+    userId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<ReturnType<typeof getUsersUserId>>,
@@ -242,7 +249,7 @@ export const useGetUsersUserId = <
  * @summary Update user info
  */
 export const postUsersUserId = (
-    userId: number,
+    userId: string,
     user: User,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -262,7 +269,7 @@ export const usePostUsersUserId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postUsersUserId>>,
         TError,
-        { userId: number; data: User },
+        { userId: string; data: User },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -271,7 +278,7 @@ export const usePostUsersUserId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postUsersUserId>>,
-        { userId: number; data: User }
+        { userId: string; data: User }
     > = (props) => {
         const { userId, data } = props ?? {}
 
@@ -281,7 +288,7 @@ export const usePostUsersUserId = <
     return useMutation<
         Awaited<ReturnType<typeof postUsersUserId>>,
         TError,
-        { userId: number; data: User },
+        { userId: string; data: User },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -289,13 +296,13 @@ export const usePostUsersUserId = <
  * @summary Returns the settings for a specific user
  */
 export const getUsersUserIdSettings = (
-    userId: number,
+    userId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetUsersUserIdSettings200>> => {
     return axios.get(`/users/${userId}/settings`, options)
 }
 
-export const getGetUsersUserIdSettingsQueryKey = (userId: number) => [
+export const getGetUsersUserIdSettingsQueryKey = (userId: string) => [
     `/users/${userId}/settings`,
 ]
 
@@ -308,7 +315,7 @@ export const useGetUsersUserIdSettings = <
     TData = Awaited<ReturnType<typeof getUsersUserIdSettings>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
+    userId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<ReturnType<typeof getUsersUserIdSettings>>,
@@ -344,7 +351,7 @@ export const useGetUsersUserIdSettings = <
  * @summary Updates user settings
  */
 export const postUsersUserIdSettings = (
-    userId: number,
+    userId: string,
     settings: Settings,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -364,7 +371,7 @@ export const usePostUsersUserIdSettings = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postUsersUserIdSettings>>,
         TError,
-        { userId: number; data: Settings },
+        { userId: string; data: Settings },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -373,7 +380,7 @@ export const usePostUsersUserIdSettings = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postUsersUserIdSettings>>,
-        { userId: number; data: Settings }
+        { userId: string; data: Settings }
     > = (props) => {
         const { userId, data } = props ?? {}
 
@@ -383,7 +390,7 @@ export const usePostUsersUserIdSettings = <
     return useMutation<
         Awaited<ReturnType<typeof postUsersUserIdSettings>>,
         TError,
-        { userId: number; data: Settings },
+        { userId: string; data: Settings },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -494,7 +501,7 @@ export const usePutProjects = <
  * @summary Returns all projects for user with userId
  */
 export const getProjectsUserUserId = (
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsUserUserId200>> => {
@@ -505,7 +512,7 @@ export const getProjectsUserUserId = (
 }
 
 export const getGetProjectsUserUserIdQueryKey = (
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdParams
 ) => [`/projects/user/${userId}`, ...(params ? [params] : [])]
 
@@ -518,7 +525,7 @@ export const useGetProjectsUserUserId = <
     TData = Awaited<ReturnType<typeof getProjectsUserUserId>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdParams,
     options?: {
         query?: UseQueryOptions<
@@ -556,13 +563,13 @@ export const useGetProjectsUserUserId = <
  * @summary Returns the information on a specific project
  */
 export const getProjectsProjectId = (
-    projectId: number,
+    projectId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<Project>> => {
     return axios.get(`/projects/${projectId}`, options)
 }
 
-export const getGetProjectsProjectIdQueryKey = (projectId: number) => [
+export const getGetProjectsProjectIdQueryKey = (projectId: string) => [
     `/projects/${projectId}`,
 ]
 
@@ -575,7 +582,7 @@ export const useGetProjectsProjectId = <
     TData = Awaited<ReturnType<typeof getProjectsProjectId>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<ReturnType<typeof getProjectsProjectId>>,
@@ -611,7 +618,7 @@ export const useGetProjectsProjectId = <
  * @summary Update project
  */
 export const postProjectsProjectId = (
-    projectId: number,
+    projectId: string,
     project: Project,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -631,7 +638,7 @@ export const usePostProjectsProjectId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postProjectsProjectId>>,
         TError,
-        { projectId: number; data: Project },
+        { projectId: string; data: Project },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -640,7 +647,7 @@ export const usePostProjectsProjectId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postProjectsProjectId>>,
-        { projectId: number; data: Project }
+        { projectId: string; data: Project }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -650,7 +657,7 @@ export const usePostProjectsProjectId = <
     return useMutation<
         Awaited<ReturnType<typeof postProjectsProjectId>>,
         TError,
-        { projectId: number; data: Project },
+        { projectId: string; data: Project },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -658,7 +665,7 @@ export const usePostProjectsProjectId = <
  * @summary Returns code entries for given project
  */
 export const getProjectsProjectIdCode = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdCode200>> => {
@@ -669,7 +676,7 @@ export const getProjectsProjectIdCode = (
 }
 
 export const getGetProjectsProjectIdCodeQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeParams
 ) => [`/projects/${projectId}/code`, ...(params ? [params] : [])]
 
@@ -682,7 +689,7 @@ export const useGetProjectsProjectIdCode = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdCode>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeParams,
     options?: {
         query?: UseQueryOptions<
@@ -720,7 +727,7 @@ export const useGetProjectsProjectIdCode = <
  * @summary Add code repository
  */
 export const putProjectsProjectIdCode = (
-    projectId: number,
+    projectId: string,
     codeRepository: CodeRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<PutProjectsProjectIdCode201>> => {
@@ -740,7 +747,7 @@ export const usePutProjectsProjectIdCode = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putProjectsProjectIdCode>>,
         TError,
-        { projectId: number; data: CodeRepository },
+        { projectId: string; data: CodeRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -749,7 +756,7 @@ export const usePutProjectsProjectIdCode = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putProjectsProjectIdCode>>,
-        { projectId: number; data: CodeRepository }
+        { projectId: string; data: CodeRepository }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -759,7 +766,7 @@ export const usePutProjectsProjectIdCode = <
     return useMutation<
         Awaited<ReturnType<typeof putProjectsProjectIdCode>>,
         TError,
-        { projectId: number; data: CodeRepository },
+        { projectId: string; data: CodeRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -767,7 +774,7 @@ export const usePutProjectsProjectIdCode = <
  * @summary Returns all codeRepos for given project and runs that the codeRepos were used in
  */
 export const getProjectsProjectIdCodeUsage = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeUsageParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdCodeUsage200>> => {
@@ -778,7 +785,7 @@ export const getProjectsProjectIdCodeUsage = (
 }
 
 export const getGetProjectsProjectIdCodeUsageQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeUsageParams
 ) => [`/projects/${projectId}/code/usage`, ...(params ? [params] : [])]
 
@@ -791,7 +798,7 @@ export const useGetProjectsProjectIdCodeUsage = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdCodeUsage>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdCodeUsageParams,
     options?: {
         query?: UseQueryOptions<
@@ -832,16 +839,16 @@ export const useGetProjectsProjectIdCodeUsage = <
  * @summary Returns code entry for given project
  */
 export const getProjectsProjectIdCodeCodeRepositoryId = (
-    projectId: number,
-    codeRepositoryId: number,
+    projectId: string,
+    codeRepositoryId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<CodeRepository>> => {
     return axios.get(`/projects/${projectId}/code/${codeRepositoryId}`, options)
 }
 
 export const getGetProjectsProjectIdCodeCodeRepositoryIdQueryKey = (
-    projectId: number,
-    codeRepositoryId: number
+    projectId: string,
+    codeRepositoryId: string
 ) => [`/projects/${projectId}/code/${codeRepositoryId}`]
 
 export type GetProjectsProjectIdCodeCodeRepositoryIdQueryResult = NonNullable<
@@ -856,8 +863,8 @@ export const useGetProjectsProjectIdCodeCodeRepositoryId = <
     >,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
-    codeRepositoryId: number,
+    projectId: string,
+    codeRepositoryId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<
@@ -905,8 +912,8 @@ export const useGetProjectsProjectIdCodeCodeRepositoryId = <
  * @summary Updates code repository
  */
 export const postProjectsProjectIdCodeCodeRepositoryId = (
-    projectId: number,
-    codeRepositoryId: number,
+    projectId: string,
+    codeRepositoryId: string,
     codeRepository: CodeRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -933,7 +940,7 @@ export const usePostProjectsProjectIdCodeCodeRepositoryId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryId>>,
         TError,
-        { projectId: number; codeRepositoryId: number; data: CodeRepository },
+        { projectId: string; codeRepositoryId: string; data: CodeRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -942,7 +949,7 @@ export const usePostProjectsProjectIdCodeCodeRepositoryId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryId>>,
-        { projectId: number; codeRepositoryId: number; data: CodeRepository }
+        { projectId: string; codeRepositoryId: string; data: CodeRepository }
     > = (props) => {
         const { projectId, codeRepositoryId, data } = props ?? {}
 
@@ -957,7 +964,7 @@ export const usePostProjectsProjectIdCodeCodeRepositoryId = <
     return useMutation<
         Awaited<ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryId>>,
         TError,
-        { projectId: number; codeRepositoryId: number; data: CodeRepository },
+        { projectId: string; codeRepositoryId: string; data: CodeRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -965,7 +972,7 @@ export const usePostProjectsProjectIdCodeCodeRepositoryId = <
  * @summary Returns data entries for given project
  */
 export const getProjectsProjectIdData = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdData200>> => {
@@ -976,7 +983,7 @@ export const getProjectsProjectIdData = (
 }
 
 export const getGetProjectsProjectIdDataQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataParams
 ) => [`/projects/${projectId}/data`, ...(params ? [params] : [])]
 
@@ -989,7 +996,7 @@ export const useGetProjectsProjectIdData = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdData>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataParams,
     options?: {
         query?: UseQueryOptions<
@@ -1027,7 +1034,7 @@ export const useGetProjectsProjectIdData = <
  * @summary Add data repository
  */
 export const putProjectsProjectIdData = (
-    projectId: number,
+    projectId: string,
     dataRepository: DataRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<PutProjectsProjectIdData201>> => {
@@ -1047,7 +1054,7 @@ export const usePutProjectsProjectIdData = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putProjectsProjectIdData>>,
         TError,
-        { projectId: number; data: DataRepository },
+        { projectId: string; data: DataRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -1056,7 +1063,7 @@ export const usePutProjectsProjectIdData = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putProjectsProjectIdData>>,
-        { projectId: number; data: DataRepository }
+        { projectId: string; data: DataRepository }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -1066,7 +1073,7 @@ export const usePutProjectsProjectIdData = <
     return useMutation<
         Awaited<ReturnType<typeof putProjectsProjectIdData>>,
         TError,
-        { projectId: number; data: DataRepository },
+        { projectId: string; data: DataRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -1074,7 +1081,7 @@ export const usePutProjectsProjectIdData = <
  * @summary Returns data entries for given project and runs grouped by the data
  */
 export const getProjectsProjectIdDataUsage = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataUsageParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdDataUsage200>> => {
@@ -1085,7 +1092,7 @@ export const getProjectsProjectIdDataUsage = (
 }
 
 export const getGetProjectsProjectIdDataUsageQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataUsageParams
 ) => [`/projects/${projectId}/data/usage`, ...(params ? [params] : [])]
 
@@ -1098,7 +1105,7 @@ export const useGetProjectsProjectIdDataUsage = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdDataUsage>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdDataUsageParams,
     options?: {
         query?: UseQueryOptions<
@@ -1139,16 +1146,16 @@ export const useGetProjectsProjectIdDataUsage = <
  * @summary Returns data entry for given project
  */
 export const getProjectsProjectIdDataDataRepositoryId = (
-    projectId: number,
-    dataRepositoryId: number,
+    projectId: string,
+    dataRepositoryId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<DataRepository>> => {
     return axios.get(`/projects/${projectId}/data/${dataRepositoryId}`, options)
 }
 
 export const getGetProjectsProjectIdDataDataRepositoryIdQueryKey = (
-    projectId: number,
-    dataRepositoryId: number
+    projectId: string,
+    dataRepositoryId: string
 ) => [`/projects/${projectId}/data/${dataRepositoryId}`]
 
 export type GetProjectsProjectIdDataDataRepositoryIdQueryResult = NonNullable<
@@ -1163,8 +1170,8 @@ export const useGetProjectsProjectIdDataDataRepositoryId = <
     >,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
-    dataRepositoryId: number,
+    projectId: string,
+    dataRepositoryId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<
@@ -1212,8 +1219,8 @@ export const useGetProjectsProjectIdDataDataRepositoryId = <
  * @summary Update data repository
  */
 export const postProjectsProjectIdDataDataRepositoryId = (
-    projectId: number,
-    dataRepositoryId: number,
+    projectId: string,
+    dataRepositoryId: string,
     dataRepository: DataRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -1240,7 +1247,7 @@ export const usePostProjectsProjectIdDataDataRepositoryId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postProjectsProjectIdDataDataRepositoryId>>,
         TError,
-        { projectId: number; dataRepositoryId: number; data: DataRepository },
+        { projectId: string; dataRepositoryId: string; data: DataRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -1249,7 +1256,7 @@ export const usePostProjectsProjectIdDataDataRepositoryId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postProjectsProjectIdDataDataRepositoryId>>,
-        { projectId: number; dataRepositoryId: number; data: DataRepository }
+        { projectId: string; dataRepositoryId: string; data: DataRepository }
     > = (props) => {
         const { projectId, dataRepositoryId, data } = props ?? {}
 
@@ -1264,7 +1271,7 @@ export const usePostProjectsProjectIdDataDataRepositoryId = <
     return useMutation<
         Awaited<ReturnType<typeof postProjectsProjectIdDataDataRepositoryId>>,
         TError,
-        { projectId: number; dataRepositoryId: number; data: DataRepository },
+        { projectId: string; dataRepositoryId: string; data: DataRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -1272,7 +1279,7 @@ export const usePostProjectsProjectIdDataDataRepositoryId = <
  * @summary Returns experiment entries for given project
  */
 export const getProjectsProjectIdExperiments = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdExperiments200>> => {
@@ -1283,7 +1290,7 @@ export const getProjectsProjectIdExperiments = (
 }
 
 export const getGetProjectsProjectIdExperimentsQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsParams
 ) => [`/projects/${projectId}/experiments`, ...(params ? [params] : [])]
 
@@ -1296,7 +1303,7 @@ export const useGetProjectsProjectIdExperiments = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdExperiments>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsParams,
     options?: {
         query?: UseQueryOptions<
@@ -1337,7 +1344,7 @@ export const useGetProjectsProjectIdExperiments = <
  * @summary Add experiment repository
  */
 export const putProjectsProjectIdExperiments = (
-    projectId: number,
+    projectId: string,
     experimentRepository: ExperimentRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<PutProjectsProjectIdExperiments201>> => {
@@ -1361,7 +1368,7 @@ export const usePutProjectsProjectIdExperiments = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putProjectsProjectIdExperiments>>,
         TError,
-        { projectId: number; data: ExperimentRepository },
+        { projectId: string; data: ExperimentRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -1370,7 +1377,7 @@ export const usePutProjectsProjectIdExperiments = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putProjectsProjectIdExperiments>>,
-        { projectId: number; data: ExperimentRepository }
+        { projectId: string; data: ExperimentRepository }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -1380,7 +1387,7 @@ export const usePutProjectsProjectIdExperiments = <
     return useMutation<
         Awaited<ReturnType<typeof putProjectsProjectIdExperiments>>,
         TError,
-        { projectId: number; data: ExperimentRepository },
+        { projectId: string; data: ExperimentRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -1388,7 +1395,7 @@ export const usePutProjectsProjectIdExperiments = <
  * @summary Returns all experiments for given project and runs that the experiments were used in
  */
 export const getProjectsProjectIdExperimentsUsage = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsUsageParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdExperimentsUsage200>> => {
@@ -1399,7 +1406,7 @@ export const getProjectsProjectIdExperimentsUsage = (
 }
 
 export const getGetProjectsProjectIdExperimentsUsageQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsUsageParams
 ) => [`/projects/${projectId}/experiments/usage`, ...(params ? [params] : [])]
 
@@ -1412,7 +1419,7 @@ export const useGetProjectsProjectIdExperimentsUsage = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdExperimentsUsage>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdExperimentsUsageParams,
     options?: {
         query?: UseQueryOptions<
@@ -1453,8 +1460,8 @@ export const useGetProjectsProjectIdExperimentsUsage = <
  * @summary Returns experiment entry for given project
  */
 export const getProjectsProjectIdExperimentsExperimentRepositoryId = (
-    projectId: number,
-    experimentRepositoryId: number,
+    projectId: string,
+    experimentRepositoryId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<ExperimentRepository>> => {
     return axios.get(
@@ -1464,7 +1471,7 @@ export const getProjectsProjectIdExperimentsExperimentRepositoryId = (
 }
 
 export const getGetProjectsProjectIdExperimentsExperimentRepositoryIdQueryKey =
-    (projectId: number, experimentRepositoryId: number) => [
+    (projectId: string, experimentRepositoryId: string) => [
         `/projects/${projectId}/experiments/${experimentRepositoryId}`,
     ]
 
@@ -1485,8 +1492,8 @@ export const useGetProjectsProjectIdExperimentsExperimentRepositoryId = <
     >,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
-    experimentRepositoryId: number,
+    projectId: string,
+    experimentRepositoryId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<
@@ -1545,8 +1552,8 @@ export const useGetProjectsProjectIdExperimentsExperimentRepositoryId = <
  * @summary Update experiment repository
  */
 export const postProjectsProjectIdExperimentsExperimentRepositoryId = (
-    projectId: number,
-    experimentRepositoryId: number,
+    projectId: string,
+    experimentRepositoryId: string,
     experimentRepository: ExperimentRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -1582,8 +1589,8 @@ export const usePostProjectsProjectIdExperimentsExperimentRepositoryId = <
         >,
         TError,
         {
-            projectId: number
-            experimentRepositoryId: number
+            projectId: string
+            experimentRepositoryId: string
             data: ExperimentRepository
         },
         TContext
@@ -1599,8 +1606,8 @@ export const usePostProjectsProjectIdExperimentsExperimentRepositoryId = <
             >
         >,
         {
-            projectId: number
-            experimentRepositoryId: number
+            projectId: string
+            experimentRepositoryId: string
             data: ExperimentRepository
         }
     > = (props) => {
@@ -1622,8 +1629,8 @@ export const usePostProjectsProjectIdExperimentsExperimentRepositoryId = <
         >,
         TError,
         {
-            projectId: number
-            experimentRepositoryId: number
+            projectId: string
+            experimentRepositoryId: string
             data: ExperimentRepository
         },
         TContext
@@ -1633,7 +1640,7 @@ export const usePostProjectsProjectIdExperimentsExperimentRepositoryId = <
  * @summary Returns model entries for given project
  */
 export const getProjectsProjectIdModels = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdModels200>> => {
@@ -1644,7 +1651,7 @@ export const getProjectsProjectIdModels = (
 }
 
 export const getGetProjectsProjectIdModelsQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsParams
 ) => [`/projects/${projectId}/models`, ...(params ? [params] : [])]
 
@@ -1657,7 +1664,7 @@ export const useGetProjectsProjectIdModels = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdModels>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsParams,
     options?: {
         query?: UseQueryOptions<
@@ -1698,7 +1705,7 @@ export const useGetProjectsProjectIdModels = <
  * @summary Add model repository
  */
 export const putProjectsProjectIdModels = (
-    projectId: number,
+    projectId: string,
     modelRepository: ModelRepository[],
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<PutProjectsProjectIdModels201>> => {
@@ -1718,7 +1725,7 @@ export const usePutProjectsProjectIdModels = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putProjectsProjectIdModels>>,
         TError,
-        { projectId: number; data: ModelRepository[] },
+        { projectId: string; data: ModelRepository[] },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -1727,7 +1734,7 @@ export const usePutProjectsProjectIdModels = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putProjectsProjectIdModels>>,
-        { projectId: number; data: ModelRepository[] }
+        { projectId: string; data: ModelRepository[] }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -1737,7 +1744,7 @@ export const usePutProjectsProjectIdModels = <
     return useMutation<
         Awaited<ReturnType<typeof putProjectsProjectIdModels>>,
         TError,
-        { projectId: number; data: ModelRepository[] },
+        { projectId: string; data: ModelRepository[] },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -1745,7 +1752,7 @@ export const usePutProjectsProjectIdModels = <
  * @summary Returns all models for given project and runs that the models were created in
  */
 export const getProjectsProjectIdModelsUsage = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsUsageParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdModelsUsage200>> => {
@@ -1756,7 +1763,7 @@ export const getProjectsProjectIdModelsUsage = (
 }
 
 export const getGetProjectsProjectIdModelsUsageQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsUsageParams
 ) => [`/projects/${projectId}/models/usage`, ...(params ? [params] : [])]
 
@@ -1769,7 +1776,7 @@ export const useGetProjectsProjectIdModelsUsage = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdModelsUsage>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdModelsUsageParams,
     options?: {
         query?: UseQueryOptions<
@@ -1810,8 +1817,8 @@ export const useGetProjectsProjectIdModelsUsage = <
  * @summary Returns model entry for given ID
  */
 export const getProjectsProjectIdModelsModelRepositoryId = (
-    projectId: number,
-    modelRepositoryId: number,
+    projectId: string,
+    modelRepositoryId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<ModelRepository>> => {
     return axios.get(
@@ -1821,8 +1828,8 @@ export const getProjectsProjectIdModelsModelRepositoryId = (
 }
 
 export const getGetProjectsProjectIdModelsModelRepositoryIdQueryKey = (
-    projectId: number,
-    modelRepositoryId: number
+    projectId: string,
+    modelRepositoryId: string
 ) => [`/projects/${projectId}/models/${modelRepositoryId}`]
 
 export type GetProjectsProjectIdModelsModelRepositoryIdQueryResult =
@@ -1838,8 +1845,8 @@ export const useGetProjectsProjectIdModelsModelRepositoryId = <
     >,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
-    modelRepositoryId: number,
+    projectId: string,
+    modelRepositoryId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<
@@ -1888,8 +1895,8 @@ export const useGetProjectsProjectIdModelsModelRepositoryId = <
  * @summary Update model repository
  */
 export const postProjectsProjectIdModelsModelRepositoryId = (
-    projectId: number,
-    modelRepositoryId: number,
+    projectId: string,
+    modelRepositoryId: string,
     modelRepository: ModelRepository,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -1918,7 +1925,7 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
             ReturnType<typeof postProjectsProjectIdModelsModelRepositoryId>
         >,
         TError,
-        { projectId: number; modelRepositoryId: number; data: ModelRepository },
+        { projectId: string; modelRepositoryId: string; data: ModelRepository },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -1929,7 +1936,7 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
         Awaited<
             ReturnType<typeof postProjectsProjectIdModelsModelRepositoryId>
         >,
-        { projectId: number; modelRepositoryId: number; data: ModelRepository }
+        { projectId: string; modelRepositoryId: string; data: ModelRepository }
     > = (props) => {
         const { projectId, modelRepositoryId, data } = props ?? {}
 
@@ -1946,7 +1953,7 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
             ReturnType<typeof postProjectsProjectIdModelsModelRepositoryId>
         >,
         TError,
-        { projectId: number; modelRepositoryId: number; data: ModelRepository },
+        { projectId: string; modelRepositoryId: string; data: ModelRepository },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -1954,7 +1961,7 @@ export const usePostProjectsProjectIdModelsModelRepositoryId = <
  * @summary Returns all runs for a given project
  */
 export const getProjectsProjectIdRuns = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdRunsParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsProjectIdRuns200>> => {
@@ -1965,7 +1972,7 @@ export const getProjectsProjectIdRuns = (
 }
 
 export const getGetProjectsProjectIdRunsQueryKey = (
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdRunsParams
 ) => [`/projects/${projectId}/runs`, ...(params ? [params] : [])]
 
@@ -1978,7 +1985,7 @@ export const useGetProjectsProjectIdRuns = <
     TData = Awaited<ReturnType<typeof getProjectsProjectIdRuns>>,
     TError = AxiosError<unknown>
 >(
-    projectId: number,
+    projectId: string,
     params?: GetProjectsProjectIdRunsParams,
     options?: {
         query?: UseQueryOptions<
@@ -2016,7 +2023,7 @@ export const useGetProjectsProjectIdRuns = <
  * @summary Creates a new run
  */
 export const putProjectsProjectIdRuns = (
-    projectId: number,
+    projectId: string,
     addRun: AddRun,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<PutProjectsProjectIdRuns201>> => {
@@ -2036,7 +2043,7 @@ export const usePutProjectsProjectIdRuns = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
         TError,
-        { projectId: number; data: AddRun },
+        { projectId: string; data: AddRun },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -2045,7 +2052,7 @@ export const usePutProjectsProjectIdRuns = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
-        { projectId: number; data: AddRun }
+        { projectId: string; data: AddRun }
     > = (props) => {
         const { projectId, data } = props ?? {}
 
@@ -2055,7 +2062,7 @@ export const usePutProjectsProjectIdRuns = <
     return useMutation<
         Awaited<ReturnType<typeof putProjectsProjectIdRuns>>,
         TError,
-        { projectId: number; data: AddRun },
+        { projectId: string; data: AddRun },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -2063,7 +2070,7 @@ export const usePutProjectsProjectIdRuns = <
  * @summary Return a curation of projects tailored for a specific user with a set of search parameters
  */
 export const getProjectsUserUserIdSearch = (
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdSearchParams,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<GetProjectsUserUserIdSearch200>> => {
@@ -2074,7 +2081,7 @@ export const getProjectsUserUserIdSearch = (
 }
 
 export const getGetProjectsUserUserIdSearchQueryKey = (
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdSearchParams
 ) => [`/projects/user/${userId}/search`, ...(params ? [params] : [])]
 
@@ -2087,7 +2094,7 @@ export const useGetProjectsUserUserIdSearch = <
     TData = Awaited<ReturnType<typeof getProjectsUserUserIdSearch>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
+    userId: string,
     params?: GetProjectsUserUserIdSearchParams,
     options?: {
         query?: UseQueryOptions<
@@ -2114,6 +2121,529 @@ export const useGetProjectsUserUserIdSearch = <
         TError,
         TData
     >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary List all deployments
+ */
+export const getProjectsProjectIdDeployments = (
+    projectId: string,
+    params?: GetProjectsProjectIdDeploymentsParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<GetProjectsProjectIdDeployments200>> => {
+    return axios.get(`/projects/${projectId}/deployments`, {
+        params,
+        ...options,
+    })
+}
+
+export const getGetProjectsProjectIdDeploymentsQueryKey = (
+    projectId: string,
+    params?: GetProjectsProjectIdDeploymentsParams
+) => [`/projects/${projectId}/deployments`, ...(params ? [params] : [])]
+
+export type GetProjectsProjectIdDeploymentsQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getProjectsProjectIdDeployments>>
+>
+export type GetProjectsProjectIdDeploymentsQueryError = AxiosError<unknown>
+
+export const useGetProjectsProjectIdDeployments = <
+    TData = Awaited<ReturnType<typeof getProjectsProjectIdDeployments>>,
+    TError = AxiosError<unknown>
+>(
+    projectId: string,
+    params?: GetProjectsProjectIdDeploymentsParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getProjectsProjectIdDeployments>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdDeploymentsQueryKey(projectId, params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdDeployments>>
+    > = ({ signal }) =>
+        getProjectsProjectIdDeployments(projectId, params, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdDeployments>>,
+        TError,
+        TData
+    >(queryKey, queryFn, { enabled: !!projectId, ...queryOptions })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary Create deployment
+ */
+export const putProjectsProjectIdDeployments = (
+    projectId: string,
+    deploymentInformation: DeploymentInformation,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<PutProjectsProjectIdDeployments201>> => {
+    return axios.put(
+        `/projects/${projectId}/deployments`,
+        deploymentInformation,
+        options
+    )
+}
+
+export type PutProjectsProjectIdDeploymentsMutationResult = NonNullable<
+    Awaited<ReturnType<typeof putProjectsProjectIdDeployments>>
+>
+export type PutProjectsProjectIdDeploymentsMutationBody = DeploymentInformation
+export type PutProjectsProjectIdDeploymentsMutationError = AxiosError<unknown>
+
+export const usePutProjectsProjectIdDeployments = <
+    TError = AxiosError<unknown>,
+    TContext = unknown
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<ReturnType<typeof putProjectsProjectIdDeployments>>,
+        TError,
+        { projectId: string; data: DeploymentInformation },
+        TContext
+    >
+    axios?: AxiosRequestConfig
+}) => {
+    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
+
+    const mutationFn: MutationFunction<
+        Awaited<ReturnType<typeof putProjectsProjectIdDeployments>>,
+        { projectId: string; data: DeploymentInformation }
+    > = (props) => {
+        const { projectId, data } = props ?? {}
+
+        return putProjectsProjectIdDeployments(projectId, data, axiosOptions)
+    }
+
+    return useMutation<
+        Awaited<ReturnType<typeof putProjectsProjectIdDeployments>>,
+        TError,
+        { projectId: string; data: DeploymentInformation },
+        TContext
+    >(mutationFn, mutationOptions)
+}
+/**
+ * @summary Get deployment information
+ */
+export const getProjectsProjectIdDeploymentsDeploymentId = (
+    projectId: string,
+    deploymentId: string,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<DeploymentInformation>> => {
+    return axios.get(
+        `/projects/${projectId}/deployments/${deploymentId}`,
+        options
+    )
+}
+
+export const getGetProjectsProjectIdDeploymentsDeploymentIdQueryKey = (
+    projectId: string,
+    deploymentId: string
+) => [`/projects/${projectId}/deployments/${deploymentId}`]
+
+export type GetProjectsProjectIdDeploymentsDeploymentIdQueryResult =
+    NonNullable<
+        Awaited<ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentId>>
+    >
+export type GetProjectsProjectIdDeploymentsDeploymentIdQueryError =
+    AxiosError<unknown>
+
+export const useGetProjectsProjectIdDeploymentsDeploymentId = <
+    TData = Awaited<
+        ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentId>
+    >,
+    TError = AxiosError<unknown>
+>(
+    projectId: string,
+    deploymentId: string,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<
+                ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentId>
+            >,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdDeploymentsDeploymentIdQueryKey(
+            projectId,
+            deploymentId
+        )
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentId>>
+    > = ({ signal }) =>
+        getProjectsProjectIdDeploymentsDeploymentId(projectId, deploymentId, {
+            signal,
+            ...axiosOptions,
+        })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentId>>,
+        TError,
+        TData
+    >(queryKey, queryFn, {
+        enabled: !!(projectId && deploymentId),
+        ...queryOptions,
+    })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary Update deployment
+ */
+export const postProjectsProjectIdDeploymentsDeploymentId = (
+    projectId: string,
+    deploymentId: string,
+    deploymentInformation: DeploymentInformation,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+    return axios.post(
+        `/projects/${projectId}/deployments/${deploymentId}`,
+        deploymentInformation,
+        options
+    )
+}
+
+export type PostProjectsProjectIdDeploymentsDeploymentIdMutationResult =
+    NonNullable<
+        Awaited<ReturnType<typeof postProjectsProjectIdDeploymentsDeploymentId>>
+    >
+export type PostProjectsProjectIdDeploymentsDeploymentIdMutationBody =
+    DeploymentInformation
+export type PostProjectsProjectIdDeploymentsDeploymentIdMutationError =
+    AxiosError<unknown>
+
+export const usePostProjectsProjectIdDeploymentsDeploymentId = <
+    TError = AxiosError<unknown>,
+    TContext = unknown
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<
+            ReturnType<typeof postProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        TError,
+        {
+            projectId: string
+            deploymentId: string
+            data: DeploymentInformation
+        },
+        TContext
+    >
+    axios?: AxiosRequestConfig
+}) => {
+    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
+
+    const mutationFn: MutationFunction<
+        Awaited<
+            ReturnType<typeof postProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        { projectId: string; deploymentId: string; data: DeploymentInformation }
+    > = (props) => {
+        const { projectId, deploymentId, data } = props ?? {}
+
+        return postProjectsProjectIdDeploymentsDeploymentId(
+            projectId,
+            deploymentId,
+            data,
+            axiosOptions
+        )
+    }
+
+    return useMutation<
+        Awaited<
+            ReturnType<typeof postProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        TError,
+        {
+            projectId: string
+            deploymentId: string
+            data: DeploymentInformation
+        },
+        TContext
+    >(mutationFn, mutationOptions)
+}
+/**
+ * @summary Delete deployment
+ */
+export const deleteProjectsProjectIdDeploymentsDeploymentId = (
+    projectId: string,
+    deploymentId: string,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+    return axios.delete(
+        `/projects/${projectId}/deployments/${deploymentId}`,
+        options
+    )
+}
+
+export type DeleteProjectsProjectIdDeploymentsDeploymentIdMutationResult =
+    NonNullable<
+        Awaited<
+            ReturnType<typeof deleteProjectsProjectIdDeploymentsDeploymentId>
+        >
+    >
+
+export type DeleteProjectsProjectIdDeploymentsDeploymentIdMutationError =
+    AxiosError<unknown>
+
+export const useDeleteProjectsProjectIdDeploymentsDeploymentId = <
+    TError = AxiosError<unknown>,
+    TContext = unknown
+>(options?: {
+    mutation?: UseMutationOptions<
+        Awaited<
+            ReturnType<typeof deleteProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        TError,
+        { projectId: string; deploymentId: string },
+        TContext
+    >
+    axios?: AxiosRequestConfig
+}) => {
+    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
+
+    const mutationFn: MutationFunction<
+        Awaited<
+            ReturnType<typeof deleteProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        { projectId: string; deploymentId: string }
+    > = (props) => {
+        const { projectId, deploymentId } = props ?? {}
+
+        return deleteProjectsProjectIdDeploymentsDeploymentId(
+            projectId,
+            deploymentId,
+            axiosOptions
+        )
+    }
+
+    return useMutation<
+        Awaited<
+            ReturnType<typeof deleteProjectsProjectIdDeploymentsDeploymentId>
+        >,
+        TError,
+        { projectId: string; deploymentId: string },
+        TContext
+    >(mutationFn, mutationOptions)
+}
+/**
+ * @summary Download packaged deployment
+ */
+export const getProjectsProjectIdDeploymentsDeploymentIdDownload = (
+    projectId: string,
+    deploymentId: string,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<PackagedDeployment>> => {
+    return axios.get(
+        `/projects/${projectId}/deployments/${deploymentId}/download`,
+        options
+    )
+}
+
+export const getGetProjectsProjectIdDeploymentsDeploymentIdDownloadQueryKey = (
+    projectId: string,
+    deploymentId: string
+) => [`/projects/${projectId}/deployments/${deploymentId}/download`]
+
+export type GetProjectsProjectIdDeploymentsDeploymentIdDownloadQueryResult =
+    NonNullable<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdDownload
+            >
+        >
+    >
+export type GetProjectsProjectIdDeploymentsDeploymentIdDownloadQueryError =
+    AxiosError<unknown>
+
+export const useGetProjectsProjectIdDeploymentsDeploymentIdDownload = <
+    TData = Awaited<
+        ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentIdDownload>
+    >,
+    TError = AxiosError<unknown>
+>(
+    projectId: string,
+    deploymentId: string,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<
+                ReturnType<
+                    typeof getProjectsProjectIdDeploymentsDeploymentIdDownload
+                >
+            >,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdDeploymentsDeploymentIdDownloadQueryKey(
+            projectId,
+            deploymentId
+        )
+
+    const queryFn: QueryFunction<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdDownload
+            >
+        >
+    > = ({ signal }) =>
+        getProjectsProjectIdDeploymentsDeploymentIdDownload(
+            projectId,
+            deploymentId,
+            { signal, ...axiosOptions }
+        )
+
+    const query = useQuery<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdDownload
+            >
+        >,
+        TError,
+        TData
+    >(queryKey, queryFn, {
+        enabled: !!(projectId && deploymentId),
+        ...queryOptions,
+    })
+
+    return {
+        queryKey,
+        ...query,
+    }
+}
+
+/**
+ * @summary Get deployment information
+ */
+export const getProjectsProjectIdDeploymentsDeploymentIdPredict = (
+    projectId: string,
+    deploymentId: string,
+    predictionRequest: PredictionRequest,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<PredictionResponse>> => {
+    return axios.get(
+        `/projects/${projectId}/deployments/${deploymentId}/predict`,
+        options
+    )
+}
+
+export const getGetProjectsProjectIdDeploymentsDeploymentIdPredictQueryKey = (
+    projectId: string,
+    deploymentId: string,
+    predictionRequest: PredictionRequest
+) => [
+    `/projects/${projectId}/deployments/${deploymentId}/predict`,
+    predictionRequest,
+]
+
+export type GetProjectsProjectIdDeploymentsDeploymentIdPredictQueryResult =
+    NonNullable<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdPredict
+            >
+        >
+    >
+export type GetProjectsProjectIdDeploymentsDeploymentIdPredictQueryError =
+    AxiosError<unknown>
+
+export const useGetProjectsProjectIdDeploymentsDeploymentIdPredict = <
+    TData = Awaited<
+        ReturnType<typeof getProjectsProjectIdDeploymentsDeploymentIdPredict>
+    >,
+    TError = AxiosError<unknown>
+>(
+    projectId: string,
+    deploymentId: string,
+    predictionRequest: PredictionRequest,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<
+                ReturnType<
+                    typeof getProjectsProjectIdDeploymentsDeploymentIdPredict
+                >
+            >,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey =
+        queryOptions?.queryKey ??
+        getGetProjectsProjectIdDeploymentsDeploymentIdPredictQueryKey(
+            projectId,
+            deploymentId,
+            predictionRequest
+        )
+
+    const queryFn: QueryFunction<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdPredict
+            >
+        >
+    > = ({ signal }) =>
+        getProjectsProjectIdDeploymentsDeploymentIdPredict(
+            projectId,
+            deploymentId,
+            predictionRequest,
+            { signal, ...axiosOptions }
+        )
+
+    const query = useQuery<
+        Awaited<
+            ReturnType<
+                typeof getProjectsProjectIdDeploymentsDeploymentIdPredict
+            >
+        >,
+        TError,
+        TData
+    >(queryKey, queryFn, {
+        enabled: !!(projectId && deploymentId),
+        ...queryOptions,
+    })
 
     return {
         queryKey,
@@ -2228,13 +2758,13 @@ export const usePutGroups = <
  * @summary Get Group information
  */
 export const getGroupsGroupId = (
-    groupId: number,
+    groupId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<UserGroup>> => {
     return axios.get(`/groups/${groupId}`, options)
 }
 
-export const getGetGroupsGroupIdQueryKey = (groupId: number) => [
+export const getGetGroupsGroupIdQueryKey = (groupId: string) => [
     `/groups/${groupId}`,
 ]
 
@@ -2247,7 +2777,7 @@ export const useGetGroupsGroupId = <
     TData = Awaited<ReturnType<typeof getGroupsGroupId>>,
     TError = AxiosError<unknown>
 >(
-    groupId: number,
+    groupId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<ReturnType<typeof getGroupsGroupId>>,
@@ -2282,7 +2812,7 @@ export const useGetGroupsGroupId = <
  * @summary Update group
  */
 export const postGroupsGroupId = (
-    groupId: number,
+    groupId: string,
     userGroup: UserGroup,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -2302,7 +2832,7 @@ export const usePostGroupsGroupId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postGroupsGroupId>>,
         TError,
-        { groupId: number; data: UserGroup },
+        { groupId: string; data: UserGroup },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -2311,7 +2841,7 @@ export const usePostGroupsGroupId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postGroupsGroupId>>,
-        { groupId: number; data: UserGroup }
+        { groupId: string; data: UserGroup }
     > = (props) => {
         const { groupId, data } = props ?? {}
 
@@ -2321,7 +2851,7 @@ export const usePostGroupsGroupId = <
     return useMutation<
         Awaited<ReturnType<typeof postGroupsGroupId>>,
         TError,
-        { groupId: number; data: UserGroup },
+        { groupId: string; data: UserGroup },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -2432,14 +2962,14 @@ export const usePutOrganizations = <
  * @summary Get info on specified organization
  */
 export const getOrganizationsOrganizationId = (
-    organizationId: number,
+    organizationId: string,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<Organization>> => {
     return axios.get(`/organizations/${organizationId}`, options)
 }
 
 export const getGetOrganizationsOrganizationIdQueryKey = (
-    organizationId: number
+    organizationId: string
 ) => [`/organizations/${organizationId}`]
 
 export type GetOrganizationsOrganizationIdQueryResult = NonNullable<
@@ -2451,7 +2981,7 @@ export const useGetOrganizationsOrganizationId = <
     TData = Awaited<ReturnType<typeof getOrganizationsOrganizationId>>,
     TError = AxiosError<unknown>
 >(
-    organizationId: number,
+    organizationId: string,
     options?: {
         query?: UseQueryOptions<
             Awaited<ReturnType<typeof getOrganizationsOrganizationId>>,
@@ -2491,7 +3021,7 @@ export const useGetOrganizationsOrganizationId = <
  * @summary Update organization info
  */
 export const postOrganizationsOrganizationId = (
-    organizationId: number,
+    organizationId: string,
     organization: Organization,
     options?: AxiosRequestConfig
 ): Promise<AxiosResponse<void>> => {
@@ -2511,7 +3041,7 @@ export const usePostOrganizationsOrganizationId = <
     mutation?: UseMutationOptions<
         Awaited<ReturnType<typeof postOrganizationsOrganizationId>>,
         TError,
-        { organizationId: number; data: Organization },
+        { organizationId: string; data: Organization },
         TContext
     >
     axios?: AxiosRequestConfig
@@ -2520,7 +3050,7 @@ export const usePostOrganizationsOrganizationId = <
 
     const mutationFn: MutationFunction<
         Awaited<ReturnType<typeof postOrganizationsOrganizationId>>,
-        { organizationId: number; data: Organization }
+        { organizationId: string; data: Organization }
     > = (props) => {
         const { organizationId, data } = props ?? {}
 
@@ -2534,7 +3064,7 @@ export const usePostOrganizationsOrganizationId = <
     return useMutation<
         Awaited<ReturnType<typeof postOrganizationsOrganizationId>>,
         TError,
-        { organizationId: number; data: Organization },
+        { organizationId: string; data: Organization },
         TContext
     >(mutationFn, mutationOptions)
 }
@@ -2642,38 +3172,38 @@ export const usePutLabels = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Return a collection of labels appropriate for the user's search
+ * @summary Return all labels of the given scope
  */
-export const getLabelsUserIdSearch = (
-    userId: number,
-    params?: GetLabelsUserIdSearchParams,
+export const getLabelsScope = (
+    scope: string,
+    params?: GetLabelsScopeParams,
     options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetLabelsUserIdSearch200>> => {
-    return axios.get(`/labels/${userId}/search`, {
+): Promise<AxiosResponse<GetLabelsScope200>> => {
+    return axios.get(`/labels/${scope}`, {
         params,
         ...options,
     })
 }
 
-export const getGetLabelsUserIdSearchQueryKey = (
-    userId: number,
-    params?: GetLabelsUserIdSearchParams
-) => [`/labels/${userId}/search`, ...(params ? [params] : [])]
+export const getGetLabelsScopeQueryKey = (
+    scope: string,
+    params?: GetLabelsScopeParams
+) => [`/labels/${scope}`, ...(params ? [params] : [])]
 
-export type GetLabelsUserIdSearchQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getLabelsUserIdSearch>>
+export type GetLabelsScopeQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLabelsScope>>
 >
-export type GetLabelsUserIdSearchQueryError = AxiosError<unknown>
+export type GetLabelsScopeQueryError = AxiosError<unknown>
 
-export const useGetLabelsUserIdSearch = <
-    TData = Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+export const useGetLabelsScope = <
+    TData = Awaited<ReturnType<typeof getLabelsScope>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
-    params?: GetLabelsUserIdSearchParams,
+    scope: string,
+    params?: GetLabelsScopeParams,
     options?: {
         query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+            Awaited<ReturnType<typeof getLabelsScope>>,
             TError,
             TData
         >
@@ -2683,19 +3213,18 @@ export const useGetLabelsUserIdSearch = <
     const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
     const queryKey =
-        queryOptions?.queryKey ??
-        getGetLabelsUserIdSearchQueryKey(userId, params)
+        queryOptions?.queryKey ?? getGetLabelsScopeQueryKey(scope, params)
 
     const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getLabelsUserIdSearch>>
+        Awaited<ReturnType<typeof getLabelsScope>>
     > = ({ signal }) =>
-        getLabelsUserIdSearch(userId, params, { signal, ...axiosOptions })
+        getLabelsScope(scope, params, { signal, ...axiosOptions })
 
     const query = useQuery<
-        Awaited<ReturnType<typeof getLabelsUserIdSearch>>,
+        Awaited<ReturnType<typeof getLabelsScope>>,
         TError,
         TData
-    >(queryKey, queryFn, { enabled: !!userId, ...queryOptions })
+    >(queryKey, queryFn, { enabled: !!scope, ...queryOptions })
 
     return {
         queryKey,
@@ -2704,41 +3233,36 @@ export const useGetLabelsUserIdSearch = <
 }
 
 /**
- * @summary Return all labels of the given scope
+ * @summary Return a collection of labels appropriate for the user's search
  */
-export const getLabelsUserIdScope = (
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams,
+export const getLabelsSearch = (
+    params?: GetLabelsSearchParams,
     options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetLabelsUserIdScope200>> => {
-    return axios.get(`/labels/${userId}/${scope}`, {
+): Promise<AxiosResponse<GetLabelsSearch200>> => {
+    return axios.get(`/labels/search`, {
         params,
         ...options,
     })
 }
 
-export const getGetLabelsUserIdScopeQueryKey = (
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams
-) => [`/labels/${userId}/${scope}`, ...(params ? [params] : [])]
+export const getGetLabelsSearchQueryKey = (params?: GetLabelsSearchParams) => [
+    `/labels/search`,
+    ...(params ? [params] : []),
+]
 
-export type GetLabelsUserIdScopeQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getLabelsUserIdScope>>
+export type GetLabelsSearchQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getLabelsSearch>>
 >
-export type GetLabelsUserIdScopeQueryError = AxiosError<unknown>
+export type GetLabelsSearchQueryError = AxiosError<unknown>
 
-export const useGetLabelsUserIdScope = <
-    TData = Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+export const useGetLabelsSearch = <
+    TData = Awaited<ReturnType<typeof getLabelsSearch>>,
     TError = AxiosError<unknown>
 >(
-    userId: number,
-    scope: string,
-    params?: GetLabelsUserIdScopeParams,
+    params?: GetLabelsSearchParams,
     options?: {
         query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+            Awaited<ReturnType<typeof getLabelsSearch>>,
             TError,
             TData
         >
@@ -2748,19 +3272,17 @@ export const useGetLabelsUserIdScope = <
     const { query: queryOptions, axios: axiosOptions } = options ?? {}
 
     const queryKey =
-        queryOptions?.queryKey ??
-        getGetLabelsUserIdScopeQueryKey(userId, scope, params)
+        queryOptions?.queryKey ?? getGetLabelsSearchQueryKey(params)
 
     const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getLabelsUserIdScope>>
-    > = ({ signal }) =>
-        getLabelsUserIdScope(userId, scope, params, { signal, ...axiosOptions })
+        Awaited<ReturnType<typeof getLabelsSearch>>
+    > = ({ signal }) => getLabelsSearch(params, { signal, ...axiosOptions })
 
     const query = useQuery<
-        Awaited<ReturnType<typeof getLabelsUserIdScope>>,
+        Awaited<ReturnType<typeof getLabelsSearch>>,
         TError,
         TData
-    >(queryKey, queryFn, { enabled: !!(userId && scope), ...queryOptions })
+    >(queryKey, queryFn, queryOptions)
 
     return {
         queryKey,

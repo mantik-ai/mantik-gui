@@ -10,7 +10,7 @@
  * Represents a user
  */
 export interface User {
-    userId: number
+    userId: string
     name: string
     email: string
 }

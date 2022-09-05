@@ -20,6 +20,7 @@
         "validate:spec": "swagger-cli validate doc/api/openapi.yaml --type yaml"
     },
     "dependencies": {
+        "@apidevtools/swagger-cli": "^4.0.4",
         "@aws-sdk/client-cognito-identity-provider": "^3.154.0",
         "@emotion/react": "^11.9.3",
         "@emotion/styled": "^11.9.3",

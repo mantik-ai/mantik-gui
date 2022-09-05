@@ -6,6 +6,6 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type PutUsers201 = {
-    userId?: string
+export interface PackagedDeployment {
+    apptainerImageUri?: string
 }

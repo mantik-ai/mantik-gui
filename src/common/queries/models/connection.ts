@@ -10,7 +10,7 @@
  * Represents a connection to a third-party platform, usually either HPC or cloud platform credentials
  */
 export interface Connection {
-    connectionId: number
+    connectionId: string
     connectionName: string
     connectionProvider: string
     loginName?: string

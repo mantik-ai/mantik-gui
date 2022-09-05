@@ -1,20 +1,26 @@
 import { Autocomplete, TextField } from '@mui/material'
-import React from 'react'
-import { Label } from '../../../common/queries'
+import React, { useContext, useState } from 'react'
+import { useGetLabelsSearch } from '../../../common/queries'
+import SearchParamerterContext from '../contexts/SearchParameterContext'
 
 export const LabelSelector = () => {
-    const labels: Label[] = [
-        { scope: 'Technology', name: 'TensorFlow' },
-        { scope: 'Technology', name: 'Pytorch' },
-        { scope: 'Dataset-size', name: 'Terrabyte' },
-    ]
+    const searchParameterContext = useContext(SearchParamerterContext)
+    const [labelSearchString, setLabelSearchString] = useState('')
+    const { data, status } = useGetLabelsSearch({
+        searchString: labelSearchString,
+    })
+    const loading = status !== 'success'
+
     return (
         <Autocomplete
             multiple
             id="labels"
-            options={labels}
+            onChange={(_, labels) =>
+                searchParameterContext.setSearchLabels!(labels)
+            }
+            options={data?.data.labels ?? []}
             getOptionLabel={(label) => label.name}
-            // defaultValue={[top100Films[13]]}
+            loading={loading}
             renderInput={(params) => (
                 <TextField
                     {...params}

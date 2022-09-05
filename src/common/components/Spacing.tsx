@@ -1,11 +1,11 @@
-import { Box } from '@mui/system'
+import { Box } from '@mui/material'
 import { FC } from 'react'
 
-interface VerticalSpacingProps {
+interface SpacingProps {
     value: string
     horizontal?: boolean
 }
-export const Spacing: FC<VerticalSpacingProps> = (props) => {
+export const Spacing: FC<SpacingProps> = (props) => {
     return (
         <Box
             height={props.horizontal ? undefined : props.value}

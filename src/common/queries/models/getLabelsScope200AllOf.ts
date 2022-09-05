@@ -5,7 +5,8 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
+import type { Label } from './label'
 
-export type PutUsers201 = {
-    userId?: string
+export type GetLabelsScope200AllOf = {
+    labels?: Label[]
 }
