@@ -12,6 +12,7 @@ import type { Label } from './label'
  */
 export interface DataRepository {
     dataRepositoryId: string
+    dataRepositoryName?: string
     uri: string
     description?: string
     labels?: Label[]

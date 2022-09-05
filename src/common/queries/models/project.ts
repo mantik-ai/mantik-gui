@@ -17,7 +17,7 @@ import type { Label } from './label'
  * A project is a collection of code, experiments, data and models with permission management (owner, members, groups)
  */
 export interface Project {
-    projectId: number
+    projectId: string
     name?: string
     description?: Description
     owner: User
