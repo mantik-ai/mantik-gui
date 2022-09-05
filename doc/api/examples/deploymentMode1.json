@@ -24,12 +24,7 @@
             "name": "queue",
             "description": "Name of queue (partition) to place the job in",
             "type": "string",
-            "options": [
-                "batch",
-                "devel",
-                "booster",
-                "develbooster"
-            ],
+            "options": ["batch", "devel", "booster", "develbooster"],
             "default": "batch",
             "required": true
         },

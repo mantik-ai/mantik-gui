@@ -25,7 +25,9 @@ export const SearchSideBar = () => {
     const searchParameterContext = useContext(SearchParamerterContext)
 
     const upToMediumSize = useMediaQuery(theme.breakpoints.up('md'))
-    const { data } = useGetProjectsUserUserId(500)
+    const { data } = useGetProjectsUserUserId(
+        'c9de9883-5efc-4b4d-b156-9fe5acce8975'
+    ) //TODO: set userid programmatically
 
     return (
         <Box sx={{ pl: theme.spacing(0.5) }}>
@@ -76,10 +78,10 @@ export const SearchSideBar = () => {
                 {upToMediumSize ? (
                     <>
                         <Stack direction="row" gap={theme.spacing(0.5)}>
-                            <Person />
-                            <Typography variant="overline">
-                                Your Projects
-                            </Typography>
+                            <Stack justifyContent="center">
+                                <Person />
+                            </Stack>
+                            <Typography variant="h6">Your Projects</Typography>
                         </Stack>
                         <Spacing value={theme.spacing(1)}></Spacing>
                         {data?.data.projects?.map((project) => (

@@ -1,0 +1,5 @@
+[
+    { "$ref": "labels/classification.json" },
+    { "$ref": "labels/dim_reduction.json" },
+    { "$ref": "labels/clustering.json" }
+]

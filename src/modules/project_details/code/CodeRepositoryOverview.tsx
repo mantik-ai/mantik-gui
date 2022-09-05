@@ -8,7 +8,7 @@ import { CodeRepositoryCard } from './CodeRepositoryCard'
 export const CodeRepositoryOverview = () => {
     const router = useRouter()
     const { id } = router.query
-    const { data, status } = useGetProjectsProjectIdCode(Number(id))
+    const { data, status } = useGetProjectsProjectIdCode(id as string)
     return (
         <DataStateIndicator status={status} text="Loading Repositories...">
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>

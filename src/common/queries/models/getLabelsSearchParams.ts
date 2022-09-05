@@ -8,7 +8,9 @@
 import type { StartIndexParameter } from './startIndexParameter'
 import type { PageLengthParameter } from './pageLengthParameter'
 
-export type GetProjectsProjectIdDeploymentsParams = {
+export type GetLabelsSearchParams = {
+    scope?: string
+    searchString?: string
     startindex?: StartIndexParameter
     pagelength?: PageLengthParameter
 }

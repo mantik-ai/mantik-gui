@@ -6,7 +6,6 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { PaginationResponse } from './paginationResponse'
-import type { GetProjectsProjectIdDeployments200AllOf } from './getProjectsProjectIdDeployments200AllOf'
+import type { GetLabelsScope200AllOf } from './getLabelsScope200AllOf'
 
-export type GetProjectsProjectIdDeployments200 = PaginationResponse &
-    GetProjectsProjectIdDeployments200AllOf
+export type GetLabelsScope200 = PaginationResponse & GetLabelsScope200AllOf

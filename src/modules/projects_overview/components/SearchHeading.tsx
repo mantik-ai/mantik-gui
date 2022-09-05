@@ -1,5 +1,4 @@
-import { Box, Divider, Typography } from '@mui/material'
-import { useTheme } from '@mui/system'
+import { Box, Divider, Typography, useTheme } from '@mui/material'
 import React from 'react'
 import { Spacing } from '../../../common/components/Spacing'
 
@@ -17,13 +16,19 @@ export const SearchHeading = (props: SearchHeadingProps) => {
                 alignItems: 'stretch',
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-                <Typography variant="h4" gutterBottom>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    justifyContent: 'center',
+                }}
+            >
+                <Typography variant="h2" gutterBottom>
                     {props.children}
                 </Typography>
                 <Spacing horizontal value={theme.spacing(2)}></Spacing>
-
-                <Typography variant="body1">{props.description}</Typography>
+                <Typography variant="h5">{props.description}</Typography>
             </Box>
             <Divider />
         </Box>

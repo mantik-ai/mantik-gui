@@ -1,53 +1,28 @@
-import {
-    Box,
-    CircularProgress,
-    Stack,
-    Typography,
-    useTheme,
-} from '@mui/material'
+import { Stack, useTheme } from '@mui/material'
 import React, { useContext } from 'react'
-import { Spacing } from '../../../common/components/Spacing'
-import { useGetProjectsUserUserIdSearch } from '../../../common/queries'
+import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
 import SearchParamerterContext from '../contexts/SearchParameterContext'
-import { ProjectEntry } from './ProjectEntry'
+import { ProjectCard } from './ProjectCard'
 
-interface ProjectListProps {}
-
-export const ProjectList = (props: ProjectListProps) => {
+export const ProjectList = () => {
     const theme = useTheme()
     const searchParameterContext = useContext(SearchParamerterContext)
-    const { data, error } = useGetProjectsUserUserIdSearch(500, {
-        searchString: searchParameterContext.debouncedSearchString,
-    })
-
-    if (!data) {
-        return (
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-            >
-                {error ? (
-                    <Typography variant="body1">Error</Typography>
-                ) : (
-                    <>
-                        <Typography variant="body1">
-                            Loading projects...
-                        </Typography>
-                        <Spacing value={theme.spacing(4)} />
-                        <CircularProgress />
-                    </>
-                )}
-            </Box>
-        )
-    }
 
     return (
-        <Stack spacing={theme.spacing(2)}>
-            {data?.data.projects?.map((project) => (
-                <ProjectEntry key={project.projectId} project={project} />
-            ))}
-        </Stack>
+        <DataStateIndicator
+            status={searchParameterContext.projectsResultStatus!}
+            text="Loading Projects..."
+        >
+            <Stack spacing={theme.spacing(2)}>
+                {searchParameterContext.projectsResult?.data.projects?.map(
+                    (project) => (
+                        <ProjectCard
+                            key={project.projectId}
+                            project={project}
+                        ></ProjectCard>
+                    )
+                )}
+            </Stack>
+        </DataStateIndicator>
     )
 }

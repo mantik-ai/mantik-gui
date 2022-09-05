@@ -24,21 +24,21 @@
     "userGroups": [
         {
             "allowedToEdit": true,
-            "userGroup": {"$ref": "userGroup.json"}
+            "userGroup": { "$ref": "userGroup.json" }
         },
         {
             "allowedToEdit": false,
-            "userGroup": {"$ref": "userGroup2.json"}
+            "userGroup": { "$ref": "userGroup2.json" }
         }
     ],
     "users": [
         {
             "allowedToEdit": true,
-            "user": {"$ref": "user.json"}
+            "user": { "$ref": "user.json" }
         },
         {
             "allowedToEdit": false,
-            "user": {"$ref": "user2.json"}
+            "user": { "$ref": "user2.json" }
         }
     ],
     "accessToken": "aldf7U-UUbc1euz8udFaOSfpI9hiuh23zuBRosaBouf"

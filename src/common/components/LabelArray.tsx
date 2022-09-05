@@ -1,20 +1,21 @@
-import { Box, Chip, ListItem, Paper, useTheme } from '@mui/material'
 import React from 'react'
+import { Box, Chip, Paper, useTheme } from '@mui/material'
 import { Label } from '../queries'
 
 interface LabelArrayProps {
-    labels: Label[]
+    labels?: Label[]
 }
 export const LabelArray = (props: LabelArrayProps) => {
     const theme = useTheme()
+    if (!props.labels) return null
+
     return (
-        <Paper
+        <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                maxWidth: '33vw',
-                p: 0.5,
+                p: theme.spacing(0.5),
             }}
             component="ul"
         >
@@ -28,6 +29,6 @@ export const LabelArray = (props: LabelArrayProps) => {
                     </Box>
                 )
             })}
-        </Paper>
+        </Box>
     )
 }

@@ -20,7 +20,7 @@ import { RunDialogFormInput } from './RunDialogFormInput'
 
 interface RunRepeatDialogProps {
     open: boolean
-    projectId: number
+    projectId: string
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -48,7 +48,7 @@ export const RunDialog = (props: RunRepeatDialogProps) => {
             <DialogTitle>
                 {`${runContext.run ? 'Re-' : 'Create '}Run ${
                     runContext.run
-                        ? `"${runContext.run?.experimentRepository?.name}"`
+                        ? `"${runContext.run.experimentRepository?.name}"`
                         : ''
                 }`}
             </DialogTitle>
@@ -71,7 +71,7 @@ export const RunDialog = (props: RunRepeatDialogProps) => {
                     <RunDialogFormInput
                         options={dataRepository?.data.dataRepositories ?? []}
                         name="Dataset"
-                        fieldSelector={(x) => x.uri ?? '<No Name>'}
+                        fieldSelector={(x) => x.uri}
                         onChange={(e) => runContext.setData!(e)}
                     />
                     <Spacing value={theme.spacing(2)} />
