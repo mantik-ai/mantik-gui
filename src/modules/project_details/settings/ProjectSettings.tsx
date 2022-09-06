@@ -38,13 +38,14 @@ function CodeSettings() {
     return null
 }
 
-const SettingsOverview = () => {
+const ProjectSettings = () => {
     const router = useRouter()
     const { id } = router.query
     const { data, status } = useGetProjectsProjectIdCode(id as string)
-    const [value, setValue] = React.useState(0)
+    const [tabValue, setTabValue] = React.useState(0)
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
-        setValue(newValue)
+        setTabValue(newValue)
+    const [codeRepositoryId, setCodeRepositoryId] = React.useState('')
 
     // const [open, setOpen] = React.useState(false)
     // const [dialogType, setDialogType] = React.useState<CollaborationDialogType>(
@@ -68,12 +69,15 @@ const SettingsOverview = () => {
                     <Autocomplete
                         disablePortal
                         loading={status === 'loading'}
+                        options={data?.data.codeRepositories ?? []}
+                        getOptionLabel={(repo) => repo.codeRepositoryName ?? ''}
                         sx={{ width: 300, py: 4 }}
-                        options={
-                            data?.data.codeRepositories?.map(
-                                (e) => e.codeRepositoryName
-                            ) ?? []
-                        }
+                        onChange={(
+                            _,
+                            selectedCodeRepository: string | null
+                        ) => {
+                            ProjectSettingsContext.set(selectedCodeRepository)
+                        }}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -98,23 +102,23 @@ const SettingsOverview = () => {
                     />
                 </Stack>
 
-                <Tabs value={value} onChange={onTabChange}>
+                <Tabs value={tabValue} onChange={onTabChange}>
                     <Tab label="general" />
                     <Tab label="collaboration" />
                     <Tab label="code" />
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tabValue} index={0}>
                 <GeneralSettings />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={tabValue} index={1}>
                 <CollaborationSettings />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={tabValue} index={2}>
                 <CodeSettings />
             </TabPanel>
         </Box>
     )
 }
 
-export default SettingsOverview
+export default ProjectSettings

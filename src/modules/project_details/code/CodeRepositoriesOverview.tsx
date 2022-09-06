@@ -5,7 +5,7 @@ import { DataStateIndicator } from '../../../common/components/DataStateIndicato
 import { useGetProjectsProjectIdCode } from '../../../common/queries'
 import { CodeRepositoryCard } from './CodeRepositoryCard'
 
-export const CodeRepositoryOverview = () => {
+export const CodeRepositoriesOverview = () => {
     const router = useRouter()
     const { id } = router.query
     const { data, status } = useGetProjectsProjectIdCode(id as string)

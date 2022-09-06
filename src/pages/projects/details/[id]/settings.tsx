@@ -1,10 +1,10 @@
 import React from 'react'
 import { NextPageWithNestedLayout } from '../../../_app'
 import { DetailsLayout } from '../../../../modules/project_details/layouts/DetailsLayout'
-import SettingsOverview from '../../../../modules/project_details/settings/SettingsOverview'
+import ProjectSettings from '../../../../modules/project_details/settings/ProjectSettings'
 
 const SettingsDetails: NextPageWithNestedLayout = () => {
-    return <SettingsOverview></SettingsOverview>
+    return <ProjectSettings />
 }
 
 SettingsDetails.getNestedLayout = (page) => {
