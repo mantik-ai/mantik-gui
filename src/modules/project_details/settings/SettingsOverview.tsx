@@ -13,7 +13,6 @@ import { useRouter } from 'next/router'
 import { useGetProjectsProjectIdCode } from '../../../common/queries'
 import { GeneralSettings } from './GeneralSettings'
 import { CollaborationSettings } from './CollaborationSettings'
-import { DataSettings } from './DataSettings'
 
 interface TabPanelProps {
     children?: React.ReactNode
@@ -42,13 +41,10 @@ function CodeSettings() {
 const SettingsOverview = () => {
     const router = useRouter()
     const { id } = router.query
-    const { data, status } = useGetProjectsProjectIdCode(Number(id))
+    const { data, status } = useGetProjectsProjectIdCode(id as string)
     const [value, setValue] = React.useState(0)
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
         setValue(newValue)
-
-    console.log('data: ', data)
-    console.log('status: ', status)
 
     // const [open, setOpen] = React.useState(false)
     // const [dialogType, setDialogType] = React.useState<CollaborationDialogType>(
@@ -71,9 +67,13 @@ const SettingsOverview = () => {
                     </Typography>
                     <Autocomplete
                         disablePortal
-                        loading={false}
+                        loading={status === 'loading'}
                         sx={{ width: 300, py: 4 }}
-                        options={data?.data.codeRepositories}
+                        options={
+                            data?.data.codeRepositories?.map(
+                                (e) => e.codeRepositoryName
+                            ) ?? []
+                        }
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -83,7 +83,7 @@ const SettingsOverview = () => {
                                     ...params.InputProps,
                                     endAdornment: (
                                         <>
-                                            {true ? (
+                                            {status === 'loading' ? (
                                                 <CircularProgress
                                                     color="inherit"
                                                     size={16}
@@ -101,7 +101,6 @@ const SettingsOverview = () => {
                 <Tabs value={value} onChange={onTabChange}>
                     <Tab label="general" />
                     <Tab label="collaboration" />
-                    <Tab label="data" />
                     <Tab label="code" />
                 </Tabs>
             </Box>
@@ -112,9 +111,6 @@ const SettingsOverview = () => {
                 <CollaborationSettings />
             </TabPanel>
             <TabPanel value={value} index={2}>
-                <DataSettings />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
                 <CodeSettings />
             </TabPanel>
         </Box>

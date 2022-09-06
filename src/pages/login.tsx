@@ -3,8 +3,8 @@ import type { NextPage } from 'next'
 import { TextField } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { signIn } from 'next-auth/react'
-import { AuthCard, AuthCardTypes } from '../common/components/AuthCard'
 import { COGNITO_PROVIDER_ID } from '../common/constants'
+import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 
 const Login: NextPage = () => {
     const [email, setEmail] = useState('')

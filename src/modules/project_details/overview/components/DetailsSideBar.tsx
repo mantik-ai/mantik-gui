@@ -1,9 +1,10 @@
 import {
-    Adjust,
     Code,
-    Dashboard,
     DirectionsRun,
-    Settings,
+    SettingsOutlined,
+    ScienceOutlined,
+    DatasetOutlined,
+    AssignmentOutlined,
 } from '@mui/icons-material'
 import {
     Box,
@@ -26,16 +27,25 @@ export const DetailsSideBar = () => {
     const activeRoute = router.pathname.split('/').at(-1)
 
     const routes: Route[] = [
-        { name: 'Overview', path: `${id}`, icon: <Adjust /> },
+        { name: 'Overview', path: `${id}`, icon: <AssignmentOutlined /> },
         { name: 'Runs', path: `${id}/runs`, icon: <DirectionsRun /> },
         {
             name: 'Experiments',
             path: `${id}/experiments`,
-            icon: <Dashboard />,
+            icon: <ScienceOutlined />,
         },
         { name: 'Code', path: `${id}/code`, icon: <Code /> },
+        {
+            name: 'Data',
+            path: `${id}/data`,
+            icon: <DatasetOutlined />,
+        },
         { name: 'DIVIDER', path: '', icon: null },
-        { name: 'Settings', path: `${id}/settings`, icon: <Settings /> },
+        {
+            name: 'Settings',
+            path: `${id}/settings`,
+            icon: <SettingsOutlined />,
+        },
     ]
     const bottomRoutes: Route[] = []
     const theme = useTheme()
