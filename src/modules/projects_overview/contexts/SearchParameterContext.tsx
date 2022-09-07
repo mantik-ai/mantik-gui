@@ -37,11 +37,13 @@ export interface SearchParameters {
         | AxiosResponse<GetProjectsUserUserIdSearch200, unknown>
         | undefined
 }
+
 const SearchParamerterContext = createContext<Partial<SearchParameters>>({})
 
 interface SearchParameterProviderProps {
     children: React.ReactNode
 }
+
 export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
     props
 ) => {

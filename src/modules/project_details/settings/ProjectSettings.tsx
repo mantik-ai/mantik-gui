@@ -34,18 +34,10 @@ function TabPanel(props: TabPanelProps) {
     )
 }
 
-function CodeSettings() {
-    return null
-}
-
 const ProjectSettings = () => {
-    const router = useRouter()
-    const { id } = router.query
-    const { data, status } = useGetProjectsProjectIdCode(id as string)
     const [tabValue, setTabValue] = React.useState(0)
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
         setTabValue(newValue)
-    const [codeRepositoryId, setCodeRepositoryId] = React.useState('')
 
     // const [open, setOpen] = React.useState(false)
     // const [dialogType, setDialogType] = React.useState<CollaborationDialogType>(
@@ -57,55 +49,13 @@ const ProjectSettings = () => {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Stack
-                    direction={'row'}
-                    alignItems={'center'}
-                    gap={'1rem'}
-                    pb={2}
-                >
-                    <Typography fontSize="2rem" fontWeight="500">
-                        Settings for
-                    </Typography>
-                    <Autocomplete
-                        disablePortal
-                        loading={status === 'loading'}
-                        options={data?.data.codeRepositories ?? []}
-                        getOptionLabel={(repo) => repo.codeRepositoryName ?? ''}
-                        sx={{ width: 300, py: 4 }}
-                        onChange={(
-                            _,
-                            selectedCodeRepository: string | null
-                        ) => {
-                            ProjectSettingsContext.set(selectedCodeRepository)
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Repository"
-                                size="small"
-                                InputProps={{
-                                    ...params.InputProps,
-                                    endAdornment: (
-                                        <>
-                                            {status === 'loading' ? (
-                                                <CircularProgress
-                                                    color="inherit"
-                                                    size={16}
-                                                />
-                                            ) : null}
-                                            {params.InputProps.endAdornment}
-                                        </>
-                                    ),
-                                }}
-                            />
-                        )}
-                    />
-                </Stack>
+                <Typography fontSize="2rem" fontWeight="500" pb={2}>
+                    Project Settings
+                </Typography>
 
                 <Tabs value={tabValue} onChange={onTabChange}>
                     <Tab label="general" />
                     <Tab label="collaboration" />
-                    <Tab label="code" />
                 </Tabs>
             </Box>
             <TabPanel value={tabValue} index={0}>
@@ -113,9 +63,6 @@ const ProjectSettings = () => {
             </TabPanel>
             <TabPanel value={tabValue} index={1}>
                 <CollaborationSettings />
-            </TabPanel>
-            <TabPanel value={tabValue} index={2}>
-                <CodeSettings />
             </TabPanel>
         </Box>
     )

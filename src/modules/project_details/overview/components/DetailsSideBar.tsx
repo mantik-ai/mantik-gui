@@ -166,6 +166,15 @@ export const DetailsSideBar = () => {
                                                     route.name === 'Overview')
                                             }
                                         >
+                                            <Typography
+                                                sx={{
+                                                    color: '#808080',
+                                                    marginRight: '24px',
+                                                    marginLeft: '20px',
+                                                }}
+                                            >
+                                                -
+                                            </Typography>
                                             <ListItemText>
                                                 {route.name}
                                             </ListItemText>
