@@ -1,0 +1,45 @@
+{
+    "projectUrl": "https://mantik.ai/projects/1",
+    "environment": "HPC",
+    "deploymentModes": [
+        {
+            "$ref": "deploymentMode1.json"
+        },
+        {
+            "$ref": "deploymentMode2.json"
+        }
+    ],
+    "entryPoints": [
+        {
+            "$ref": "entryPoint1.json"
+        },
+        {
+            "$ref": "entryPoint2.json"
+        }
+    ],
+    "public": true,
+    "owner": {
+        "$ref": "user.json"
+    },
+    "userGroups": [
+        {
+            "allowedToEdit": true,
+            "userGroup": { "$ref": "userGroup.json" }
+        },
+        {
+            "allowedToEdit": false,
+            "userGroup": { "$ref": "userGroup2.json" }
+        }
+    ],
+    "users": [
+        {
+            "allowedToEdit": true,
+            "user": { "$ref": "user.json" }
+        },
+        {
+            "allowedToEdit": false,
+            "user": { "$ref": "user2.json" }
+        }
+    ],
+    "accessToken": "aldf7U-UUbc1euz8udFaOSfpI9hiuh23zuBRosaBouf"
+}

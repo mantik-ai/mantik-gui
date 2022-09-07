@@ -10,14 +10,18 @@ import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
 import Link from 'next/link'
 import { MenuItem, Stack } from '@mui/material'
-import { NavbarProps } from '../../types/navbarProps'
-import AccountMenu from '../AccountMenu'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
+import { NavbarProps } from '../../types/navbarProps'
+import Notification from '../../../modules/auth/Notification'
+import AccountMenu from '../../../modules/auth/AccountMenu'
+import LoginRegister from '../../../modules/auth/LoginRegister'
 
 const drawerWidth = 240
 
 export default function Navbar(props: NavbarProps) {
     const [mobileOpen, setMobileOpen] = React.useState(false)
+    const session = useSession()
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen)
@@ -108,10 +112,20 @@ export default function Navbar(props: NavbarProps) {
                     <Stack
                         direction={'row'}
                         justifyContent={'end'}
+                        alignItems={'center'}
                         flex={1}
                         spacing={2}
                     >
-                        <AccountMenu />
+                        {session.data ? (
+                            <>
+                                <Notification />
+                                <AccountMenu
+                                    username={session.data.user?.name ?? ''}
+                                />
+                            </>
+                        ) : (
+                            <LoginRegister />
+                        )}
                     </Stack>
                 </Toolbar>
             </AppBar>

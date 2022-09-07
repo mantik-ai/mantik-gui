@@ -30,6 +30,8 @@ paths:
         $ref: './paths/projects/{projectId}/code/usage.yaml'
     /projects/{projectId}/code/{codeRepositoryId}:
         $ref: './paths/projects/{projectId}/code/{codeRepositoryId}.yaml'
+    /projects/{projectId}/code/{codeRepositoryId}/settings:
+        $ref: './paths/projects/{projectId}/code/{codeRepositoryId}/settings.yaml'
     /projects/{projectId}/data:
         $ref: './paths/projects/{projectId}/data.yaml'
     /projects/{projectId}/data/usage:

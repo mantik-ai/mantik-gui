@@ -1,0 +1,80 @@
+{
+    "name": "HPC",
+    "parameters": [
+        {
+            "name": "apiUrl",
+            "description": "UNICORE API URL of the HPC site",
+            "type": "string",
+            "required": true,
+            "default": "https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core"
+        },
+        {
+            "name": "environment",
+            "description": "Environment variables to pass to the job",
+            "type": "map",
+            "required": false
+        },
+        {
+            "name": "project",
+            "description": "Name of the project for compute time accounting",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "queue",
+            "description": "Name of queue (partition) to place the job in",
+            "type": "string",
+            "options": ["batch", "devel", "booster", "develbooster"],
+            "default": "batch",
+            "required": true
+        },
+        {
+            "name": "runtime",
+            "description": "Maximum runtime (walltime) of the job",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "nodes",
+            "description": "Number of compute nodes",
+            "type": "int",
+            "required": false
+        },
+        {
+            "name": "cpuCount",
+            "description": "Total number of CPUs",
+            "type": "int",
+            "required": false
+        },
+        {
+            "name": "cpuCountPerNode",
+            "description": "Number of CPUs per node",
+            "type": "int",
+            "required": false
+        },
+        {
+            "name": "memory",
+            "description": "Memory per node",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "reservation",
+            "description": "Batch system reservation ID",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "nodeConstraints",
+            "description": "Batch system node constraints",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "QoS",
+            "description": "Batch system QoS",
+            "type": "string",
+            "required": false
+        }
+    ]
+}

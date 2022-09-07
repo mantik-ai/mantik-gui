@@ -1,0 +1,21 @@
+type: object
+description: Represents an entry point of a repository
+properties:
+    name:
+        type: string
+    parameters:
+        type: array
+        items:
+            type: object
+            properties:
+                name:
+                    type: string
+                type:
+                    type: string
+                default:
+                    type: string
+            required:
+                - name
+                - type
+required:
+    - name

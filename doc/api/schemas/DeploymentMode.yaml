@@ -1,0 +1,10 @@
+type: object
+description: Represents an deployment mode of a repository
+properties:
+    name:
+        type: string
+    parameters:
+        type: object
+        additionalProperties: {}
+required:
+    - name

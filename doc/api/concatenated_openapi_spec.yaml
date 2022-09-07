@@ -71,6 +71,8 @@ components:
                     type: string
                 uri:
                     type: string
+                commitHash:
+                    type: string
                 description:
                     type: string
                 labels:
@@ -242,6 +244,47 @@ components:
             required:
                 - projectId
                 - owner
+        CodeRepositorySettings:
+            type: object
+            description: Code Repository Settings
+            properties:
+                projectUrl:
+                    type: string
+                environment:
+                    type: string
+                deploymentModes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/DeploymentMode'
+                entryPoints:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/EntryPoint'
+                public:
+                    type: boolean
+                owner:
+                    $ref: '#/components/schemas/User'
+                userGroups:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            userGroup:
+                                $ref: '#/components/schemas/UserGroup'
+                users:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            user:
+                                $ref: '#/components/schemas/User'
+                accessToken:
+                    type: string
+            required: null
         Description:
             type: object
             description: Represents the description of a project
@@ -356,7 +399,7 @@ components:
                                 $ref: '#/components/schemas/DataRepository'
                             connection:
                                 $ref: '#/components/schemas/Connection'
-        Settings:
+        UserSettings:
             type: object
             description: User settings
             properties:
@@ -438,6 +481,39 @@ components:
             properties:
                 apptainerImageUri:
                     type: string
+        EntryPoint:
+            type: object
+            description: Represents an entry point of a repository
+            properties:
+                name:
+                    type: string
+                parameters:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            name:
+                                type: string
+                            type:
+                                type: string
+                            default:
+                                type: string
+                        required:
+                            - name
+                            - type
+            required:
+                - name
+        DeploymentMode:
+            type: object
+            description: Represents an deployment mode of a repository
+            properties:
+                name:
+                    type: string
+                parameters:
+                    type: object
+                    additionalProperties: {}
+            required:
+                - name
     parameters:
         PageLength:
             name: pagelength
@@ -568,7 +644,7 @@ paths:
                                 type: object
                                 properties:
                                     settings:
-                                        $ref: '#/components/schemas/Settings'
+                                        $ref: '#/components/schemas/UserSettings'
         post:
             summary: Updates user settings
             requestBody:
@@ -577,7 +653,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Settings'
+                            $ref: '#/components/schemas/UserSettings'
             responses:
                 '200':
                     description: Successfully updated settings
@@ -617,13 +693,7 @@ paths:
                                               members:
                                                   - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
                                               groups:
-                                                  - userGroupId: 50d8fafb-2541-44ea-a012-da377dcbd9c0
-                                                    name: Maelstrom group
-                                                    admin:
-                                                        $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
-                                                    members:
-                                                        - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                                        - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                                  - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D~1settings/get/responses/200/content/application~1json/examples/exampleModelRepositories/value/userGroups/1/userGroup'
                                               codeRepositories:
                                                   - totalrecords: 2
                                                     codeRepositories:
@@ -888,6 +958,191 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
+    '/projects/{projectId}/code/{codeRepositoryId}/settings':
+        parameters:
+            - name: projectId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+            - name: codeRepositoryId
+              in: path
+              required: true
+              schema:
+                  type: string
+                  format: uuid
+        get:
+            summary: Returns the settings for a specific code repository of a given project
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    settings:
+                                        $ref: '#/components/schemas/CodeRepositorySettings'
+                            examples:
+                                exampleModelRepositories:
+                                    value:
+                                        projectUrl: 'https://mantik.ai/projects/1'
+                                        environment: HPC
+                                        deploymentModes:
+                                            - name: HPC
+                                              parameters:
+                                                  - name: apiUrl
+                                                    description: UNICORE API URL of the HPC site
+                                                    type: string
+                                                    required: true
+                                                    default: 'https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core'
+                                                  - name: environment
+                                                    description: Environment variables to pass to the job
+                                                    type: map
+                                                    required: false
+                                                  - name: project
+                                                    description: Name of the project for compute time accounting
+                                                    type: string
+                                                    required: true
+                                                  - name: queue
+                                                    description: Name of queue (partition) to place the job in
+                                                    type: string
+                                                    options:
+                                                        - batch
+                                                        - devel
+                                                        - booster
+                                                        - develbooster
+                                                    default: batch
+                                                    required: true
+                                                  - name: runtime
+                                                    description: Maximum runtime (walltime) of the job
+                                                    type: string
+                                                    required: false
+                                                  - name: nodes
+                                                    description: Number of compute nodes
+                                                    type: int
+                                                    required: false
+                                                  - name: cpuCount
+                                                    description: Total number of CPUs
+                                                    type: int
+                                                    required: false
+                                                  - name: cpuCountPerNode
+                                                    description: Number of CPUs per node
+                                                    type: int
+                                                    required: false
+                                                  - name: memory
+                                                    description: Memory per node
+                                                    type: string
+                                                    required: false
+                                                  - name: reservation
+                                                    description: Batch system reservation ID
+                                                    type: string
+                                                    required: false
+                                                  - name: nodeConstraints
+                                                    description: Batch system node constraints
+                                                    type: string
+                                                    required: false
+                                                  - name: QoS
+                                                    description: Batch system QoS
+                                                    type: string
+                                                    required: false
+                                            - name: AWS
+                                              parameters:
+                                                  - name: region
+                                                    description: AWS region where to deploy the Sakemaker Endpoint
+                                                    type: string
+                                                    required: true
+                                                  - name: imageUri
+                                                    description: URI to the ECR image
+                                                    type: string
+                                                    required: true
+                                                  - name: modelUri
+                                                    description: URI to the registered model
+                                                    type: string
+                                                    required: true
+                                                  - name: bucket
+                                                    description: Name of the S3 bucket
+                                                    type: string
+                                                    required: true
+                                                  - name: role
+                                                    description: AWS role with the necessary permissions for SageMaker
+                                                    type: string
+                                                    required: true
+                                                  - name: vpcSecurityGroupIds
+                                                    description: VPC security group IDs
+                                                    type: array
+                                                    required: true
+                                                  - name: vpcSubnetIds
+                                                    description: VPC subnets IDs
+                                                    type: array
+                                                    required: true
+                                                  - name: instanceType
+                                                    description: SageMaker instance type
+                                                    type: string
+                                                    default: ml.t3.medium
+                                                    required: true
+                                                  - name: instanceCount
+                                                    description: Number of instances to use
+                                                    type: int
+                                                    required: false
+                                        entryPoints:
+                                            - name: pca-kmeans
+                                              parameters:
+                                                  - name: data
+                                                    type: string
+                                                  - name: n_components
+                                                    type: int
+                                                    default: '3'
+                                                  - name: n_clusters
+                                                    type: int
+                                                    default: '4'
+                                            - name: pca-hdbscan
+                                              parameters:
+                                                  - name: data
+                                                    type: string
+                                                  - name: n_components
+                                                    type: int
+                                                    default: '3'
+                                                  - name: min_cluster_size
+                                                    type: int
+                                                    default: '2'
+                                        public: true
+                                        owner:
+                                            $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                        userGroups:
+                                            - allowedToEdit: true
+                                              userGroup:
+                                                  $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - allowedToEdit: false
+                                              userGroup:
+                                                  userGroupId: 50d8fafb-2541-44ea-a012-da377dcbd9c0
+                                                  name: Maelstrom group
+                                                  admin:
+                                                      $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                                  members:
+                                                      - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                                      - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                        users:
+                                            - allowedToEdit: true
+                                              user:
+                                                  $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            - allowedToEdit: false
+                                              user:
+                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                        accessToken: aldf7U-UUbc1euz8udFaOSfpI9hiuh23zuBRosaBouf
+        post:
+            summary: Updates project settings
+            requestBody:
+                description: Update project settings
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CodeRepositorySettings'
+            responses:
+                '200':
+                    description: Successfully updated project settings
     '/projects/{projectId}/data':
         parameters:
             - name: projectId
