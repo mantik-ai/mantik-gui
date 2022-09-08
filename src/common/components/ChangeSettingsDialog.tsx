@@ -7,40 +7,43 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import * as React from 'react'
 import { QueryKey, UseQueryResult } from 'react-query'
-import { AxiosResponse } from 'axios'
-import useModal from '../hooks/useModal'
 
-interface ChangeSettingsDialogProps<TRes> {
+interface ChangeSettingsDialogProps<TData, TError> {
     title: string
     message: string
     buttonText: string
+    open: boolean
     multiple: boolean
     projectId: string
     onClose: () => void
-    queryHook: () => UseQueryResult<AxiosResponse<TRes>> & {
-        queryKey: QueryKey
-    }
-    autocompleteSelector: (item: TRes) => string
+    queryHook: () => UseQueryResult<TData, TError> & { queryKey: QueryKey }
+    autocompleteSelector: (item: TData) => string
 }
 
-export const ChangeSettingsDialog = <TRes,>(
-    props: ChangeSettingsDialogProps<TRes>
+export const ChangeSettingsDialog = <TData, TError>(
+    props: ChangeSettingsDialogProps<TData, TError>
 ) => {
-    const { open } = useModal()
     const { data, status } = props.queryHook()
+    console.log(data)
+    console.log(props.open)
 
     return (
-        <Dialog fullScreen={true} open={open} onClose={props.onClose}>
+        <Dialog
+            open={props.open}
+            onClose={props.onClose}
+            fullWidth={true}
+            maxWidth={'sm'}
+        >
             <DialogTitle>{props.title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{props.message}</DialogContentText>
-                <Autocomplete
+                <Autocomplete<TData>
                     sx={{ py: 4 }}
                     multiple={props.multiple}
-                    getOptionLabel={(option: TRes) =>
+                    getOptionLabel={(option) =>
                         props.autocompleteSelector(option)
                     }
-                    options={data?.data as unknown as []}
+                    options={data?.data.users}
                     loading={status === 'loading'}
                     renderInput={(params) => (
                         <TextField
@@ -65,7 +68,11 @@ export const ChangeSettingsDialog = <TRes,>(
                 />
             </DialogContent>
             <DialogActions>
-                <Button autoFocus sx={{ color: '#bdbdbd' }}>
+                <Button
+                    autoFocus
+                    sx={{ color: '#bdbdbd' }}
+                    onClick={() => onClose()}
+                >
                     Cancel
                 </Button>
                 <Button variant={'outlined'}>{props.buttonText}</Button>

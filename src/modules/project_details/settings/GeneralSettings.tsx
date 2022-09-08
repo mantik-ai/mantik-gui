@@ -5,7 +5,7 @@ import { ChangeSettingsDialog } from '../../../common/components/ChangeSettingsD
 import { useGetUsers, User } from '../../../common/queries'
 
 export const GeneralSettings = () => {
-    const { toggle } = useModal()
+    const { open, openModal, closeModal } = useModal()
 
     return (
         <>
@@ -58,7 +58,7 @@ export const GeneralSettings = () => {
                     <Typography variant={'body1'}>
                         The project is currently owned by:{' '}
                     </Typography>
-                    <Button variant="outlined" onClick={() => toggle()}>
+                    <Button variant="outlined" onClick={() => openModal()}>
                         Change Owner
                     </Button>
                 </Stack>
@@ -75,9 +75,10 @@ export const GeneralSettings = () => {
                 title={'Change Owner'}
                 message={'Test'}
                 buttonText={'Change Owner'}
+                open={open}
                 multiple={false}
                 projectId={'fe02e72c-ea75-4d31-a154-381e83c6bf13'}
-                onClose={() => {}}
+                onClose={() => closeModal()}
                 queryHook={useGetUsers}
                 autocompleteSelector={(user: User) => user.name}
             />
