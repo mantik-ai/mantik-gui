@@ -8,9 +8,7 @@ import Dialog from '@mui/material/Dialog'
 import * as React from 'react'
 import { QueryKey, UseQueryResult } from 'react-query'
 import { AxiosResponse } from 'axios'
-import { useGetProjectsProjectIdCode } from "../queries";
-import { useRouter } from "next/router";
-import useModal from "../hooks/useModal";
+import useModal from '../hooks/useModal'
 
 interface ChangeSettingsDialogProps<TRes> {
     title: string
@@ -19,17 +17,17 @@ interface ChangeSettingsDialogProps<TRes> {
     multiple: boolean
     projectId: string
     onClose: () => void
-    queryHook: (
-        projectId: number {SearchString}
-    ) => UseQueryResult<AxiosResponse<TRes>> & { queryKey: QueryKey }
+    queryHook: () => UseQueryResult<AxiosResponse<TRes>> & {
+        queryKey: QueryKey
+    }
     autocompleteSelector: (item: TRes) => string
 }
 
 export const ChangeSettingsDialog = <TRes,>(
     props: ChangeSettingsDialogProps<TRes>
 ) => {
-  const { open, toggle } = useModal();
-  const { data, status } = props.queryHook(props.projectId)
+    const { open } = useModal()
+    const { data, status } = props.queryHook()
 
     return (
         <Dialog fullScreen={true} open={open} onClose={props.onClose}>
@@ -38,21 +36,12 @@ export const ChangeSettingsDialog = <TRes,>(
                 <DialogContentText>{props.message}</DialogContentText>
                 <Autocomplete
                     sx={{ py: 4 }}
-                    onChange={(event, value) => {
-                        Array.isArray(value)
-                            ? setSelection(value)
-                            : setSelection(value ? [value] : [])
-                    }}
-                    multiple={data.multiple}
-                    open={openSearch}
-                    onOpen={() => setOpenSearch(true)}
-                    onClose={() => setOpenSearch(false)}
-                    isOptionEqualToValue={(option, value) =>
-                        option.name === value.name
+                    multiple={props.multiple}
+                    getOptionLabel={(option: TRes) =>
+                        props.autocompleteSelector(option)
                     }
-                    getOptionLabel={(option) => option.name}
-                    options={data.options ?? []}
-                    loading={status === "loading"}
+                    options={data?.data as unknown as []}
+                    loading={status === 'loading'}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -61,7 +50,7 @@ export const ChangeSettingsDialog = <TRes,>(
                                 ...params.InputProps,
                                 endAdornment: (
                                     <>
-                                        {data.loading ? (
+                                        {status === 'loading' ? (
                                             <CircularProgress
                                                 color="inherit"
                                                 size={20}
@@ -76,18 +65,10 @@ export const ChangeSettingsDialog = <TRes,>(
                 />
             </DialogContent>
             <DialogActions>
-                <Button
-                    autoFocus
-                    sx={{ color: '#bdbdbd' }}
-                >
+                <Button autoFocus sx={{ color: '#bdbdbd' }}>
                     Cancel
                 </Button>
-                <Button
-                    variant={'outlined'}
-                    disabled={!selection.length}
-                >
-                    {props.buttonText}
-                </Button>
+                <Button variant={'outlined'}>{props.buttonText}</Button>
             </DialogActions>
         </Dialog>
     )

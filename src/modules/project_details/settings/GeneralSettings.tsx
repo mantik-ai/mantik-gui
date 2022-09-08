@@ -1,7 +1,12 @@
 import { Button, Stack, Switch, Typography } from '@mui/material'
 import * as React from 'react'
+import useModal from '../../../common/hooks/useModal'
+import { ChangeSettingsDialog } from '../../../common/components/ChangeSettingsDialog'
+import { useGetUsers, User } from '../../../common/queries'
 
 export const GeneralSettings = () => {
+    const { toggle } = useModal()
+
     return (
         <>
             <div>
@@ -53,7 +58,7 @@ export const GeneralSettings = () => {
                     <Typography variant={'body1'}>
                         The project is currently owned by:{' '}
                     </Typography>
-                    <Button variant="outlined" onClick={() => {}}>
+                    <Button variant="outlined" onClick={() => toggle()}>
                         Change Owner
                     </Button>
                 </Stack>
@@ -66,6 +71,16 @@ export const GeneralSettings = () => {
                     <Typography>public</Typography>
                 </Stack>
             </div>
+            <ChangeSettingsDialog
+                title={'Change Owner'}
+                message={'Test'}
+                buttonText={'Change Owner'}
+                multiple={false}
+                projectId={'fe02e72c-ea75-4d31-a154-381e83c6bf13'}
+                onClose={() => {}}
+                queryHook={useGetUsers}
+                autocompleteSelector={(user: User) => user.name}
+            />
         </>
     )
 }
