@@ -1,80 +1,71 @@
-import { Grid, TextField } from '@mui/material'
+import { Button, Stack, Switch, Typography } from '@mui/material'
+import * as React from 'react'
 
 export const GeneralSettings = () => {
     return (
         <>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-name"
-                        name="project-name"
-                        label="Project Name"
-                        fullWidth
-                        autoComplete="project-name"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-description"
-                        name="project-description"
-                        label="Project Description"
-                        fullWidth
-                        autoComplete="project-description"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-url"
-                        name="project-url"
-                        label="Project URL"
-                        fullWidth
-                        autoComplete="project-url"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-repository"
-                        name="project-repository"
-                        label="Project Repository"
-                        fullWidth
-                        autoComplete="project-repository"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license"
-                        name="project-license"
-                        label="Project License"
-                        fullWidth
-                        autoComplete="project-license"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license-url"
-                        name="project-license-url"
-                        label="Project License URL"
-                        fullWidth
-                        autoComplete="project-license-url"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license-text"
-                        name="project-license-text"
-                        label="Project License Text"
-                        fullWidth
-                        autoComplete="project-license-text"
-                    />
-                </Grid>
-            </Grid>
+            <div>
+                <Typography variant={'h5'}>Project Name</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                >
+                    <Typography variant={'body1'}>@Todo insert</Typography>
+                    <Button variant="outlined" onClick={() => {}}>
+                        Edit Name
+                    </Button>
+                </Stack>
+            </div>
+            <div>
+                <Typography variant={'h5'}>Short Description</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                >
+                    <Typography variant={'body1'}>@Todo insert</Typography>
+                    <Button variant="outlined" onClick={() => {}}>
+                        Edit Description
+                    </Button>
+                </Stack>
+            </div>
+            <div>
+                <Typography variant={'h5'}>Labels</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                >
+                    <Typography variant={'body1'}>@Todo insert</Typography>
+                    <Button variant="outlined" onClick={() => {}}>
+                        Edit Labels
+                    </Button>
+                </Stack>
+            </div>
+            <div>
+                <Typography variant={'h5'}>Owner</Typography>
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                >
+                    <Typography variant={'body1'}>
+                        The project is currently owned by:{' '}
+                    </Typography>
+                    <Button variant="outlined" onClick={() => {}}>
+                        Change Owner
+                    </Button>
+                </Stack>
+            </div>
+            <div>
+                <Typography variant={'h5'}>Visibility</Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                    <Typography>private</Typography>
+                    <Switch checked={false} color="primary" />
+                    <Typography>public</Typography>
+                </Stack>
+            </div>
         </>
     )
 }
