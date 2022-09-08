@@ -73,7 +73,9 @@ export const GeneralSettings = () => {
             </div>
             <ChangeSettingsDialog
                 title={'Change Owner'}
-                message={'Test'}
+                message={
+                    'Please select a user to designate as the owner of this project.'
+                }
                 buttonText={'Change Owner'}
                 open={open}
                 multiple={false}
@@ -81,6 +83,7 @@ export const GeneralSettings = () => {
                 onClose={() => closeModal()}
                 queryHook={useGetUsers}
                 autocompleteSelector={(user: User) => user.name}
+                autocompleteOptions={(data) => data?.data.users}
             />
         </>
     )

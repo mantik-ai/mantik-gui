@@ -18,14 +18,13 @@ interface ChangeSettingsDialogProps<TData, TError> {
     onClose: () => void
     queryHook: () => UseQueryResult<TData, TError> & { queryKey: QueryKey }
     autocompleteSelector: (item: TData) => string
+    autocompleteOptions: (data: any) => ReadonlyArray<any>
 }
 
 export const ChangeSettingsDialog = <TData, TError>(
     props: ChangeSettingsDialogProps<TData, TError>
 ) => {
     const { data, status } = props.queryHook()
-    console.log(data)
-    console.log(props.open)
 
     return (
         <Dialog
@@ -43,7 +42,7 @@ export const ChangeSettingsDialog = <TData, TError>(
                     getOptionLabel={(option) =>
                         props.autocompleteSelector(option)
                     }
-                    options={data?.data.users}
+                    options={props.autocompleteOptions(data)}
                     loading={status === 'loading'}
                     renderInput={(params) => (
                         <TextField
