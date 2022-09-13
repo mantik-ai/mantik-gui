@@ -23,15 +23,10 @@ get:
                         properties:
                             settings:
                                 $ref: '../../../../../schemas/CodeRepositorySettings.yaml'
-
-                    examples:
-                        exampleModelRepositories:
-                            value:
-                                $ref: '../../../../../examples/codeRepositorySettings.json'
 post:
-    summary: Updates project settings
+    summary: Updates the settings for a specific code repository of a given project
     requestBody:
-        description: Update project settings
+        description: Update code repository settings
         required: true
         content:
             application/json:
@@ -39,4 +34,4 @@ post:
                     $ref: '../../../../../schemas/CodeRepositorySettings.yaml'
     responses:
         '200':
-            description: Successfully updated project settings
+            description: Successfully updated code repository settings

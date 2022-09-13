@@ -5,11 +5,9 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
+import type { User } from './user'
 
-/**
- * Code Repository Settings
- */
-export interface CodeRepositorySettings {
-    url: string
-    accessToken?: string
+export type ProjectSettingsUsersItem = {
+    allowedToEdit?: boolean
+    user?: User
 }

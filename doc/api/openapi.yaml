@@ -24,6 +24,8 @@ paths:
         $ref: './paths/projects/user/{userId}.yaml'
     /projects/{projectId}:
         $ref: './paths/projects/{projectId}.yaml'
+    /projects/{projectId}/settings:
+        $ref: './paths/projects/{projectId}/settings.yaml'
     /projects/{projectId}/code:
         $ref: './paths/projects/{projectId}/code.yaml'
     /projects/{projectId}/code/usage:
@@ -38,6 +40,8 @@ paths:
         $ref: './paths/projects/{projectId}/data/usage.yaml'
     /projects/{projectId}/data/{dataRepositoryId}:
         $ref: './paths/projects/{projectId}/data/{dataRepositoryId}.yaml'
+    /projects/{projectId}/data/{dataRepositoryId}/settings:
+        $ref: './paths/projects/{projectId}/data/{dataRepositoryId}/settings.yaml'
     /projects/{projectId}/experiments:
         $ref: './paths/projects/{projectId}/experiments.yaml'
     /projects/{projectId}/experiments/usage:

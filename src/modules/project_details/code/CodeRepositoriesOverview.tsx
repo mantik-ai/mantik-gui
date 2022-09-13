@@ -13,10 +13,7 @@ export const CodeRepositoriesOverview = () => {
         <DataStateIndicator status={status} text="Loading Repositories...">
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 {data?.data.codeRepositories?.map((repo) => (
-                    <CodeRepositoryCard
-                        key={repo.uri}
-                        codeRepository={repo}
-                    ></CodeRepositoryCard>
+                    <CodeRepositoryCard key={repo.uri} codeRepository={repo} />
                 ))}
             </Box>
         </DataStateIndicator>

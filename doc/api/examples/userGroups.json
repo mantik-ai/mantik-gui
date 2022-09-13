@@ -3,6 +3,9 @@
     "userGroups": [
         {
             "$ref": "userGroup.json"
+        },
+        {
+            "$ref": "userGroup2.json"
         }
     ]
 }

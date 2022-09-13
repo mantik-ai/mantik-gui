@@ -7,8 +7,9 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import * as React from 'react'
 import { QueryKey, UseQueryResult } from 'react-query'
+import { AxiosResponse } from 'axios'
 
-interface ChangeSettingsDialogProps<TData, TError> {
+interface ChangeSettingsDialogProps<TData> {
     title: string
     message: string
     buttonText: string
@@ -16,13 +17,17 @@ interface ChangeSettingsDialogProps<TData, TError> {
     multiple: boolean
     projectId: string
     onClose: () => void
-    queryHook: () => UseQueryResult<TData, TError> & { queryKey: QueryKey }
+    queryHook: () => UseQueryResult<AxiosResponse<TData>> & {
+        queryKey: QueryKey
+    }
     autocompleteSelector: (item: TData) => string
-    autocompleteOptions: (data: any) => ReadonlyArray<any>
+    autocompleteOptions: (
+        data: AxiosResponse<TData> | undefined
+    ) => ReadonlyArray<TData>
 }
 
-export const ChangeSettingsDialog = <TData, TError>(
-    props: ChangeSettingsDialogProps<TData, TError>
+export const ChangeSettingsDialog = <TData,>(
+    props: ChangeSettingsDialogProps<TData>
 ) => {
     const { data, status } = props.queryHook()
 
@@ -36,7 +41,7 @@ export const ChangeSettingsDialog = <TData, TError>(
             <DialogTitle>{props.title}</DialogTitle>
             <DialogContent>
                 <DialogContentText>{props.message}</DialogContentText>
-                <Autocomplete<TData>
+                <Autocomplete
                     sx={{ py: 4 }}
                     multiple={props.multiple}
                     getOptionLabel={(option) =>
@@ -70,7 +75,7 @@ export const ChangeSettingsDialog = <TData, TError>(
                 <Button
                     autoFocus
                     sx={{ color: '#bdbdbd' }}
-                    onClick={() => onClose()}
+                    onClick={() => props.onClose()}
                 >
                     Cancel
                 </Button>

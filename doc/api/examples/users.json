@@ -6,6 +6,15 @@
         },
         {
             "$ref": "user2.json"
+        },
+        {
+            "$ref": "user3.json"
+        },
+        {
+            "$ref": "user4.json"
+        },
+        {
+            "$ref": "user5.json"
         }
     ]
 }

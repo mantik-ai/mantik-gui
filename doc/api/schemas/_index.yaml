@@ -26,8 +26,10 @@ Project:
     $ref: './Project.yaml'
 CodeRepositorySettings:
     $ref: './CodeRepositorySettings.yaml'
-Description:
-    $ref: './Description.yaml'
+DataRepositorySettings:
+    $ref: './DataRepositorySettings.yaml'
+ProjectSettings:
+    $ref: './ProjectSettings.yaml'
 Run:
     $ref: './Run.yaml'
 RunsByCodeRepository:

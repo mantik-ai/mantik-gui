@@ -6,8 +6,10 @@ properties:
         format: uuid
     name:
         type: string
-    description:
-        $ref: './Description.yaml'
+    executiveSummary:
+        type: string
+    detailedDescription:
+        type: string
     owner:
         $ref: ./User.yaml
     members:
@@ -33,7 +35,7 @@ properties:
     labels:
         type: array
         items:
-            $ref: './Label.yaml'
+            $ref: ./Label.yaml
 required:
     - projectId
     - owner

@@ -7,9 +7,9 @@
  */
 
 /**
- * Code Repository Settings
+ * Data Repository Settings
  */
-export interface CodeRepositorySettings {
+export interface DataRepositorySettings {
     url: string
     accessToken?: string
 }

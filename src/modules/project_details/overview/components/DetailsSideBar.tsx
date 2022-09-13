@@ -20,11 +20,10 @@ import {
     ListItemText,
     Paper,
     Stack,
-    styled,
     Typography,
     useTheme,
 } from '@mui/material'
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
+import Accordion from '@mui/material/Accordion'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -41,14 +40,6 @@ export const DetailsSideBar = () => {
         (event: React.SyntheticEvent, isExpanded: boolean) => {
             setExpanded(isExpanded ? panel : false)
         }
-
-    const Accordion = styled((props: AccordionProps) => (
-        <MuiAccordion disableGutters elevation={0} {...props} />
-    ))((_) => ({
-        '&.MuiAccordion-root:before': {
-            display: 'none',
-        },
-    }))
 
     const routes: Route[] = [
         {
@@ -134,6 +125,13 @@ export const DetailsSideBar = () => {
                     ))}
                     <Divider />
                     <Accordion
+                        sx={{
+                            '&:before': {
+                                display: 'none',
+                            },
+                        }}
+                        disableGutters
+                        elevation={0}
                         expanded={expanded === 'settings'}
                         onChange={handleChange('settings')}
                     >

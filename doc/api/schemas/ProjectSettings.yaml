@@ -1,22 +1,18 @@
 type: object
-description: Code Repository Settings
+description: Project Settings
 properties:
-    projectUrl:
+    name:
         type: string
-    environment:
+    shortDescription:
         type: string
-    deploymentModes:
-        type: array
-        items:
-            $ref: './DeploymentMode.yaml'
-    entryPoints:
-        type: array
-        items:
-            $ref: './EntryPoint.yaml'
     public:
         type: boolean
+    labels:
+        type: array
+        items:
+            $ref: ./Label.yaml
     owner:
-        $ref: './User.yaml'
+        $ref: ./User.yaml
     userGroups:
         type: array
         items:
@@ -25,7 +21,7 @@ properties:
                 allowedToEdit:
                     type: boolean
                 userGroup:
-                    $ref: './UserGroup.yaml'
+                    $ref: ./UserGroup.yaml
     users:
         type: array
         items:
@@ -34,7 +30,5 @@ properties:
                 allowedToEdit:
                     type: boolean
                 user:
-                    $ref: './User.yaml'
-    accessToken:
-        type: string
+                    $ref: ./User.yaml
 required:
