@@ -7,18 +7,18 @@
  */
 import type { Label } from './label'
 import type { User } from './user'
+import type { ProjectSettingsMembersItem } from './projectSettingsMembersItem'
 import type { ProjectSettingsUserGroupsItem } from './projectSettingsUserGroupsItem'
-import type { ProjectSettingsUsersItem } from './projectSettingsUsersItem'
 
 /**
  * Project Settings
  */
 export interface ProjectSettings {
     name?: string
-    shortDescription?: string
+    executiveSummary?: string
     public?: boolean
     labels?: Label[]
     owner?: User
+    members?: ProjectSettingsMembersItem[]
     userGroups?: ProjectSettingsUserGroupsItem[]
-    users?: ProjectSettingsUsersItem[]
 }

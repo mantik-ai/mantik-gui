@@ -1,46 +1,40 @@
-import * as React from 'react'
+import { createContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import {
+    ProjectSettings,
+    useGetProjectsProjectId,
+} from '../../../../common/queries'
 
-type Action = { type: 'increment' } | { type: 'decrement' }
-type Dispatch = (action: Action) => void
-type State = {
-    projectName: string
-    projectDescription: string
-}
-type ProjectSettingsProviderProps = { children: React.ReactNode }
+const ProjectSettingsContext = createContext<ProjectSettings>({})
 
-const ProjectSettingsContext = React.createContext<
-    { state: State; dispatch: Dispatch } | undefined
->(undefined)
-
-function ProjectSettings(state: State, action: Action) {
-    switch (action.type) {
-        case 'increment': {
-            return { count: state.count + 1 }
-        }
-        default: {
-            throw new Error(`Unhandled action type: ${action.type}`)
-        }
-    }
+interface ProjectSettingsProviderProps {
+    children: React.ReactNode
 }
 
-function ProjectSettingsProvider({ children }: ProjectSettingsProviderProps) {
-    const [state, dispatch] = React.useReducer(ProjectSettings, { count: 0 })
-    const value = { state, dispatch }
+export const ProjectSettingsProvider: React.FC<ProjectSettingsProviderProps> = (
+    props
+) => {
+    const [projectSettings, setProjectSettings] = useState<
+        ProjectSettings | undefined
+    >()
+
+    const router = useRouter()
+    const { id } = router.query
+    const { data, status } = useGetProjectsProjectId(id as string)
+
+    useEffect(() => {
+        setProjectSettings(data?.data)
+    }, [data])
+
     return (
-        <ProjectSettingsContext.Provider value={value}>
-            {children}
+        <ProjectSettingsContext.Provider
+            value={{
+                ...projectSettings,
+            }}
+        >
+            {props.children}
         </ProjectSettingsContext.Provider>
     )
 }
 
-function useProjectSettings() {
-    const context = React.useContext(ProjectSettingsContext)
-    if (context === undefined) {
-        throw new Error(
-            'useProjectSettings must be used within a ProjectSettingsProvider'
-        )
-    }
-    return context
-}
-
-export { ProjectSettingsProvider, useProjectSettings }
+export default ProjectSettingsContext

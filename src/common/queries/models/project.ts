@@ -22,7 +22,7 @@ export interface Project {
     detailedDescription?: string
     owner: User
     members?: User[]
-    groups?: UserGroup[]
+    userGroups?: UserGroup[]
     codeRepositories?: CodeRepository[]
     experimentRepositories?: ExperimentRepository[]
     dataRepositories?: DataRepository[]

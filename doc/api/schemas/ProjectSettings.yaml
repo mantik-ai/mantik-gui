@@ -3,7 +3,7 @@ description: Project Settings
 properties:
     name:
         type: string
-    shortDescription:
+    executiveSummary:
         type: string
     public:
         type: boolean
@@ -13,6 +13,15 @@ properties:
             $ref: ./Label.yaml
     owner:
         $ref: ./User.yaml
+    members:
+        type: array
+        items:
+            type: object
+            properties:
+                allowedToEdit:
+                    type: boolean
+                user:
+                    $ref: ./User.yaml
     userGroups:
         type: array
         items:
@@ -22,13 +31,4 @@ properties:
                     type: boolean
                 userGroup:
                     $ref: ./UserGroup.yaml
-    users:
-        type: array
-        items:
-            type: object
-            properties:
-                allowedToEdit:
-                    type: boolean
-                user:
-                    $ref: ./User.yaml
 required:

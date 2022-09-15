@@ -15,7 +15,6 @@ interface ChangeSettingsDialogProps<TData> {
     buttonText: string
     open: boolean
     multiple: boolean
-    projectId: string
     onClose: () => void
     queryHook: () => UseQueryResult<AxiosResponse<TData>> & {
         queryKey: QueryKey
@@ -26,7 +25,7 @@ interface ChangeSettingsDialogProps<TData> {
     ) => ReadonlyArray<TData>
 }
 
-export const ChangeSettingsDialog = <TData,>(
+export const ChangeCollaborationDialog = <TData,>(
     props: ChangeSettingsDialogProps<TData>
 ) => {
     const { data, status } = props.queryHook()
@@ -53,6 +52,7 @@ export const ChangeSettingsDialog = <TData,>(
                         <TextField
                             {...params}
                             label="User"
+                            size="small"
                             InputProps={{
                                 ...params.InputProps,
                                 endAdornment: (

@@ -24,7 +24,8 @@ export const LabelSelector = () => {
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    variant="standard"
+                    sx={{ py: 4 }}
+                    size="small"
                     placeholder="add..."
                 />
             )}
