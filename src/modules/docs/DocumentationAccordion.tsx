@@ -1,71 +1,41 @@
 import React from 'react'
-import { ExpandMore } from '@mui/icons-material'
 import {
-    AccordionDetails,
-    AccordionSummary,
-    Link,
+    Collapse,
+    Divider,
     List,
     ListItemButton,
     ListItemText,
-    Stack,
-    Typography,
 } from '@mui/material'
-import Accordion from '@mui/material/Accordion'
-import { useRouter } from 'next/router'
 import { Route } from '../../common/types/route'
+import SideBarItem from '../project_details/overview/components/SideBarItem'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 export type DocAccordionProps = { itemName: string; routes?: Route[] }
 export const DocumentationAccordion = (props: DocAccordionProps) => {
-    const router = useRouter()
-    const activeRoute = router.pathname.split('/').at(-1)
-    const [expanded, setExpanded] = React.useState<string | false>(false)
-    const handleChange =
-        (panel: string) =>
-        (event: React.SyntheticEvent, isExpanded: boolean) => {
-            setExpanded(isExpanded ? panel : false)
-        }
+    const [open, setOpen] = React.useState(false)
 
+    const handleClick = () => {
+        setOpen(!open)
+    }
     return (
-        <Accordion
-            sx={{
-                '&:before': {
-                    display: 'none',
-                },
-            }}
-            disableGutters
-            elevation={0}
-            expanded={expanded === 'settings'}
-            onChange={handleChange('settings')}
-        >
-            <AccordionSummary expandIcon={<ExpandMore />}>
-                <Stack direction={'row'}>
-                    <Typography color={'#252525'}>{props.itemName}</Typography>
-                </Stack>
-            </AccordionSummary>
-            <AccordionDetails>
-                <List>
+        <>
+            <Divider />
+            <ListItemButton onClick={handleClick}>
+                <ListItemText primary="Settings" />
+                {open ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
                     {props.routes?.map((route) => (
-                        <Link key={route.name} href={route.path}>
-                            <ListItemButton
-                                key={route.path}
-                                selected={
-                                    route.name.toLowerCase() === activeRoute ||
-                                    (activeRoute === '[id]' &&
-                                        route.name === 'Overview')
-                                }
-                            >
-                                <Typography
-                                    sx={{
-                                        color: '#808080',
-                                        marginRight: '24px',
-                                        marginLeft: '20px',
-                                    }}
-                                ></Typography>
-                                <ListItemText>{route.name}</ListItemText>
-                            </ListItemButton>
-                        </Link>
+                        <SideBarItem
+                            key={route.path}
+                            name={route.name}
+                            icon={<></>}
+                            path={route.path}
+                        />
                     ))}
                 </List>
-            </AccordionDetails>
-        </Accordion>
+            </Collapse>
+            <Divider />
+        </>
     )
 }
