@@ -46,7 +46,7 @@ export const DocumentationAccordion = (props: DocAccordionProps) => {
                     {props.routes?.map((route) => (
                         <Link key={route.name} href={route.path}>
                             <ListItemButton
-                                key={route.name}
+                                key={route.path}
                                 selected={
                                     route.name.toLowerCase() === activeRoute ||
                                     (activeRoute === '[id]' &&

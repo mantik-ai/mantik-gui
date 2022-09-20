@@ -35,7 +35,7 @@ export const DocumentationSideBar = (props: DocSideBarProps) => {
                                 >
                                     <ListItemButton key={node.filename}>
                                         <ListItemText>
-                                            {`${node.filename}`}
+                                            {`${node.name}`}
                                         </ListItemText>
                                     </ListItemButton>
                                 </Link>
@@ -44,7 +44,7 @@ export const DocumentationSideBar = (props: DocSideBarProps) => {
                         if (node.dirname) {
                             return (
                                 <DocumentationAccordion
-                                    itemName={node.dirname}
+                                    itemName={node.name}
                                     key={`${node.path}/${node.dirname}`}
                                     routes={node.dir.map((dirnode) => {
                                         return {

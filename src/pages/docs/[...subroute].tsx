@@ -8,10 +8,14 @@ import { DocumentationSideBar } from '../../modules/docs/DocumentationSideBar'
 import { DocumentationMarkdownPage } from '../../modules/docs/DocumentationMarkdownPage'
 import { readFile } from 'fs/promises'
 
+const DOC_DIRECTORY = './src'
+const DOC_FOLDER_NAME = 'docs'
+
 export type fileTreeNode =
     | {
           filename: string
           markdown: string
+          name: string
           path: string
           dirname: never
           dir: never
@@ -19,6 +23,7 @@ export type fileTreeNode =
     | {
           filename: never
           markdown: never
+          name: string
           path: string
           dirname: string
           dir: fileTreeNode[]
@@ -37,7 +42,7 @@ const Docs: NextPage<DocsPageProps> = (props: DocsPageProps) => {
                 flexDirection: 'column',
             }}
         >
-            <PageHeading description="Search through the documentation of this project.">
+            <PageHeading description="Read the documentation of this project.">
                 Documentation
             </PageHeading>
             <Box
@@ -73,9 +78,14 @@ const Docs: NextPage<DocsPageProps> = (props: DocsPageProps) => {
     )
 }
 
+const convertFilenameToName = (filename: string) => {
+    const name = filename.split('_').join(' ').split('.')[0]
+    return name
+}
+
 export async function getStaticProps() {
     const getFileTree = async (pathstring: string): Promise<fileTreeNode[]> => {
-        const fullpath = path.resolve('./src', pathstring)
+        const fullpath = path.resolve(DOC_DIRECTORY, pathstring)
         const filetree = fs.readdirSync(fullpath, { withFileTypes: true })
         if (filetree.length == 0) ''
 
@@ -88,19 +98,23 @@ export async function getStaticProps() {
                     )
                     return {
                         filename: item.name,
+                        name: convertFilenameToName(item.name),
                         path: pathstring,
                         markdown: markdownFile,
                     } as fileTreeNode
                 } else if (item.isDirectory()) {
                     return {
+                        name: convertFilenameToName(item.name),
                         path: pathstring,
                         dirname: item.name,
                         dir: await getFileTree(`${pathstring}/${item.name}`),
                     } as fileTreeNode
                 }
                 return {
+                    name: '',
                     filename: item.name,
                     path: pathstring,
+
                     markdown: '',
                 } as fileTreeNode
             })
@@ -108,7 +122,7 @@ export async function getStaticProps() {
 
         return tree
     }
-    const docFileTree = await getFileTree('docs')
+    const docFileTree = await getFileTree(DOC_FOLDER_NAME)
 
     return {
         props: {
@@ -121,7 +135,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const paths: string[] = []
 
     const getPaths = (pathstring: string) => {
-        const fullpath = path.resolve('./src', pathstring)
+        const fullpath = path.resolve(DOC_DIRECTORY, pathstring)
         const filetree = fs.readdirSync(fullpath, { withFileTypes: true })
         if (filetree.length == 0) ''
 
@@ -133,7 +147,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
             }
         })
     }
-    getPaths('docs')
+    getPaths(DOC_FOLDER_NAME)
 
     const querypaths = paths.map((p) => {
         return {
@@ -142,6 +156,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
             },
         }
     })
+
+    if (querypaths.length <= 0) {
+        throw new Error('Documentation not found')
+    }
 
     return {
         paths: querypaths,
