@@ -20,7 +20,9 @@ export interface ProjectSettingsParameters {
     setMembers: (x: ProjectMembersItem[]) => void
 }
 
-const ProjectSettingsContext = createContext<ProjectSettingsParameters>({})
+const ProjectSettingsContext = createContext<
+    Partial<ProjectSettingsParameters>
+>({})
 
 interface ProjectSettingsProviderProps {
     children: React.ReactNode

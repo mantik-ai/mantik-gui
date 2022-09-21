@@ -15,7 +15,7 @@ interface ChangeSettingsDialogProps<TData> {
     open: boolean
     multiple: boolean
     onClose: () => void
-    onSave: (value: TData) => void
+    onSave: (value: TData | TData[]) => void
     queryHook: () => UseQueryResult<AxiosResponse<TData>> & {
         queryKey: QueryKey
     }
@@ -26,11 +26,11 @@ interface ChangeSettingsDialogProps<TData> {
     defaultValue: TData | TData[]
 }
 
-export const CollaborationDialog = <TData,>(
+export const CollaborationDialog = <TData extends { name: string }>(
     props: ChangeSettingsDialogProps<TData>
 ) => {
     const { data, status } = props.queryHook()
-    const [value, setValue] = React.useState<TData | null>(null)
+    const [value, setValue] = React.useState<TData | TData[] | null>(null)
 
     return (
         <Dialog
@@ -49,7 +49,7 @@ export const CollaborationDialog = <TData,>(
                     getOptionLabel={(option) =>
                         props.autocompleteSelector(option)
                     }
-                    isOptionEqualToValue={(opt, val) => opt?.name === val?.name}
+                    isOptionEqualToValue={(opt, val) => opt.name === val.name}
                     defaultValue={props.defaultValue}
                     options={props.autocompleteOptions(data)}
                     loading={status === 'loading'}
@@ -87,7 +87,11 @@ export const CollaborationDialog = <TData,>(
                 <Button
                     variant={'outlined'}
                     onClick={() => {
-                        props.onSave(value as TData)
+                        props.onSave(
+                            props.multiple
+                                ? (value as TData[])
+                                : (value as TData)
+                        )
                         props.onClose()
                     }}
                 >
