@@ -8,27 +8,23 @@ import {
     ModelTrainingOutlined,
     OnlinePredictionOutlined,
     ExpandMore,
+    ExpandLess,
 } from '@mui/icons-material'
 import {
-    AccordionDetails,
-    AccordionSummary,
     Box,
+    Collapse,
     Divider,
     List,
     ListItemButton,
     ListItemIcon,
     ListItemText,
     Paper,
-    Stack,
-    styled,
-    Typography,
     useTheme,
 } from '@mui/material'
-import MuiAccordion, { AccordionProps } from '@mui/material/Accordion'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { Route } from '../../../../common/types/route'
+import SideBarItem from './SideBarItem'
 
 export const DetailsSideBar = () => {
     const router = useRouter()
@@ -36,19 +32,16 @@ export const DetailsSideBar = () => {
     const activeRoute = router.pathname.split('/').at(-1)
     const theme = useTheme()
     const [expanded, setExpanded] = React.useState<string | false>(false)
+    const [open, setOpen] = React.useState(true)
+
+    const handleClick = () => {
+        setOpen(!open)
+    }
     const handleChange =
         (panel: string) =>
         (event: React.SyntheticEvent, isExpanded: boolean) => {
             setExpanded(isExpanded ? panel : false)
         }
-
-    const Accordion = styled((props: AccordionProps) => (
-        <MuiAccordion disableGutters elevation={0} {...props} />
-    ))((_) => ({
-        '&.MuiAccordion-root:before': {
-            display: 'none',
-        },
-    }))
 
     const routes: Route[] = [
         {
@@ -110,80 +103,39 @@ export const DetailsSideBar = () => {
             sx={{
                 flex: 1,
                 p: theme.spacing(2),
+                minWidth: 300,
             }}
         >
             <Paper sx={{ height: '100%' }}>
                 <List sx={{ height: '100%' }}>
                     {routes.map((route) => (
-                        <Link
-                            key={route.name}
-                            href={`/projects/details/${route.path}`}
-                        >
-                            <ListItemButton
-                                key={route.name}
-                                selected={
-                                    route.name.toLowerCase() === activeRoute ||
-                                    (activeRoute === '[id]' &&
-                                        route.name === 'Overview')
-                                }
-                            >
-                                <ListItemIcon>{route.icon}</ListItemIcon>
-                                <ListItemText>{route.name}</ListItemText>
-                            </ListItemButton>
-                        </Link>
+                        <SideBarItem
+                            key={route.path}
+                            name={route.name}
+                            path={`/projects/details/${route.path}`}
+                            icon={route.icon}
+                        />
                     ))}
                     <Divider />
-                    <Accordion
-                        expanded={expanded === 'settings'}
-                        onChange={handleChange('settings')}
-                    >
-                        <AccordionSummary expandIcon={<ExpandMore />}>
-                            <Stack direction={'row'}>
-                                <SettingsOutlined
-                                    sx={{
-                                        color: '#808080',
-                                        marginRight: '32px',
-                                    }}
+                    <ListItemButton onClick={handleClick}>
+                        <ListItemIcon>
+                            <SettingsOutlined />
+                        </ListItemIcon>
+                        <ListItemText primary="Settings" />
+                        {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            {settingRoutes.map((route) => (
+                                <SideBarItem
+                                    key={route.path}
+                                    name={route.name}
+                                    icon={<></>}
+                                    path={`/projects/details/${route.path}`}
                                 />
-                                <Typography color={'#252525'}>
-                                    Settings
-                                </Typography>
-                            </Stack>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <List>
-                                {settingRoutes.map((route) => (
-                                    <Link
-                                        key={route.name}
-                                        href={`/projects/details/${route.path}`}
-                                    >
-                                        <ListItemButton
-                                            key={route.name}
-                                            selected={
-                                                route.name.toLowerCase() ===
-                                                    activeRoute ||
-                                                (activeRoute === '[id]' &&
-                                                    route.name === 'Overview')
-                                            }
-                                        >
-                                            <Typography
-                                                sx={{
-                                                    color: '#808080',
-                                                    marginRight: '24px',
-                                                    marginLeft: '20px',
-                                                }}
-                                            >
-                                                -
-                                            </Typography>
-                                            <ListItemText>
-                                                {route.name}
-                                            </ListItemText>
-                                        </ListItemButton>
-                                    </Link>
-                                ))}
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
+                            ))}
+                        </List>
+                    </Collapse>
                     <Divider />
                 </List>
             </Paper>

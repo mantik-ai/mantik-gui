@@ -26,7 +26,7 @@ export default function SideBarItem({
 
     return (
         <Link key={name} href={path}>
-            <ListItemButton key={name} selected={false}>
+            <ListItemButton key={name} selected={isSelected}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText>{name}</ListItemText>
             </ListItemButton>

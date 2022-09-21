@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Chip, Paper, useTheme } from '@mui/material'
+import { Box, Chip, useTheme } from '@mui/material'
 import { Label } from '../queries'
 
 interface LabelArrayProps {

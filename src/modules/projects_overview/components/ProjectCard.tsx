@@ -24,7 +24,7 @@ export const ProjectCard = (props: ProjectEntryProps) => {
             ></CardHeader>
             <CardContent sx={{ pb: 0 }}>
                 <Typography variant="body1">
-                    {props.project.description?.short}
+                    {props.project.executiveSummary}
                 </Typography>
                 <LabelArray labels={props.project.labels}></LabelArray>
             </CardContent>

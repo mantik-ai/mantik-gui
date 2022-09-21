@@ -1,12 +1,18 @@
 {
     "userGroupId": "3d27324b-fc31-4367-99b3-f9dc007768ee",
-    "name": "Ambrosys Team Green",
+    "name": "Ambrosys Team",
     "admin": {
-        "$ref": "user.json"
+        "$ref": "user5.json"
     },
     "members": [
         {
             "$ref": "user.json"
+        },
+        {
+            "$ref": "user3.json"
+        },
+        {
+            "$ref": "user4.json"
         }
     ]
 }

@@ -18,7 +18,7 @@ export const DetailsRunsTableToolbar = (
                     id="tableTitle"
                     component="div"
                 >
-                    Experiments
+                    Runs
                 </Typography>
                 <Button variant="text" onClick={() => props.openDialog()}>
                     <Add></Add>Add

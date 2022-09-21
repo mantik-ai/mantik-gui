@@ -48,7 +48,7 @@ get:
         search parameters
     responses:
         '200':
-            description: Successully returned projects that match the search
+            description: Successfully returned projects that match the search
             content:
                 application/json:
                     schema:

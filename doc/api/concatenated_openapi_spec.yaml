@@ -28,6 +28,8 @@ components:
                     type: string
                 uri:
                     type: string
+                accessToken:
+                    type: string
                 description:
                     type: string
                 labels:
@@ -71,7 +73,7 @@ components:
                     type: string
                 uri:
                     type: string
-                commitHash:
+                accessToken:
                     type: string
                 description:
                     type: string
@@ -213,18 +215,30 @@ components:
                     format: uuid
                 name:
                     type: string
-                description:
-                    $ref: '#/components/schemas/Description'
+                executiveSummary:
+                    type: string
+                detailedDescription:
+                    type: string
                 owner:
                     $ref: '#/components/schemas/User'
                 members:
                     type: array
                     items:
-                        $ref: '#/components/schemas/User'
-                groups:
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            user:
+                                $ref: '#/components/schemas/User'
+                userGroups:
                     type: array
                     items:
-                        $ref: '#/components/schemas/UserGroup'
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            userGroup:
+                                $ref: '#/components/schemas/UserGroup'
                 codeRepositories:
                     type: array
                     items:
@@ -241,58 +255,11 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/Label'
+                public:
+                    type: boolean
             required:
                 - projectId
                 - owner
-        CodeRepositorySettings:
-            type: object
-            description: Code Repository Settings
-            properties:
-                projectUrl:
-                    type: string
-                environment:
-                    type: string
-                deploymentModes:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/DeploymentMode'
-                entryPoints:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/EntryPoint'
-                public:
-                    type: boolean
-                owner:
-                    $ref: '#/components/schemas/User'
-                userGroups:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            allowedToEdit:
-                                type: boolean
-                            userGroup:
-                                $ref: '#/components/schemas/UserGroup'
-                users:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            allowedToEdit:
-                                type: boolean
-                            user:
-                                $ref: '#/components/schemas/User'
-                accessToken:
-                    type: string
-            required: null
-        Description:
-            type: object
-            description: Represents the description of a project
-            properties:
-                short:
-                    type: string
-                long:
-                    type: string
         Run:
             type: object
             description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
@@ -556,12 +523,19 @@ paths:
                             examples:
                                 exampleUsers:
                                     value:
-                                        totalrecords: 2
+                                        totalrecords: 5
                                         users:
                                             - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
                                             - userId: 58e40243-6dc1-42c6-bbab-cd39f087c86b
                                               name: Kristian Ehlert
                                               email: kristian.ehlert@4-cast.de
+                                            - userId: a8f831b6-ac1e-4172-88f4-9ecabd6c513d
+                                              name: Philipp Lehmann
+                                              email: philipp.lehmann@pcode.at
+                                            - userId: aec38e96-b39e-4849-bec8-cb11828da29a
+                                              name: Daniel Weidinger
+                                              email: daniel.weidinger@pcode.at
+                                            - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value/admin'
         put:
             summary: Creates a new user
             requestBody:
@@ -590,6 +564,28 @@ paths:
                                     userId:
                                         type: string
                                         format: uuid
+    /users/search:
+        parameters:
+            - name: searchString
+              in: query
+              schema:
+                  type: string
+        get:
+            summary: Return a curation of users by searchString
+            responses:
+                '200':
+                    description: Successfully returned users that match the search
+                    content:
+                        application/json:
+                            schema:
+                                users:
+                                    type: array
+                                    items:
+                                        $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUsers:
+                                    value:
+                                        $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value'
     '/users/{userId}':
         parameters:
             - name: userId
@@ -693,7 +689,7 @@ paths:
                                               members:
                                                   - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
                                               groups:
-                                                  - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code~1%7BcodeRepositoryId%7D~1settings/get/responses/200/content/application~1json/examples/exampleModelRepositories/value/userGroups/1/userGroup'
+                                                  - $ref: '#/paths/~1groups/get/responses/200/content/application~1json/examples/exampleUserGroups/value/userGroups/1'
                                               codeRepositories:
                                                   - totalrecords: 2
                                                     codeRepositories:
@@ -803,15 +799,25 @@ paths:
                                     value:
                                         projectId: fe02e72c-ea75-4d31-a154-381e83c6bf13
                                         name: Maelstrom Application 6 - Large-Scale Weather Regime Classification
-                                        description:
-                                            short: Classification of large-scale weather regimes for power prediction of renewable energy resources
-                                            long: '# PCA and Clustering of Weather Data Features\n\nThe goal is to classify large-scale weather regimes (LSWRs) by performing a PCA on timeseries data containing multiple phyiscal quantities on a large grid covering the whole of Europe.\nClassification is done by applying a clustering algorithm on the data that assigns each individual time step to a cluster, where outliers are allowed.\n\nTo allow classification of timeseries grid data, we apply a dimensionality reduction algorithm (PCA) and transform the original data into PC space. The PC space is a multi-dimensional space that represents the phase space of the dynamical system described by the data. To avoid the curse of dimensions, we use only a reduced amount of PCs for the transformation such that the PCs reflect most of the variance of the data.\n\nFor clustering the states of the dynamical system in PC space, we use the [hierarchical density-based spatial clustering algorithm for applications with noise (HDBSCAN)](https://arxiv.org/abs/1911.02282), which is a modification of the [DBSCAN](https://dl.acm.org/doi/10.5555/3001460.3001507) algorithm.\n\n## PCA\n\nThe PCA is performed on the whole dataset, whereas only 3 PCs are kept for the transformation. This is because we only have `10^3` data samples. Choosing more PCs would require more data (curse of dimensions). I.e., using `N` PCs would require at least `10^N` samples.\n\n## Clustering\n\nBefore applying the clustering, the data are transformed into the 3-D sub-space of the PC-space. The result reflects the phase space containing all states of the dynamical system throughout the given time span.\n\nWithin this space, we perform a clustering to find reoccuring states of the system. Each cluster represents a LSWR, i.e. all clusters represent the ensemble of LSWRs that our system resided in during the given time range. Each data point in a cluster hence reflects the time steps within the timeseries where the LSWR of the respective cluster appeared.\n\n## Statistical Analysis of the Clusters\n\nThe clusters (LSWRs) are then statistically analyzed such that we retrieve information about the LSWRs in general (total abundance, mean and standard deviation of their duration). In addition, we visualize the appearance of individual LSWR clusters at all time steps.\n'
+                                        executiveSummary: Classification of large-scale weather regimes for power prediction of renewable energy resources.
+                                        detailedDescription: '# PCA and Clustering of Weather Data Features\n\nThe goal is to classify large-scale weather regimes (LSWRs) by performing a PCA on timeseries data containing multiple phyiscal quantities on a large grid covering the whole of Europe.\nClassification is done by applying a clustering algorithm on the data that assigns each individual time step to a cluster, where outliers are allowed.\n\nTo allow classification of timeseries grid data, we apply a dimensionality reduction algorithm (PCA) and transform the original data into PC space. The PC space is a multi-dimensional space that represents the phase space of the dynamical system described by the data. To avoid the curse of dimensions, we use only a reduced amount of PCs for the transformation such that the PCs reflect most of the variance of the data.\n\nFor clustering the states of the dynamical system in PC space, we use the [hierarchical density-based spatial clustering algorithm for applications with noise (HDBSCAN)](https://arxiv.org/abs/1911.02282), which is a modification of the [DBSCAN](https://dl.acm.org/doi/10.5555/3001460.3001507) algorithm.\n\n## PCA\n\nThe PCA is performed on the whole dataset, whereas only 3 PCs are kept for the transformation. This is because we only have `10^3` data samples. Choosing more PCs would require more data (curse of dimensions). I.e., using `N` PCs would require at least `10^N` samples.\n\n## Clustering\n\nBefore applying the clustering, the data are transformed into the 3-D sub-space of the PC-space. The result reflects the phase space containing all states of the dynamical system throughout the given time span.\n\nWithin this space, we perform a clustering to find reoccuring states of the system. Each cluster represents a LSWR, i.e. all clusters represent the ensemble of LSWRs that our system resided in during the given time range. Each data point in a cluster hence reflects the time steps within the timeseries where the LSWR of the respective cluster appeared.\n\n## Statistical Analysis of the Clusters\n\nThe clusters (LSWRs) are then statistically analyzed such that we retrieve information about the LSWRs in general (total abundance, mean and standard deviation of their duration). In addition, we visualize the appearance of individual LSWR clusters at all time steps.\n'
                                         owner:
                                             $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
                                         members:
-                                            - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                        groups:
-                                            - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - allowedToEdit: false
+                                              user:
+                                                  $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            - allowedToEdit: true
+                                              user:
+                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                        userGroups:
+                                            - allowedToEdit: true
+                                              userGroup:
+                                                  $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - allowedToEdit: false
+                                              userGroup:
+                                                  $ref: '#/paths/~1groups/get/responses/200/content/application~1json/examples/exampleUserGroups/value/userGroups/1'
+                                        public: false
                                         codeRepositories:
                                             - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code/get/responses/200/content/application~1json/examples/exampleProject/value'
                                         experimentRepositories:
@@ -944,8 +950,7 @@ paths:
                                         uri: 'https://github.com/mantik-ai/tutorials'
                                         description: GitHub repo containing examples on how to use mantik
                                         labels:
-                                            - scope: github-repo
-                                              name: Tutorials
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/5'
         post:
             summary: Updates code repository
             requestBody:
@@ -958,191 +963,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-    '/projects/{projectId}/code/{codeRepositoryId}/settings':
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-            - name: codeRepositoryId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-        get:
-            summary: Returns the settings for a specific code repository of a given project
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    settings:
-                                        $ref: '#/components/schemas/CodeRepositorySettings'
-                            examples:
-                                exampleModelRepositories:
-                                    value:
-                                        projectUrl: 'https://mantik.ai/projects/1'
-                                        environment: HPC
-                                        deploymentModes:
-                                            - name: HPC
-                                              parameters:
-                                                  - name: apiUrl
-                                                    description: UNICORE API URL of the HPC site
-                                                    type: string
-                                                    required: true
-                                                    default: 'https://zam2125.zam.kfa-juelich.de:9112/JUWELS/rest/core'
-                                                  - name: environment
-                                                    description: Environment variables to pass to the job
-                                                    type: map
-                                                    required: false
-                                                  - name: project
-                                                    description: Name of the project for compute time accounting
-                                                    type: string
-                                                    required: true
-                                                  - name: queue
-                                                    description: Name of queue (partition) to place the job in
-                                                    type: string
-                                                    options:
-                                                        - batch
-                                                        - devel
-                                                        - booster
-                                                        - develbooster
-                                                    default: batch
-                                                    required: true
-                                                  - name: runtime
-                                                    description: Maximum runtime (walltime) of the job
-                                                    type: string
-                                                    required: false
-                                                  - name: nodes
-                                                    description: Number of compute nodes
-                                                    type: int
-                                                    required: false
-                                                  - name: cpuCount
-                                                    description: Total number of CPUs
-                                                    type: int
-                                                    required: false
-                                                  - name: cpuCountPerNode
-                                                    description: Number of CPUs per node
-                                                    type: int
-                                                    required: false
-                                                  - name: memory
-                                                    description: Memory per node
-                                                    type: string
-                                                    required: false
-                                                  - name: reservation
-                                                    description: Batch system reservation ID
-                                                    type: string
-                                                    required: false
-                                                  - name: nodeConstraints
-                                                    description: Batch system node constraints
-                                                    type: string
-                                                    required: false
-                                                  - name: QoS
-                                                    description: Batch system QoS
-                                                    type: string
-                                                    required: false
-                                            - name: AWS
-                                              parameters:
-                                                  - name: region
-                                                    description: AWS region where to deploy the Sakemaker Endpoint
-                                                    type: string
-                                                    required: true
-                                                  - name: imageUri
-                                                    description: URI to the ECR image
-                                                    type: string
-                                                    required: true
-                                                  - name: modelUri
-                                                    description: URI to the registered model
-                                                    type: string
-                                                    required: true
-                                                  - name: bucket
-                                                    description: Name of the S3 bucket
-                                                    type: string
-                                                    required: true
-                                                  - name: role
-                                                    description: AWS role with the necessary permissions for SageMaker
-                                                    type: string
-                                                    required: true
-                                                  - name: vpcSecurityGroupIds
-                                                    description: VPC security group IDs
-                                                    type: array
-                                                    required: true
-                                                  - name: vpcSubnetIds
-                                                    description: VPC subnets IDs
-                                                    type: array
-                                                    required: true
-                                                  - name: instanceType
-                                                    description: SageMaker instance type
-                                                    type: string
-                                                    default: ml.t3.medium
-                                                    required: true
-                                                  - name: instanceCount
-                                                    description: Number of instances to use
-                                                    type: int
-                                                    required: false
-                                        entryPoints:
-                                            - name: pca-kmeans
-                                              parameters:
-                                                  - name: data
-                                                    type: string
-                                                  - name: n_components
-                                                    type: int
-                                                    default: '3'
-                                                  - name: n_clusters
-                                                    type: int
-                                                    default: '4'
-                                            - name: pca-hdbscan
-                                              parameters:
-                                                  - name: data
-                                                    type: string
-                                                  - name: n_components
-                                                    type: int
-                                                    default: '3'
-                                                  - name: min_cluster_size
-                                                    type: int
-                                                    default: '2'
-                                        public: true
-                                        owner:
-                                            $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                        userGroups:
-                                            - allowedToEdit: true
-                                              userGroup:
-                                                  $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
-                                            - allowedToEdit: false
-                                              userGroup:
-                                                  userGroupId: 50d8fafb-2541-44ea-a012-da377dcbd9c0
-                                                  name: Maelstrom group
-                                                  admin:
-                                                      $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
-                                                  members:
-                                                      - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                                      - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
-                                        users:
-                                            - allowedToEdit: true
-                                              user:
-                                                  $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                            - allowedToEdit: false
-                                              user:
-                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
-                                        accessToken: aldf7U-UUbc1euz8udFaOSfpI9hiuh23zuBRosaBouf
-        post:
-            summary: Updates project settings
-            requestBody:
-                description: Update project settings
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CodeRepositorySettings'
-            responses:
-                '200':
-                    description: Successfully updated project settings
     '/projects/{projectId}/data':
         parameters:
             - name: projectId
@@ -1253,8 +1073,7 @@ paths:
                                         uri: 'https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc'
                                         description: 'The underlying data is taken from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data covers a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contains `~10^3` samples.'
                                         labels:
-                                            - scope: weather-model
-                                              name: ECMWF IFS HRES
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/6'
         post:
             summary: Update data repository
             requestBody:
@@ -1615,7 +1434,7 @@ paths:
             summary: Return a curation of projects tailored for a specific user with a set of search parameters
             responses:
                 '200':
-                    description: Successully returned projects that match the search
+                    description: Successfully returned projects that match the search
                     content:
                         application/json:
                             schema:
@@ -1838,6 +1657,13 @@ paths:
                                         totalrecords: 1
                                         userGroups:
                                             - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - userGroupId: 50d8fafb-2541-44ea-a012-da377dcbd9c0
+                                              name: Maelstrom group
+                                              admin:
+                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                              members:
+                                                  - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                                  - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
         put:
             summary: Create a new user group
             requestBody:
@@ -1878,11 +1704,15 @@ paths:
                                 exampleUserGroup:
                                     value:
                                         userGroupId: 3d27324b-fc31-4367-99b3-f9dc007768ee
-                                        name: Ambrosys Team Green
+                                        name: Ambrosys Team
                                         admin:
-                                            $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            userId: 130bd078-e792-4fdb-944c-ad6f692647af
+                                            name: Markus Abel
+                                            email: markus.abel@ambrosys.de
                                         members:
                                             - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/2'
+                                            - $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/3'
         post:
             summary: Update group
             requestBody:
@@ -2062,7 +1892,7 @@ paths:
                             examples:
                                 exampleLabels:
                                     value:
-                                        totalrecords: 5
+                                        totalrecords: 7
                                         labels:
                                             - scope: problem-type
                                               name: Classification
@@ -2074,3 +1904,7 @@ paths:
                                               name: Natural Language Processing
                                             - scope: problem-type
                                               name: Text Classification
+                                            - scope: github-repo
+                                              name: Tutorials
+                                            - scope: weather-model
+                                              name: ECMWF IFS HRES

@@ -12,28 +12,33 @@ const Register: NextPage = () => {
                 <TextField
                     key="register-firstname"
                     label="first name"
+                    size="small"
                     required
                 />,
                 <TextField
                     key="register-lastname"
                     label="last name"
+                    size="small"
                     required
                 />,
                 <TextField
                     key="register-email"
                     label="email"
+                    size="small"
                     type={'email'}
                     required
                 />,
                 <TextField
                     key="register-password"
                     label="password"
+                    size="small"
                     type="password"
                     required
                 />,
                 <TextField
                     key="register-password-confirm"
                     label="password confirmation"
+                    size="small"
                     type={'password'}
                     required
                 />,
