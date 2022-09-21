@@ -1,9 +1,0 @@
-type: object
-description: Data Repository Settings
-properties:
-    url:
-        type: string
-    accessToken:
-        type: string
-required:
-    - url

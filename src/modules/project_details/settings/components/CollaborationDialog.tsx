@@ -12,7 +12,6 @@ import { AxiosResponse } from 'axios'
 interface ChangeSettingsDialogProps<TData> {
     title: string
     message: string
-    buttonText: string
     open: boolean
     multiple: boolean
     onClose: () => void
@@ -70,6 +69,7 @@ export const ChangeCollaborationDialog = <TData,>(
                         />
                     )}
                 />
+
             </DialogContent>
             <DialogActions>
                 <Button
@@ -79,7 +79,7 @@ export const ChangeCollaborationDialog = <TData,>(
                 >
                     Cancel
                 </Button>
-                <Button variant={'outlined'}>{props.buttonText}</Button>
+                <Button variant={'outlined'}>Save Changes</Button>
             </DialogActions>
         </Dialog>
     )
