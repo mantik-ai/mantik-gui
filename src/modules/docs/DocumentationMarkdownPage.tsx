@@ -1,6 +1,4 @@
-import { useTheme } from '@emotion/react'
-import { Paper, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Box, Paper, Typography, useTheme } from '@mui/material'
 import { fileTreeNode } from '../../pages/docs/[...subroute]'
 import { MarkdownWrapper } from './MarkdownWrapper'
 type DocsProps = {
