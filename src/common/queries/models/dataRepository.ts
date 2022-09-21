@@ -14,7 +14,7 @@ export interface DataRepository {
     dataRepositoryId: string
     dataRepositoryName?: string
     uri: string
-    commitHash?: string
+    accessToken?: string
     description?: string
     labels?: Label[]
 }

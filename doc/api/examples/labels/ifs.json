@@ -1,4 +1,4 @@
 {
-  "scope": "weather-model",
-  "name": "ECMWF IFS HRES"
+    "scope": "weather-model",
+    "name": "ECMWF IFS HRES"
 }

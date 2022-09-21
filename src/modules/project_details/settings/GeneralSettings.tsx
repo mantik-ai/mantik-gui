@@ -1,50 +1,32 @@
-import { Box, Stack, Switch, Typography } from '@mui/material'
+import { Stack, Switch, Typography } from '@mui/material'
 import * as React from 'react'
 import { useContext } from 'react'
-import { useGetUsers, User } from '../../../common/queries'
-import EditTextContainer from './EditTextContainer'
-import EditLabelsContainer from './EditLabelsContainer'
-import EditCollaborationContainer from './EditCollaborationContainer'
+import EditTextContainer from './components/EditTextContainer'
+import EditLabelsContainer from './components/EditLabelsContainer'
 import ProjectSettingsContext from './contexts/ProjectSettingsContext'
+import EditOwnerContainer from './components/EditOwnerContainer'
 
 export const GeneralSettings = () => {
-    const settings = useContext(ProjectSettingsContext)
-
+    const context = useContext(ProjectSettingsContext)
     return (
         <>
             <EditTextContainer
                 title={'Project Name'}
-                buttonText={'Edit Name'}
-                data={settings.name}
-                onReset={() => settings.setName(settings.name)}
+                data={context.settings?.name}
+                onSave={(name) => context.setName(name)}
             />
             <EditTextContainer
                 title={'Executive Summary (for Teaser)'}
-                buttonText={'Edit Summary'}
-                data={settings.executiveSummary}
+                data={context.settings?.executiveSummary}
+                onSave={(summary) => context.setSummary(summary)}
             />
             <EditLabelsContainer
                 title={'Labels'}
-                buttonText={'Edit Labels'}
-                message={'Add or remove labels for the project'}
+                message={'Add or remove labels for the project.'}
+                labels={context.settings?.labels ?? []}
+                onSave={(labels) => context.setLabels(labels)}
             />
-            <EditCollaborationContainer
-                title={'Owner'}
-                message={
-                    'Please select a user to designate as the owner of this project. Please be aware that this action can only be undone by the new owner.'
-                }
-                data={
-                    <Box ml={'14px'}>
-                        The project is currently owned by{' '}
-                        <b>{settings.owner?.name}</b>
-                    </Box>
-                }
-                buttonText={'Change Owner'}
-                multiple={false}
-                queryHook={useGetUsers}
-                autocompleteSelector={(user: User) => user.name}
-                autocompleteOptions={(option) => option?.data.users ?? []}
-            />
+            <EditOwnerContainer />
             <div>
                 <Typography variant={'h5'}>Visibility</Typography>
                 <Stack
@@ -55,7 +37,13 @@ export const GeneralSettings = () => {
                     alignItems="center"
                 >
                     <Typography>private</Typography>
-                    <Switch color="primary" />
+                    <Switch
+                        color="primary"
+                        checked={context.settings?.public}
+                        onChange={(e) =>
+                            context.setIsPublic(e.target.value === 'on')
+                        }
+                    />
                     <Typography>public</Typography>
                 </Stack>
             </div>

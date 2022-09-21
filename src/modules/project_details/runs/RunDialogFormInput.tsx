@@ -14,6 +14,7 @@ export const RunDialogFormInput = <T,>(props: RunDialogFormInput<T>) => {
         <FormControl>
             <FormLabel id={`label-${idSuffix}`}>{props.name}</FormLabel>
             <Select
+                size={'small'}
                 labelId={`label-select-${idSuffix}`}
                 id={`select-${idSuffix}`}
                 value={selected ?? '<undefined>'}

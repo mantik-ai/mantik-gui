@@ -21,6 +21,7 @@ import type {
     GetUsersParams,
     PutUsers201,
     PutUsersBody,
+    GetUsersSearchParams,
     User,
     GetUsersUserIdSettings200,
     UserSettings,
@@ -30,24 +31,18 @@ import type {
     Project,
     GetProjectsUserUserId200,
     GetProjectsUserUserIdParams,
-    GetProjectsProjectIdSettings200,
-    ProjectSettings,
     GetProjectsProjectIdCode200,
     GetProjectsProjectIdCodeParams,
     PutProjectsProjectIdCode201,
     CodeRepository,
     GetProjectsProjectIdCodeUsage200,
     GetProjectsProjectIdCodeUsageParams,
-    GetProjectsProjectIdCodeCodeRepositoryIdSettings200,
-    CodeRepositorySettings,
     GetProjectsProjectIdData200,
     GetProjectsProjectIdDataParams,
     PutProjectsProjectIdData201,
     DataRepository,
     GetProjectsProjectIdDataUsage200,
     GetProjectsProjectIdDataUsageParams,
-    GetProjectsProjectIdDataDataRepositoryIdSettings200,
-    DataRepositorySettings,
     GetProjectsProjectIdExperiments200,
     GetProjectsProjectIdExperimentsParams,
     PutProjectsProjectIdExperiments201,
@@ -193,6 +188,64 @@ export const usePutUsers = <
         TContext
     >(mutationFn, mutationOptions)
 }
+/**
+ * @summary Return a curation of users by searchString
+ */
+export const getUsersSearch = (
+    params?: GetUsersSearchParams,
+    options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+    return axios.get(`/users/search`, {
+        ...options,
+        params: { ...params, ...options?.params },
+    })
+}
+
+export const getGetUsersSearchQueryKey = (params?: GetUsersSearchParams) => [
+    `/users/search`,
+    ...(params ? [params] : []),
+]
+
+export type GetUsersSearchQueryResult = NonNullable<
+    Awaited<ReturnType<typeof getUsersSearch>>
+>
+export type GetUsersSearchQueryError = AxiosError<unknown>
+
+export const useGetUsersSearch = <
+    TData = Awaited<ReturnType<typeof getUsersSearch>>,
+    TError = AxiosError<unknown>
+>(
+    params?: GetUsersSearchParams,
+    options?: {
+        query?: UseQueryOptions<
+            Awaited<ReturnType<typeof getUsersSearch>>,
+            TError,
+            TData
+        >
+        axios?: AxiosRequestConfig
+    }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+    const { query: queryOptions, axios: axiosOptions } = options ?? {}
+
+    const queryKey = queryOptions?.queryKey ?? getGetUsersSearchQueryKey(params)
+
+    const queryFn: QueryFunction<
+        Awaited<ReturnType<typeof getUsersSearch>>
+    > = ({ signal }) => getUsersSearch(params, { signal, ...axiosOptions })
+
+    const query = useQuery<
+        Awaited<ReturnType<typeof getUsersSearch>>,
+        TError,
+        TData
+    >(queryKey, queryFn, queryOptions) as UseQueryResult<TData, TError> & {
+        queryKey: QueryKey
+    }
+
+    query.queryKey = queryKey
+
+    return query
+}
+
 /**
  * @summary Returns the information on a specific user
  */
@@ -672,115 +725,6 @@ export const usePostProjectsProjectId = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Returns the settings for a given project
- */
-export const getProjectsProjectIdSettings = (
-    projectId: string,
-    options?: AxiosRequestConfig
-): Promise<AxiosResponse<GetProjectsProjectIdSettings200>> => {
-    return axios.get(`/projects/${projectId}/settings`, options)
-}
-
-export const getGetProjectsProjectIdSettingsQueryKey = (projectId: string) => [
-    `/projects/${projectId}/settings`,
-]
-
-export type GetProjectsProjectIdSettingsQueryResult = NonNullable<
-    Awaited<ReturnType<typeof getProjectsProjectIdSettings>>
->
-export type GetProjectsProjectIdSettingsQueryError = AxiosError<unknown>
-
-export const useGetProjectsProjectIdSettings = <
-    TData = Awaited<ReturnType<typeof getProjectsProjectIdSettings>>,
-    TError = AxiosError<unknown>
->(
-    projectId: string,
-    options?: {
-        query?: UseQueryOptions<
-            Awaited<ReturnType<typeof getProjectsProjectIdSettings>>,
-            TError,
-            TData
-        >
-        axios?: AxiosRequestConfig
-    }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-    const { query: queryOptions, axios: axiosOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ??
-        getGetProjectsProjectIdSettingsQueryKey(projectId)
-
-    const queryFn: QueryFunction<
-        Awaited<ReturnType<typeof getProjectsProjectIdSettings>>
-    > = ({ signal }) =>
-        getProjectsProjectIdSettings(projectId, { signal, ...axiosOptions })
-
-    const query = useQuery<
-        Awaited<ReturnType<typeof getProjectsProjectIdSettings>>,
-        TError,
-        TData
-    >(queryKey, queryFn, {
-        enabled: !!projectId,
-        ...queryOptions,
-    }) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-    query.queryKey = queryKey
-
-    return query
-}
-
-/**
- * @summary Updates the settings of a given project
- */
-export const postProjectsProjectIdSettings = (
-    projectId: string,
-    projectSettings: ProjectSettings,
-    options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-    return axios.post(
-        `/projects/${projectId}/settings`,
-        projectSettings,
-        options
-    )
-}
-
-export type PostProjectsProjectIdSettingsMutationResult = NonNullable<
-    Awaited<ReturnType<typeof postProjectsProjectIdSettings>>
->
-export type PostProjectsProjectIdSettingsMutationBody = ProjectSettings
-export type PostProjectsProjectIdSettingsMutationError = AxiosError<unknown>
-
-export const usePostProjectsProjectIdSettings = <
-    TError = AxiosError<unknown>,
-    TContext = unknown
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<ReturnType<typeof postProjectsProjectIdSettings>>,
-        TError,
-        { projectId: string; data: ProjectSettings },
-        TContext
-    >
-    axios?: AxiosRequestConfig
-}) => {
-    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
-
-    const mutationFn: MutationFunction<
-        Awaited<ReturnType<typeof postProjectsProjectIdSettings>>,
-        { projectId: string; data: ProjectSettings }
-    > = (props) => {
-        const { projectId, data } = props ?? {}
-
-        return postProjectsProjectIdSettings(projectId, data, axiosOptions)
-    }
-
-    return useMutation<
-        Awaited<ReturnType<typeof postProjectsProjectIdSettings>>,
-        TError,
-        { projectId: string; data: ProjectSettings },
-        TContext
-    >(mutationFn, mutationOptions)
-}
-/**
  * @summary Returns code entries for given project
  */
 export const getProjectsProjectIdCode = (
@@ -1091,173 +1035,6 @@ export const usePostProjectsProjectIdCodeCodeRepositoryId = <
     >(mutationFn, mutationOptions)
 }
 /**
- * @summary Returns the settings for a specific code repository of a given project
- */
-export const getProjectsProjectIdCodeCodeRepositoryIdSettings = (
-    projectId: string,
-    codeRepositoryId: string,
-    options?: AxiosRequestConfig
-): Promise<
-    AxiosResponse<GetProjectsProjectIdCodeCodeRepositoryIdSettings200>
-> => {
-    return axios.get(
-        `/projects/${projectId}/code/${codeRepositoryId}/settings`,
-        options
-    )
-}
-
-export const getGetProjectsProjectIdCodeCodeRepositoryIdSettingsQueryKey = (
-    projectId: string,
-    codeRepositoryId: string
-) => [`/projects/${projectId}/code/${codeRepositoryId}/settings`]
-
-export type GetProjectsProjectIdCodeCodeRepositoryIdSettingsQueryResult =
-    NonNullable<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >
-    >
-export type GetProjectsProjectIdCodeCodeRepositoryIdSettingsQueryError =
-    AxiosError<unknown>
-
-export const useGetProjectsProjectIdCodeCodeRepositoryIdSettings = <
-    TData = Awaited<
-        ReturnType<typeof getProjectsProjectIdCodeCodeRepositoryIdSettings>
-    >,
-    TError = AxiosError<unknown>
->(
-    projectId: string,
-    codeRepositoryId: string,
-    options?: {
-        query?: UseQueryOptions<
-            Awaited<
-                ReturnType<
-                    typeof getProjectsProjectIdCodeCodeRepositoryIdSettings
-                >
-            >,
-            TError,
-            TData
-        >
-        axios?: AxiosRequestConfig
-    }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-    const { query: queryOptions, axios: axiosOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ??
-        getGetProjectsProjectIdCodeCodeRepositoryIdSettingsQueryKey(
-            projectId,
-            codeRepositoryId
-        )
-
-    const queryFn: QueryFunction<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >
-    > = ({ signal }) =>
-        getProjectsProjectIdCodeCodeRepositoryIdSettings(
-            projectId,
-            codeRepositoryId,
-            { signal, ...axiosOptions }
-        )
-
-    const query = useQuery<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >,
-        TError,
-        TData
-    >(queryKey, queryFn, {
-        enabled: !!(projectId && codeRepositoryId),
-        ...queryOptions,
-    }) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-    query.queryKey = queryKey
-
-    return query
-}
-
-/**
- * @summary Updates the settings for a specific code repository of a given project
- */
-export const postProjectsProjectIdCodeCodeRepositoryIdSettings = (
-    projectId: string,
-    codeRepositoryId: string,
-    codeRepositorySettings: CodeRepositorySettings,
-    options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-    return axios.post(
-        `/projects/${projectId}/code/${codeRepositoryId}/settings`,
-        codeRepositorySettings,
-        options
-    )
-}
-
-export type PostProjectsProjectIdCodeCodeRepositoryIdSettingsMutationResult =
-    NonNullable<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >
-    >
-export type PostProjectsProjectIdCodeCodeRepositoryIdSettingsMutationBody =
-    CodeRepositorySettings
-export type PostProjectsProjectIdCodeCodeRepositoryIdSettingsMutationError =
-    AxiosError<unknown>
-
-export const usePostProjectsProjectIdCodeCodeRepositoryIdSettings = <
-    TError = AxiosError<unknown>,
-    TContext = unknown
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >,
-        TError,
-        {
-            projectId: string
-            codeRepositoryId: string
-            data: CodeRepositorySettings
-        },
-        TContext
-    >
-    axios?: AxiosRequestConfig
-}) => {
-    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
-
-    const mutationFn: MutationFunction<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >,
-        {
-            projectId: string
-            codeRepositoryId: string
-            data: CodeRepositorySettings
-        }
-    > = (props) => {
-        const { projectId, codeRepositoryId, data } = props ?? {}
-
-        return postProjectsProjectIdCodeCodeRepositoryIdSettings(
-            projectId,
-            codeRepositoryId,
-            data,
-            axiosOptions
-        )
-    }
-
-    return useMutation<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdCodeCodeRepositoryIdSettings>
-        >,
-        TError,
-        {
-            projectId: string
-            codeRepositoryId: string
-            data: CodeRepositorySettings
-        },
-        TContext
-    >(mutationFn, mutationOptions)
-}
-/**
  * @summary Returns data entries for given project
  */
 export const getProjectsProjectIdData = (
@@ -1564,173 +1341,6 @@ export const usePostProjectsProjectIdDataDataRepositoryId = <
         Awaited<ReturnType<typeof postProjectsProjectIdDataDataRepositoryId>>,
         TError,
         { projectId: string; dataRepositoryId: string; data: DataRepository },
-        TContext
-    >(mutationFn, mutationOptions)
-}
-/**
- * @summary Returns the settings for a specific data repository of a given project
- */
-export const getProjectsProjectIdDataDataRepositoryIdSettings = (
-    projectId: string,
-    dataRepositoryId: string,
-    options?: AxiosRequestConfig
-): Promise<
-    AxiosResponse<GetProjectsProjectIdDataDataRepositoryIdSettings200>
-> => {
-    return axios.get(
-        `/projects/${projectId}/data/${dataRepositoryId}/settings`,
-        options
-    )
-}
-
-export const getGetProjectsProjectIdDataDataRepositoryIdSettingsQueryKey = (
-    projectId: string,
-    dataRepositoryId: string
-) => [`/projects/${projectId}/data/${dataRepositoryId}/settings`]
-
-export type GetProjectsProjectIdDataDataRepositoryIdSettingsQueryResult =
-    NonNullable<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdDataDataRepositoryIdSettings>
-        >
-    >
-export type GetProjectsProjectIdDataDataRepositoryIdSettingsQueryError =
-    AxiosError<unknown>
-
-export const useGetProjectsProjectIdDataDataRepositoryIdSettings = <
-    TData = Awaited<
-        ReturnType<typeof getProjectsProjectIdDataDataRepositoryIdSettings>
-    >,
-    TError = AxiosError<unknown>
->(
-    projectId: string,
-    dataRepositoryId: string,
-    options?: {
-        query?: UseQueryOptions<
-            Awaited<
-                ReturnType<
-                    typeof getProjectsProjectIdDataDataRepositoryIdSettings
-                >
-            >,
-            TError,
-            TData
-        >
-        axios?: AxiosRequestConfig
-    }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-    const { query: queryOptions, axios: axiosOptions } = options ?? {}
-
-    const queryKey =
-        queryOptions?.queryKey ??
-        getGetProjectsProjectIdDataDataRepositoryIdSettingsQueryKey(
-            projectId,
-            dataRepositoryId
-        )
-
-    const queryFn: QueryFunction<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdDataDataRepositoryIdSettings>
-        >
-    > = ({ signal }) =>
-        getProjectsProjectIdDataDataRepositoryIdSettings(
-            projectId,
-            dataRepositoryId,
-            { signal, ...axiosOptions }
-        )
-
-    const query = useQuery<
-        Awaited<
-            ReturnType<typeof getProjectsProjectIdDataDataRepositoryIdSettings>
-        >,
-        TError,
-        TData
-    >(queryKey, queryFn, {
-        enabled: !!(projectId && dataRepositoryId),
-        ...queryOptions,
-    }) as UseQueryResult<TData, TError> & { queryKey: QueryKey }
-
-    query.queryKey = queryKey
-
-    return query
-}
-
-/**
- * @summary Updates the settings for a specific data repository of a given project
- */
-export const postProjectsProjectIdDataDataRepositoryIdSettings = (
-    projectId: string,
-    dataRepositoryId: string,
-    dataRepositorySettings: DataRepositorySettings,
-    options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-    return axios.post(
-        `/projects/${projectId}/data/${dataRepositoryId}/settings`,
-        dataRepositorySettings,
-        options
-    )
-}
-
-export type PostProjectsProjectIdDataDataRepositoryIdSettingsMutationResult =
-    NonNullable<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdDataDataRepositoryIdSettings>
-        >
-    >
-export type PostProjectsProjectIdDataDataRepositoryIdSettingsMutationBody =
-    DataRepositorySettings
-export type PostProjectsProjectIdDataDataRepositoryIdSettingsMutationError =
-    AxiosError<unknown>
-
-export const usePostProjectsProjectIdDataDataRepositoryIdSettings = <
-    TError = AxiosError<unknown>,
-    TContext = unknown
->(options?: {
-    mutation?: UseMutationOptions<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdDataDataRepositoryIdSettings>
-        >,
-        TError,
-        {
-            projectId: string
-            dataRepositoryId: string
-            data: DataRepositorySettings
-        },
-        TContext
-    >
-    axios?: AxiosRequestConfig
-}) => {
-    const { mutation: mutationOptions, axios: axiosOptions } = options ?? {}
-
-    const mutationFn: MutationFunction<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdDataDataRepositoryIdSettings>
-        >,
-        {
-            projectId: string
-            dataRepositoryId: string
-            data: DataRepositorySettings
-        }
-    > = (props) => {
-        const { projectId, dataRepositoryId, data } = props ?? {}
-
-        return postProjectsProjectIdDataDataRepositoryIdSettings(
-            projectId,
-            dataRepositoryId,
-            data,
-            axiosOptions
-        )
-    }
-
-    return useMutation<
-        Awaited<
-            ReturnType<typeof postProjectsProjectIdDataDataRepositoryIdSettings>
-        >,
-        TError,
-        {
-            projectId: string
-            dataRepositoryId: string
-            data: DataRepositorySettings
-        },
         TContext
     >(mutationFn, mutationOptions)
 }

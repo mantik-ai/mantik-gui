@@ -94,11 +94,14 @@ export const DetailsRunsTable = () => {
                                 <TableCell align="center">
                                     <Button
                                         variant="outlined"
+                                        sx={{ mx: 0.5 }}
                                         onClick={() => openDialog(run)}
                                     >
                                         Re-run
                                     </Button>
-                                    <Button variant="outlined">Details</Button>
+                                    <Button variant="outlined" sx={{ mx: 0.5 }}>
+                                        Details
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}

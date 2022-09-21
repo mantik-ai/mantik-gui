@@ -24,12 +24,6 @@ PaymentInfo:
     $ref: './PaymentInfo.yaml'
 Project:
     $ref: './Project.yaml'
-CodeRepositorySettings:
-    $ref: './CodeRepositorySettings.yaml'
-DataRepositorySettings:
-    $ref: './DataRepositorySettings.yaml'
-ProjectSettings:
-    $ref: './ProjectSettings.yaml'
 Run:
     $ref: './Run.yaml'
 RunsByCodeRepository:

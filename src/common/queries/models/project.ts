@@ -6,7 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { User } from './user'
-import type { UserGroup } from './userGroup'
+import type { ProjectMembersItem } from './projectMembersItem'
+import type { ProjectUserGroupsItem } from './projectUserGroupsItem'
 import type { CodeRepository } from './codeRepository'
 import type { ExperimentRepository } from './experimentRepository'
 import type { DataRepository } from './dataRepository'
@@ -21,10 +22,11 @@ export interface Project {
     executiveSummary?: string
     detailedDescription?: string
     owner: User
-    members?: User[]
-    userGroups?: UserGroup[]
+    members?: ProjectMembersItem[]
+    userGroups?: ProjectUserGroupsItem[]
     codeRepositories?: CodeRepository[]
     experimentRepositories?: ExperimentRepository[]
     dataRepositories?: DataRepository[]
     labels?: Label[]
+    public?: boolean
 }

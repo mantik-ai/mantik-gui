@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import {
@@ -8,12 +8,27 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import { useGetProjectsProjectIdData } from '../../../common/queries'
+import {
+    DataRepository,
+    useGetProjectsProjectIdData,
+} from '../../../common/queries'
+import EditTextContainer from './components/EditTextContainer'
+import EditLabelsContainer from './components/EditLabelsContainer'
 
 export const DataRepositorySettings = () => {
     const router = useRouter()
     const { id } = router.query
     const { data, status } = useGetProjectsProjectIdData(id as string)
+    const [selectedDataRepository, setSelectedDataRepository] =
+        useState<DataRepository | null>()
+    const [newData, setNewData] = useState<DataRepository>({
+        accessToken: '',
+        dataRepositoryId: '',
+        dataRepositoryName: '',
+        description: '',
+        labels: [],
+        uri: '',
+    })
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -27,7 +42,10 @@ export const DataRepositorySettings = () => {
                     options={data?.data.dataRepositories ?? []}
                     getOptionLabel={(repo) => repo.dataRepositoryName ?? ''}
                     sx={{ width: 300, py: 4 }}
-                    onChange={() => {}}
+                    onChange={(_, value) => {
+                        setSelectedDataRepository(value)
+                        value && setNewData(value)
+                    }}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -51,6 +69,44 @@ export const DataRepositorySettings = () => {
                     )}
                 />
             </Stack>
+            {selectedDataRepository && (
+                <Stack px={3} gap={4}>
+                    <EditTextContainer
+                        title={'Name'}
+                        data={newData.dataRepositoryName}
+                        onSave={(dataRepositoryName) =>
+                            setNewData({ ...newData, dataRepositoryName })
+                        }
+                    />
+                    <EditTextContainer
+                        title={'Description'}
+                        data={newData.description}
+                        onSave={(description) =>
+                            setNewData({ ...newData, description })
+                        }
+                    />
+                    <EditTextContainer
+                        title={'URL'}
+                        data={newData.uri}
+                        onSave={(uri) => setNewData({ ...newData, uri })}
+                    />
+                    <EditTextContainer
+                        title={'Access Token (for private data repositories)'}
+                        data={newData.description}
+                        onSave={(accessToken) =>
+                            setNewData({ ...newData, accessToken })
+                        }
+                    />
+                    <EditLabelsContainer
+                        title={'Labels'}
+                        message={
+                            'Add or remove labels for this data repository'
+                        }
+                        labels={newData.labels ?? []}
+                        onSave={(labels) => setNewData({ ...newData, labels })}
+                    />
+                </Stack>
+            )}
         </Box>
     )
 }

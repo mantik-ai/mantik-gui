@@ -28,6 +28,8 @@ components:
                     type: string
                 uri:
                     type: string
+                accessToken:
+                    type: string
                 description:
                     type: string
                 labels:
@@ -71,7 +73,7 @@ components:
                     type: string
                 uri:
                     type: string
-                commitHash:
+                accessToken:
                     type: string
                 description:
                     type: string
@@ -222,11 +224,21 @@ components:
                 members:
                     type: array
                     items:
-                        $ref: '#/components/schemas/User'
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            user:
+                                $ref: '#/components/schemas/User'
                 userGroups:
                     type: array
                     items:
-                        $ref: '#/components/schemas/UserGroup'
+                        type: object
+                        properties:
+                            allowedToEdit:
+                                type: boolean
+                            userGroup:
+                                $ref: '#/components/schemas/UserGroup'
                 codeRepositories:
                     type: array
                     items:
@@ -243,64 +255,11 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/Label'
+                public:
+                    type: boolean
             required:
                 - projectId
                 - owner
-        CodeRepositorySettings:
-            type: object
-            description: Code Repository Settings
-            properties:
-                url:
-                    type: string
-                accessToken:
-                    type: string
-            required:
-                - url
-        DataRepositorySettings:
-            type: object
-            description: Data Repository Settings
-            properties:
-                url:
-                    type: string
-                accessToken:
-                    type: string
-            required:
-                - url
-        ProjectSettings:
-            type: object
-            description: Project Settings
-            properties:
-                name:
-                    type: string
-                executiveSummary:
-                    type: string
-                public:
-                    type: boolean
-                labels:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/Label'
-                owner:
-                    $ref: '#/components/schemas/User'
-                members:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            allowedToEdit:
-                                type: boolean
-                            user:
-                                $ref: '#/components/schemas/User'
-                userGroups:
-                    type: array
-                    items:
-                        type: object
-                        properties:
-                            allowedToEdit:
-                                type: boolean
-                            userGroup:
-                                $ref: '#/components/schemas/UserGroup'
-            required: null
         Run:
             type: object
             description: 'Represents a quadruple of experiment, code, data and hardware-configuration'
@@ -564,7 +523,7 @@ paths:
                             examples:
                                 exampleUsers:
                                     value:
-                                        totalrecords: 2
+                                        totalrecords: 5
                                         users:
                                             - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
                                             - userId: 58e40243-6dc1-42c6-bbab-cd39f087c86b
@@ -605,6 +564,28 @@ paths:
                                     userId:
                                         type: string
                                         format: uuid
+    /users/search:
+        parameters:
+            - name: searchString
+              in: query
+              schema:
+                  type: string
+        get:
+            summary: Return a curation of users by searchString
+            responses:
+                '200':
+                    description: Successfully returned users that match the search
+                    content:
+                        application/json:
+                            schema:
+                                users:
+                                    type: array
+                                    items:
+                                        $ref: '#/components/schemas/User'
+                            examples:
+                                exampleUsers:
+                                    value:
+                                        $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value'
     '/users/{userId}':
         parameters:
             - name: userId
@@ -823,9 +804,19 @@ paths:
                                         owner:
                                             $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
                                         members:
-                                            - $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
-                                        groups:
-                                            - $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - allowedToEdit: false
+                                              user:
+                                                  $ref: '#/paths/~1users~1%7BuserId%7D/get/responses/200/content/application~1json/examples/exampleUser/value'
+                                            - allowedToEdit: true
+                                              user:
+                                                  $ref: '#/paths/~1users/get/responses/200/content/application~1json/examples/exampleUsers/value/users/1'
+                                        userGroups:
+                                            - allowedToEdit: true
+                                              userGroup:
+                                                  $ref: '#/paths/~1groups~1%7BgroupId%7D/get/responses/200/content/application~1json/examples/exampleUserGroup/value'
+                                            - allowedToEdit: false
+                                              userGroup:
+                                                  $ref: '#/paths/~1groups/get/responses/200/content/application~1json/examples/exampleUserGroups/value/userGroups/1'
                                         public: false
                                         codeRepositories:
                                             - $ref: '#/paths/~1projects~1%7BprojectId%7D~1code/get/responses/200/content/application~1json/examples/exampleProject/value'
@@ -849,38 +840,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated project information
-    '/projects/{projectId}/settings':
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-        get:
-            summary: Returns the settings for a given project
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    settings:
-                                        $ref: '#/components/schemas/ProjectSettings'
-        post:
-            summary: Updates the settings of a given project
-            requestBody:
-                description: Update project settings
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/ProjectSettings'
-            responses:
-                '200':
-                    description: Successfully updated project settings
     '/projects/{projectId}/code':
         parameters:
             - name: projectId
@@ -991,8 +950,7 @@ paths:
                                         uri: 'https://github.com/mantik-ai/tutorials'
                                         description: GitHub repo containing examples on how to use mantik
                                         labels:
-                                            - scope: github-repo
-                                              name: Tutorials
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/5'
         post:
             summary: Updates code repository
             requestBody:
@@ -1005,44 +963,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-    '/projects/{projectId}/code/{codeRepositoryId}/settings':
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-            - name: codeRepositoryId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-        get:
-            summary: Returns the settings for a specific code repository of a given project
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    settings:
-                                        $ref: '#/components/schemas/CodeRepositorySettings'
-        post:
-            summary: Updates the settings for a specific code repository of a given project
-            requestBody:
-                description: Update code repository settings
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/CodeRepositorySettings'
-            responses:
-                '200':
-                    description: Successfully updated code repository settings
     '/projects/{projectId}/data':
         parameters:
             - name: projectId
@@ -1153,8 +1073,7 @@ paths:
                                         uri: 'https://storage.ecmwf.europeanweather.cloud/MAELSTROM_AP6/ECMWF_AB137.nc'
                                         description: 'The underlying data is taken from the ECMWF IFS HRES model. A detailed description can be found [here (pp. 21)](https://www.maelstrom-eurohpc.eu/content/docs/uploads/doc6.pdf). The data covers a time range of 2017-2020 with an hourly temporal resolution. Hence, the data contains `~10^3` samples.'
                                         labels:
-                                            - scope: weather-model
-                                              name: ECMWF IFS HRES
+                                            - $ref: '#/paths/~1labels~1search/get/responses/200/content/application~1json/examples/exampleLabels/value/labels/6'
         post:
             summary: Update data repository
             requestBody:
@@ -1167,44 +1086,6 @@ paths:
             responses:
                 '200':
                     description: Successfully updated code repository
-    '/projects/{projectId}/data/{dataRepositoryId}/settings':
-        parameters:
-            - name: projectId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-            - name: dataRepositoryId
-              in: path
-              required: true
-              schema:
-                  type: string
-                  format: uuid
-        get:
-            summary: Returns the settings for a specific data repository of a given project
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    settings:
-                                        $ref: '#/components/schemas/DataRepositorySettings'
-        post:
-            summary: Updates the settings for a specific data repository of a given project
-            requestBody:
-                description: Update data repository settings
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DataRepositorySettings'
-            responses:
-                '200':
-                    description: Successfully updated data repository settings
     '/projects/{projectId}/experiments':
         parameters:
             - name: projectId
@@ -1553,7 +1434,7 @@ paths:
             summary: Return a curation of projects tailored for a specific user with a set of search parameters
             responses:
                 '200':
-                    description: Successully returned projects that match the search
+                    description: Successfully returned projects that match the search
                     content:
                         application/json:
                             schema:
@@ -2011,7 +1892,7 @@ paths:
                             examples:
                                 exampleLabels:
                                     value:
-                                        totalrecords: 5
+                                        totalrecords: 7
                                         labels:
                                             - scope: problem-type
                                               name: Classification
@@ -2023,3 +1904,7 @@ paths:
                                               name: Natural Language Processing
                                             - scope: problem-type
                                               name: Text Classification
+                                            - scope: github-repo
+                                              name: Tutorials
+                                            - scope: weather-model
+                                              name: ECMWF IFS HRES

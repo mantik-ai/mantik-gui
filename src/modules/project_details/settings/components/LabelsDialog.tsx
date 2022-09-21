@@ -1,40 +1,40 @@
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import * as React from "react";
-import { Autocomplete, TextField } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { useGetLabelsSearch } from "../../../common/queries";
-import ProjectSettingsContext from "./contexts/ProjectSettingsContext";
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import * as React from 'react'
+import { Autocomplete, TextField } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { Label, useGetLabelsSearch } from '../../../../common/queries'
 
 interface ChangeLabelsDialogProps {
-    title: string;
-    message: string;
-    open: boolean;
-    onClose: () => void;
+    title: string
+    message: string
+    open: boolean
+    onClose: () => void
+    onSave: (labels: Label[]) => void
+    labels: Label[]
 }
 
-export const ChangeLabelsDialog = (props: ChangeLabelsDialogProps) => {
-    const context = useContext(ProjectSettingsContext);
-    const [labelSearchString, setLabelSearchString] = useState("");
+export const LabelsDialog = (props: ChangeLabelsDialogProps) => {
+    const [labelSearchString, setLabelSearchString] = useState('')
     const { data, status } = useGetLabelsSearch({
-        searchString: labelSearchString
-    });
-    const [labels, setLabels] = useState(context.settings?.labels ?? []);
+        searchString: labelSearchString,
+    })
+    const [labels, setLabels] = useState(props.labels)
 
     useEffect(() => {
-        setLabels(context.settings?.labels ?? []);
-    }, [context.settings?.labels]);
+        setLabels(props.labels)
+    }, [props.labels])
 
     return (
         <Dialog
             open={props.open}
             onClose={props.onClose}
             fullWidth={true}
-            maxWidth={"sm"}
+            maxWidth={'sm'}
         >
             <DialogTitle>{props.title}</DialogTitle>
             <DialogContent>
@@ -44,12 +44,14 @@ export const ChangeLabelsDialog = (props: ChangeLabelsDialogProps) => {
                     multiple
                     value={labels}
                     onChange={(event, newValue) => {
-                        setLabels(newValue);
+                        setLabels(newValue)
                     }}
-                    isOptionEqualToValue={(option, value) => option.name === value.name}
+                    isOptionEqualToValue={(option, value) =>
+                        option.name === value.name
+                    }
                     options={data?.data.labels ?? []}
                     getOptionLabel={(label) => label.name}
-                    loading={status !== "success"}
+                    loading={status !== 'success'}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -59,24 +61,28 @@ export const ChangeLabelsDialog = (props: ChangeLabelsDialogProps) => {
                         />
                     )}
                 />
-
             </DialogContent>
             <DialogActions>
                 <Button
                     autoFocus
-                    sx={{ color: "#bdbdbd" }}
+                    sx={{ color: '#bdbdbd' }}
                     onClick={() => {
-                        setLabels(context.settings?.labels ?? []);
-                        props.onClose();
+                        setLabels(props.labels)
+                        props.onClose()
                     }}
                 >
                     Cancel
                 </Button>
-                <Button variant={"outlined"} onClick={() => {
-                    context.setLabels(labels)
-                    props.onClose();
-                }}>Save Changes</Button>
+                <Button
+                    variant={'outlined'}
+                    onClick={() => {
+                        props.onSave(labels)
+                        props.onClose()
+                    }}
+                >
+                    Save Changes
+                </Button>
             </DialogActions>
         </Dialog>
-    );
-};
+    )
+}

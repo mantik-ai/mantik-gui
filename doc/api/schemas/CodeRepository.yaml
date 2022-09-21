@@ -8,6 +8,8 @@ properties:
         type: string
     uri:
         type: string
+    accessToken:
+        type: string
     description:
         type: string
     labels:

@@ -1,34 +1,12 @@
 {
-    "totalrecords": 5,
+    "totalrecords": 7,
     "labels": [
-        {
-            "scope": "problem-type",
-            "name": "Classification"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Clustering"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Dimensionality Reduction"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Natural Language Processing"
-        },
-        {
-            "scope": "problem-type",
-            "name": "Text Classification"
-        },
-        {
-
-        },
-        {
-
-        },
-        {
-
-        }
+        { "$ref": "labels/classification.json" },
+        { "$ref": "labels/dim_reduction.json" },
+        { "$ref": "labels/clustering.json" },
+        { "$ref": "labels/nlp.json" },
+        { "$ref": "labels/text_classification.json" },
+        { "$ref": "labels/tutorials.json" },
+        { "$ref": "labels/ifs.json" }
     ]
 }

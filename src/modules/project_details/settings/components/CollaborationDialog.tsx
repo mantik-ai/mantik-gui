@@ -15,6 +15,7 @@ interface ChangeSettingsDialogProps<TData> {
     open: boolean
     multiple: boolean
     onClose: () => void
+    onSave: (value: TData) => void
     queryHook: () => UseQueryResult<AxiosResponse<TData>> & {
         queryKey: QueryKey
     }
@@ -22,12 +23,14 @@ interface ChangeSettingsDialogProps<TData> {
     autocompleteOptions: (
         data: AxiosResponse<TData> | undefined
     ) => ReadonlyArray<TData>
+    defaultValue: TData | TData[]
 }
 
-export const ChangeCollaborationDialog = <TData,>(
+export const CollaborationDialog = <TData,>(
     props: ChangeSettingsDialogProps<TData>
 ) => {
     const { data, status } = props.queryHook()
+    const [value, setValue] = React.useState<TData | null>(null)
 
     return (
         <Dialog
@@ -41,16 +44,19 @@ export const ChangeCollaborationDialog = <TData,>(
                 <DialogContentText>{props.message}</DialogContentText>
                 <Autocomplete
                     sx={{ py: 4 }}
+                    onChange={(_, newValue) => setValue(newValue)}
                     multiple={props.multiple}
                     getOptionLabel={(option) =>
                         props.autocompleteSelector(option)
                     }
+                    isOptionEqualToValue={(opt, val) => opt?.name === val?.name}
+                    defaultValue={props.defaultValue}
                     options={props.autocompleteOptions(data)}
                     loading={status === 'loading'}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="User"
+                            label="please select"
                             size="small"
                             InputProps={{
                                 ...params.InputProps,
@@ -69,7 +75,6 @@ export const ChangeCollaborationDialog = <TData,>(
                         />
                     )}
                 />
-
             </DialogContent>
             <DialogActions>
                 <Button
@@ -79,7 +84,15 @@ export const ChangeCollaborationDialog = <TData,>(
                 >
                     Cancel
                 </Button>
-                <Button variant={'outlined'}>Save Changes</Button>
+                <Button
+                    variant={'outlined'}
+                    onClick={() => {
+                        props.onSave(value as TData)
+                        props.onClose()
+                    }}
+                >
+                    Save Changes
+                </Button>
             </DialogActions>
         </Dialog>
     )

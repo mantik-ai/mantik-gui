@@ -103,6 +103,7 @@ export const DetailsSideBar = () => {
             sx={{
                 flex: 1,
                 p: theme.spacing(2),
+                minWidth: 300,
             }}
         >
             <Paper sx={{ height: '100%' }}>

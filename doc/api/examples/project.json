@@ -8,12 +8,22 @@
     },
     "members": [
         {
-            "$ref": "user.json"
+            "allowedToEdit": false,
+            "user": { "$ref": "user.json" }
+        },
+        {
+            "allowedToEdit": true,
+            "user": { "$ref": "user2.json" }
         }
     ],
-    "groups": [
+    "userGroups": [
         {
-            "$ref": "userGroup.json"
+            "allowedToEdit": true,
+            "userGroup": { "$ref": "userGroup.json" }
+        },
+        {
+            "allowedToEdit": false,
+            "userGroup": { "$ref": "userGroup2.json" }
         }
     ],
     "public": false,

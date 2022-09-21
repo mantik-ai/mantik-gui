@@ -1,0 +1,21 @@
+parameters:
+    - name: searchString
+      in: query
+      schema:
+          type: string
+get:
+    summary: Return a curation of users by searchString
+    responses:
+        '200':
+            description: Successfully returned users that match the search
+            content:
+                application/json:
+                    schema:
+                        users:
+                            type: array
+                            items:
+                                $ref: '../../schemas/User.yaml'
+                    examples:
+                        exampleUsers:
+                            value:
+                                $ref: '../../examples/users.json'

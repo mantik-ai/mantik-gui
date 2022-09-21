@@ -15,11 +15,21 @@ properties:
     members:
         type: array
         items:
-            $ref: ./User.yaml
+            type: object
+            properties:
+                allowedToEdit:
+                    type: boolean
+                user:
+                    $ref: ./User.yaml
     userGroups:
         type: array
         items:
-            $ref: ./UserGroup.yaml
+            type: object
+            properties:
+                allowedToEdit:
+                    type: boolean
+                userGroup:
+                    $ref: ./UserGroup.yaml
     codeRepositories:
         type: array
         items:
@@ -36,6 +46,8 @@ properties:
         type: array
         items:
             $ref: ./Label.yaml
+    public:
+        type: boolean
 required:
     - projectId
     - owner

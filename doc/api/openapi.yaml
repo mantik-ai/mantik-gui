@@ -13,6 +13,8 @@ components:
 paths:
     /users:
         $ref: './paths/users.yaml'
+    /users/search:
+        $ref: './paths/users/search.yaml'
     /users/{userId}:
         $ref: './paths/users/{userId}.yaml'
     /users/{userId}/settings:
@@ -24,24 +26,18 @@ paths:
         $ref: './paths/projects/user/{userId}.yaml'
     /projects/{projectId}:
         $ref: './paths/projects/{projectId}.yaml'
-    /projects/{projectId}/settings:
-        $ref: './paths/projects/{projectId}/settings.yaml'
     /projects/{projectId}/code:
         $ref: './paths/projects/{projectId}/code.yaml'
     /projects/{projectId}/code/usage:
         $ref: './paths/projects/{projectId}/code/usage.yaml'
     /projects/{projectId}/code/{codeRepositoryId}:
         $ref: './paths/projects/{projectId}/code/{codeRepositoryId}.yaml'
-    /projects/{projectId}/code/{codeRepositoryId}/settings:
-        $ref: './paths/projects/{projectId}/code/{codeRepositoryId}/settings.yaml'
     /projects/{projectId}/data:
         $ref: './paths/projects/{projectId}/data.yaml'
     /projects/{projectId}/data/usage:
         $ref: './paths/projects/{projectId}/data/usage.yaml'
     /projects/{projectId}/data/{dataRepositoryId}:
         $ref: './paths/projects/{projectId}/data/{dataRepositoryId}.yaml'
-    /projects/{projectId}/data/{dataRepositoryId}/settings:
-        $ref: './paths/projects/{projectId}/data/{dataRepositoryId}/settings.yaml'
     /projects/{projectId}/experiments:
         $ref: './paths/projects/{projectId}/experiments.yaml'
     /projects/{projectId}/experiments/usage:

@@ -1,39 +1,41 @@
-import { Box, Stack, Typography } from "@mui/material";
-import * as React from "react";
-import { useContext } from "react";
-import { LabelArray } from "../../../common/components/LabelArray";
-import ChangeSettingsButton from "./ChangeSettingsButton";
-import { ChangeLabelsDialog } from "./ChangeLabelsDialog";
-import ProjectSettingsContext from "./contexts/ProjectSettingsContext";
+import { Box, Stack, Typography } from '@mui/material'
+import * as React from 'react'
+import { LabelArray } from '../../../../common/components/LabelArray'
+import { Label } from '../../../../common/queries'
+import EditButton from './EditButton'
+import { LabelsDialog } from './LabelsDialog'
 
 interface EditLabelsContainerProps {
-    title: string;
-    message: string;
+    title: string
+    message: string
+    labels: Label[]
+    onSave: (labels: Label[]) => void
 }
 
 export default function EditLabelsContainer(props: EditLabelsContainerProps) {
-    const [isOpen, setIsOpen] = React.useState(false);
-    const context = useContext(ProjectSettingsContext);
+    const [isOpen, setIsOpen] = React.useState(false)
 
     return (
         <div>
-            <Typography variant={"h5"}>{props.title}</Typography>
+            <Typography variant={'h5'}>{props.title}</Typography>
             <Stack
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
             >
                 <Box px={1}>
-                    <LabelArray labels={context.settings?.labels}></LabelArray>
+                    <LabelArray labels={props.labels}></LabelArray>
                 </Box>
-                <ChangeSettingsButton onEdit={() => setIsOpen(true)} />
+                <EditButton onEdit={() => setIsOpen(true)} />
             </Stack>
-            <ChangeLabelsDialog
+            <LabelsDialog
                 title={`Edit ${props.title}`}
                 message={props.message}
                 open={isOpen}
                 onClose={() => setIsOpen(false)}
+                labels={props.labels}
+                onSave={(newLabels) => props.onSave(newLabels)}
             />
         </div>
-    );
+    )
 }
