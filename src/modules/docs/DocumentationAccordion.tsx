@@ -20,7 +20,7 @@ export const DocumentationAccordion = (props: DocAccordionProps) => {
         <>
             <Divider />
             <ListItemButton onClick={handleClick}>
-                <ListItemText primary="Settings" />
+                <ListItemText primary={props.itemName} />
                 {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse in={open} timeout="auto" unmountOnExit>

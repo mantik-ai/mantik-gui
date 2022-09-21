@@ -1,6 +1,5 @@
 import {
     Box,
-    Divider,
     List,
     ListItemButton,
     ListItemText,
@@ -48,7 +47,7 @@ export const DocumentationSideBar = (props: DocSideBarProps) => {
                                     key={`${node.path}/${node.dirname}`}
                                     routes={node.dir.map((dirnode) => {
                                         return {
-                                            name: dirnode.filename,
+                                            name: dirnode.name,
                                             path: `/${dirnode.path}/${dirnode.filename}`,
                                             key: `${dirnode.path}/${dirnode.filename}`,
                                         }
@@ -58,7 +57,6 @@ export const DocumentationSideBar = (props: DocSideBarProps) => {
                         }
                         return <></>
                     })}
-                    <Divider />
                 </List>
             </Paper>
         </Box>

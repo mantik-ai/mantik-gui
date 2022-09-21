@@ -1,3 +1,6 @@
+import { useTheme } from '@emotion/react'
+import { Paper, Typography } from '@mui/material'
+import { Box } from '@mui/system'
 import { fileTreeNode } from '../../pages/docs/[...subroute]'
 import { MarkdownWrapper } from './MarkdownWrapper'
 type DocsProps = {
@@ -29,7 +32,20 @@ const getMarkdownContent = (props: DocsProps): string => {
     return ''
 }
 export const DocumentationMarkdownPage = (props: DocsProps) => {
+    const theme = useTheme()
+
     return (
-        <MarkdownWrapper markdown={getMarkdownContent(props)}></MarkdownWrapper>
+        <Box
+            sx={{
+                flex: 1,
+                p: theme.spacing(2),
+            }}
+        >
+            <Paper sx={{ height: '100%', p: theme.spacing(2) }}>
+                <MarkdownWrapper
+                    markdown={getMarkdownContent(props)}
+                ></MarkdownWrapper>
+            </Paper>
+        </Box>
     )
 }
