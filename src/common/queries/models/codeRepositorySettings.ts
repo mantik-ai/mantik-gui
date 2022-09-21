@@ -5,23 +5,11 @@
  * The API serves the front end with all necessary information on projects, and users.
  * OpenAPI spec version: 0.1.0
  */
-import type { DeploymentMode } from './deploymentMode'
-import type { EntryPoint } from './entryPoint'
-import type { User } from './user'
-import type { CodeRepositorySettingsUserGroupsItem } from './codeRepositorySettingsUserGroupsItem'
-import type { CodeRepositorySettingsUsersItem } from './codeRepositorySettingsUsersItem'
 
 /**
  * Code Repository Settings
  */
 export interface CodeRepositorySettings {
-    projectUrl?: string
-    environment?: string
-    deploymentModes?: DeploymentMode[]
-    entryPoints?: EntryPoint[]
-    public?: boolean
-    owner?: User
-    userGroups?: CodeRepositorySettingsUserGroupsItem[]
-    users?: CodeRepositorySettingsUsersItem[]
+    url: string
     accessToken?: string
 }

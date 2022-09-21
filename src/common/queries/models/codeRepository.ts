@@ -14,6 +14,7 @@ export interface CodeRepository {
     codeRepositoryId: string
     codeRepositoryName?: string
     uri: string
+    accessToken?: string
     description?: string
     labels?: Label[]
 }

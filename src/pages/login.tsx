@@ -24,6 +24,7 @@ const Login: NextPage = () => {
                 <TextField
                     key="login-email"
                     label="email"
+                    size="small"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -32,6 +33,7 @@ const Login: NextPage = () => {
                 <TextField
                     key="login-password"
                     label="password"
+                    size="small"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

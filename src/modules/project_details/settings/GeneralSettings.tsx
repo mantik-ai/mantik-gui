@@ -1,80 +1,52 @@
-import { Grid, TextField } from '@mui/material'
+import { Stack, Switch, Typography } from '@mui/material'
+import * as React from 'react'
+import { useContext } from 'react'
+import EditTextContainer from './components/EditTextContainer'
+import EditLabelsContainer from './components/EditLabelsContainer'
+import ProjectSettingsContext from './contexts/ProjectSettingsContext'
+import EditOwnerContainer from './components/EditOwnerContainer'
 
 export const GeneralSettings = () => {
+    const context = useContext(ProjectSettingsContext)
     return (
         <>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-name"
-                        name="project-name"
-                        label="Project Name"
-                        fullWidth
-                        autoComplete="project-name"
+            <EditTextContainer
+                title={'Project Name'}
+                data={context.settings?.name}
+                onSave={(name) => context.setName(name)}
+            />
+            <EditTextContainer
+                title={'Executive Summary (for Teaser)'}
+                data={context.settings?.executiveSummary}
+                onSave={(summary) => context.setSummary(summary)}
+            />
+            <EditLabelsContainer
+                title={'Labels'}
+                message={'Add or remove labels for the project.'}
+                labels={context.settings?.labels ?? []}
+                onSave={(labels) => context.setLabels(labels)}
+            />
+            <EditOwnerContainer />
+            <div>
+                <Typography variant={'h5'}>Visibility</Typography>
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    ml={'14px'}
+                    mt={1}
+                    alignItems="center"
+                >
+                    <Typography>private</Typography>
+                    <Switch
+                        color="primary"
+                        checked={context.settings?.public}
+                        onChange={(e) =>
+                            context.setIsPublic(e.target.value === 'on')
+                        }
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-description"
-                        name="project-description"
-                        label="Project Description"
-                        fullWidth
-                        autoComplete="project-description"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-url"
-                        name="project-url"
-                        label="Project URL"
-                        fullWidth
-                        autoComplete="project-url"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-repository"
-                        name="project-repository"
-                        label="Project Repository"
-                        fullWidth
-                        autoComplete="project-repository"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license"
-                        name="project-license"
-                        label="Project License"
-                        fullWidth
-                        autoComplete="project-license"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license-url"
-                        name="project-license-url"
-                        label="Project License URL"
-                        fullWidth
-                        autoComplete="project-license-url"
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="project-license-text"
-                        name="project-license-text"
-                        label="Project License Text"
-                        fullWidth
-                        autoComplete="project-license-text"
-                    />
-                </Grid>
-            </Grid>
+                    <Typography>public</Typography>
+                </Stack>
+            </div>
         </>
     )
 }

@@ -3,10 +3,5 @@
     "codeRepositoryName": "mantik-tutorials-github-repo",
     "uri": "https://github.com/mantik-ai/tutorials",
     "description": "GitHub repo containing examples on how to use mantik",
-    "labels": [
-        {
-            "scope": "github-repo",
-            "name": "Tutorials"
-        }
-    ]
+    "labels": [{ "$ref": "./labels/tutorials.json" }]
 }

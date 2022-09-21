@@ -36,6 +36,7 @@ export const SearchSideBar = () => {
                 <TextField
                     id="search-string"
                     label="Search"
+                    size="small"
                     variant="outlined"
                     value={searchParameterContext.searchString!}
                     onChange={(e) =>

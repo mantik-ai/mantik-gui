@@ -2,15 +2,9 @@ import * as React from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import {
-    Autocomplete,
-    CircularProgress,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
-import { useGetProjectsProjectIdCode } from '../../../common/queries'
+import { useGetProjectsProjectId } from '../../../common/queries'
 import { GeneralSettings } from './GeneralSettings'
 import { CollaborationSettings } from './CollaborationSettings'
 
@@ -36,16 +30,9 @@ function TabPanel(props: TabPanelProps) {
 
 const ProjectSettings = () => {
     const [tabValue, setTabValue] = React.useState(0)
+
     const onTabChange = (event: React.SyntheticEvent, newValue: number) =>
         setTabValue(newValue)
-
-    // const [open, setOpen] = React.useState(false)
-    // const [dialogType, setDialogType] = React.useState<CollaborationDialogType>(
-    //     CollaborationDialogType.MEMBERS
-    // )
-    //
-    // const handleClose = () => setOpen(false)
-
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

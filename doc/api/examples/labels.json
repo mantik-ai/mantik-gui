@@ -1,10 +1,12 @@
 {
-    "totalrecords": 5,
+    "totalrecords": 7,
     "labels": [
         { "$ref": "labels/classification.json" },
         { "$ref": "labels/dim_reduction.json" },
         { "$ref": "labels/clustering.json" },
         { "$ref": "labels/nlp.json" },
-        { "$ref": "labels/text_classification.json" }
+        { "$ref": "labels/text_classification.json" },
+        { "$ref": "labels/tutorials.json" },
+        { "$ref": "labels/ifs.json" }
     ]
 }
