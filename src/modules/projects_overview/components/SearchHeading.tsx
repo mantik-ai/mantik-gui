@@ -2,11 +2,11 @@ import { Box, Divider, Typography, useTheme } from '@mui/material'
 import React from 'react'
 import { Spacing } from '../../../common/components/Spacing'
 
-interface SearchHeadingProps {
+interface PageHeadingProps {
     children: React.ReactNode
     description: string
 }
-export const SearchHeading = (props: SearchHeadingProps) => {
+export const PageHeading = (props: PageHeadingProps) => {
     const theme = useTheme()
     return (
         <Box

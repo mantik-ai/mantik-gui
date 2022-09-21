@@ -6,7 +6,11 @@ import { Route } from '../types/route'
 
 const routes: Route[] = [
     { name: 'About', path: '/about', positions: ['navbar', 'drawer'] },
-    { name: 'Docs', path: '/docs', positions: ['navbar', 'drawer'] },
+    {
+        name: 'Docs',
+        path: '/docs/Getting_Started/Welcome.md',
+        positions: ['navbar', 'drawer'],
+    },
     { name: 'Projects', path: '/projects', positions: ['navbar', 'drawer'] },
     { name: 'Contact', path: '/contact', positions: ['footer', 'drawer'] },
     { name: 'Privacy', path: '/privacy', positions: ['footer', 'drawer'] },
