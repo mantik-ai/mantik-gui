@@ -1,10 +1,10 @@
 import React from 'react'
 import type { NextPage } from 'next'
 import { Box, useTheme } from '@mui/material'
-import { SearchHeading } from '../../modules/projects_overview/components/SearchHeading'
 import { SearchSideBar } from '../../modules/projects_overview/components/SearchSideBar'
 import { SearchParameterProvider } from '../../modules/projects_overview/contexts/SearchParameterContext'
 import { ProjectList } from '../../modules/projects_overview/components/ProjectList'
+import { PageHeading } from '../../modules/projects_overview/components/SearchHeading'
 
 const Projects: NextPage = () => {
     const theme = useTheme()
@@ -17,9 +17,9 @@ const Projects: NextPage = () => {
                     flexDirection: 'column',
                 }}
             >
-                <SearchHeading description="Search through all project accessible to you.">
+                <PageHeading description="Search through all project accessible to you.">
                     Project Overview
-                </SearchHeading>
+                </PageHeading>
                 <Box
                     sx={{
                         display: 'flex',
