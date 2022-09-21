@@ -38,12 +38,11 @@ const FooterNavigation = styled.div`
 
 export const Footer = (props: NavbarProps) => {
     const router = useRouter()
-    return router.asPath !== '/' ? null : (
+    return router.asPath === '/' ? (
         <FooterContainer>
             <Box
                 component="img"
                 sx={{
-                    bottom: { lg: '-5%', xl: '-15%' },
                     width: { xs: '200%', sm: '150%', md: '100%' },
                     left: { xs: '-50%', sm: '-25%', md: 0 },
                     position: 'relative',
@@ -94,5 +93,5 @@ export const Footer = (props: NavbarProps) => {
                 </Stack>
             </FooterNavigation>
         </FooterContainer>
-    )
+    ) : null
 }
