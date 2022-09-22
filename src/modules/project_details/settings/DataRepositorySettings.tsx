@@ -73,14 +73,14 @@ export const DataRepositorySettings = () => {
                 <Stack px={3} gap={4}>
                     <EditTextContainer
                         title={'Name'}
-                        data={newData.dataRepositoryName}
+                        data={newData.dataRepositoryName ?? ""}
                         onSave={(dataRepositoryName) =>
                             setNewData({ ...newData, dataRepositoryName })
                         }
                     />
                     <EditTextContainer
                         title={'Description'}
-                        data={newData.description}
+                        data={newData.description ?? ""}
                         onSave={(description) =>
                             setNewData({ ...newData, description })
                         }
@@ -92,7 +92,7 @@ export const DataRepositorySettings = () => {
                     />
                     <EditTextContainer
                         title={'Access Token (for private data repositories)'}
-                        data={newData.description}
+                        data={newData.description ?? ""}
                         onSave={(accessToken) =>
                             setNewData({ ...newData, accessToken })
                         }

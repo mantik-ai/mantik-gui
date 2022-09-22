@@ -18,12 +18,12 @@ export const GeneralSettings = () => {
         <>
             <EditTextContainer
                 title={'Project Name'}
-                data={context.settings?.name}
+                data={context.settings?.name ?? ''}
                 onSave={(name) => context.setName!(name)}
             />
             <EditTextContainer
                 title={'Executive Summary (for Teaser)'}
-                data={context.settings?.executiveSummary}
+                data={context.settings?.executiveSummary ?? ""}
                 onSave={(summary) => context.setSummary!(summary)}
             />
             <EditLabelsContainer
