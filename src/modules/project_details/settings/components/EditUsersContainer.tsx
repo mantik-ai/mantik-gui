@@ -71,14 +71,14 @@ export default function EditUserContainer() {
         if (context.settings) {
             setMembers(context.settings.members ?? [])
         }
-    }, [context.settings?.members])
+    }, [context.settings])
 
     return (
         <div>
             <Typography variant={'h5'}>Members</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
                 <TableContainer component={Paper} sx={{ mt: 4, mr: -4 }}>

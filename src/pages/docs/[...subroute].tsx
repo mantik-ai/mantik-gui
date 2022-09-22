@@ -1,12 +1,12 @@
-import fs from 'fs'
-import path from 'path'
-import { Box, useTheme } from '@mui/material'
-import { GetStaticPaths, NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { PageHeading } from '../../modules/projects_overview/components/SearchHeading'
-import { DocumentationSideBar } from '../../modules/docs/DocumentationSideBar'
-import { DocumentationMarkdownPage } from '../../modules/docs/DocumentationMarkdownPage'
-import { readFile } from 'fs/promises'
+import fs from "fs";
+import path from "path";
+import { readFile } from "fs/promises";
+import { Box, useTheme } from "@mui/material";
+import { GetStaticPaths, NextPage } from "next";
+import { useRouter } from "next/router";
+import { PageHeading } from "../../modules/projects_overview/components/SearchHeading";
+import { DocumentationSideBar } from "../../modules/docs/DocumentationSideBar";
+import { DocumentationMarkdownPage } from "../../modules/docs/DocumentationMarkdownPage";
 
 const DOC_DIRECTORY = './src'
 const DOC_FOLDER_NAME = 'docs'
@@ -79,8 +79,7 @@ const Docs: NextPage<DocsPageProps> = (props: DocsPageProps) => {
 }
 
 const convertFilenameToName = (filename: string) => {
-    const name = filename.split('_').join(' ').split('.')[0]
-    return name
+    return filename.split('_').join(' ').split('.')[0]
 }
 
 export async function getStaticProps() {

@@ -20,7 +20,7 @@ export default function EditLabelsContainer(props: EditLabelsContainerProps) {
             <Typography variant={'h5'}>{props.title}</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
                 <Box px={1}>

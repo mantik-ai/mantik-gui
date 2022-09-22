@@ -16,10 +16,10 @@ export default function EditOwnerContainer() {
             <Typography variant={'h5'}>Project Owner</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
-                <Typography variant={'body1'} ml={'14px'}>
+                <Typography variant={'body1'} ml={'14px'} pt={"11px"}>
                     The project is currently owned by{' '}
                     <b>{context.settings?.owner.name}</b>
                 </Typography>
