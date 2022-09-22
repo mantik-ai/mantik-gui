@@ -1,5 +1,4 @@
 import {
-    Box,
     Collapse,
     IconButton,
     Paper,
@@ -38,7 +37,7 @@ function Row({
     admin: string
     allowedToEdit: boolean
     members: User[]
-    onPermissionChange: (e) => void
+    onPermissionChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) {
     const [open, setOpen] = React.useState(false)
 
@@ -160,7 +159,7 @@ export default function EditUserGroupsContainer() {
                                                 item.allowedToEdit =
                                                     e.target.checked
                                                 copy[index] = item
-                                                context.setUserGroups(copy)
+                                                context.setUserGroups!(copy)
                                                 return copy
                                             })
                                         }}
@@ -183,40 +182,43 @@ export default function EditUserGroupsContainer() {
                     setUserGroups((prev) => {
                         const copy = [...prev]
                         const newGroups = copy.filter((group) => {
-                            return groups.some(
+                            return (groups as UserGroup[]).some(
                                 (g) =>
                                     g.userGroupId ===
                                     group.userGroup?.userGroupId
                             )
                         })
-                        context.setUserGroups(newGroups)
+                        context.setUserGroups!(newGroups)
                         return newGroups
                     })
 
                     //add groups to state that are not in the old list
                     setUserGroups((prev) => {
                         const copy = [...prev]
-                        const newGroups = groups.filter((group) => {
-                            return !prev.some(
-                                (g) =>
-                                    g.userGroup?.userGroupId ===
-                                    group.userGroupId
-                            )
-                        })
+                        const newGroups = (groups as UserGroup[]).filter(
+                            (group) => {
+                                return !prev.some(
+                                    (g) =>
+                                        g.userGroup?.userGroupId ===
+                                        group.userGroupId
+                                )
+                            }
+                        )
                         newGroups.forEach((group) => {
                             copy.push({
                                 userGroup: group,
                                 allowedToEdit: false,
                             })
                         })
-                        context.setUserGroups(copy)
+                        context.setUserGroups!(copy)
                         return copy
                     })
                 }}
                 queryHook={useGetGroups}
-                autocompleteSelector={(group: UserGroup) => group.name ?? ''}
+                autocompleteSelector={(group: UserGroup) => group.name}
+                //@ts-expect-error wip
                 autocompleteOptions={(option) => option?.data.userGroups ?? []}
-                defaultValue={userGroups.map((item) => item.userGroup)}
+                defaultValue={userGroups.map((item) => item.userGroup!)}
             />
         </div>
     )

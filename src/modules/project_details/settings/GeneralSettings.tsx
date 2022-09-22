@@ -13,18 +13,18 @@ export const GeneralSettings = () => {
             <EditTextContainer
                 title={'Project Name'}
                 data={context.settings?.name}
-                onSave={(name) => context.setName(name)}
+                onSave={(name) => context.setName!(name)}
             />
             <EditTextContainer
                 title={'Executive Summary (for Teaser)'}
                 data={context.settings?.executiveSummary}
-                onSave={(summary) => context.setSummary(summary)}
+                onSave={(summary) => context.setSummary!(summary)}
             />
             <EditLabelsContainer
                 title={'Labels'}
                 message={'Add or remove labels for the project.'}
                 labels={context.settings?.labels ?? []}
-                onSave={(labels) => context.setLabels(labels)}
+                onSave={(labels) => context.setLabels!(labels)}
             />
             <EditOwnerContainer />
             <div>
@@ -41,7 +41,7 @@ export const GeneralSettings = () => {
                         color="primary"
                         checked={context.settings?.public}
                         onChange={(e) =>
-                            context.setIsPublic(e.target.value === 'on')
+                            context.setIsPublic!(e.target.value === 'on')
                         }
                     />
                     <Typography>public</Typography>

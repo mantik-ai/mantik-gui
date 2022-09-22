@@ -30,13 +30,15 @@ export default function EditOwnerContainer() {
                 message={
                     'Please select a user to designate as the owner of this project. Please be aware that this action can only be undone by the new owner.'
                 }
+                defaultValue={[]}
                 open={isOpen}
                 multiple={false}
                 onClose={() => setIsOpen(false)}
-                onSave={(users) => context.setOwner(users)}
+                onSave={(users) => context.setOwner!(users as User)}
                 queryHook={useGetUsers}
                 autocompleteSelector={(user: User) => user.name}
-                autocompleteOptions={(option) => option?.data.users ?? []}
+                //@ts-expect-error wip
+                autocompleteOptions={(options) => options?.data.users ?? []}
             />
         </div>
     )

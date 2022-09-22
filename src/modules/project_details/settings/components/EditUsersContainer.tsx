@@ -31,7 +31,7 @@ function Row({
     name: string
     email: string
     allowedToEdit: boolean
-    onPermissionChange: () => void
+    onPermissionChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }) {
     return (
         <>
@@ -128,18 +128,18 @@ export default function EditUserContainer() {
                     setMembers((prev) => {
                         const copy = [...prev]
                         const newUsers = copy.filter((u) => {
-                            return users.find((user) => {
+                            return (users as User[]).find((user) => {
                                 return user.userId === u.user?.userId
                             })
                         })
-                        context.setMembers(newUsers)
+                        context.setMembers!(newUsers)
                         return newUsers
                     })
 
                     //add users to state that are not in the old list
                     setMembers((prev) => {
                         const copy = [...prev]
-                        const newUsers = users.filter((user) => {
+                        const newUsers = (users as User[]).filter((user) => {
                             return !prev.some((u) => {
                                 return u.user?.userId === user.userId
                             })
@@ -150,14 +150,15 @@ export default function EditUserContainer() {
                                 allowedToEdit: false,
                             })
                         })
-                        context.setMembers(copy)
+                        context.setMembers!(copy)
                         return copy
                     })
                 }}
                 queryHook={useGetUsers}
-                autocompleteSelector={(user: User) => user?.name ?? ''}
+                autocompleteSelector={(user: User) => user.name}
+                //@ts-expect-error wip
                 autocompleteOptions={(option) => option?.data.users ?? []}
-                defaultValue={members.map((item) => item.user)}
+                defaultValue={members.map((item) => item.user!)}
             />
         </div>
     )
