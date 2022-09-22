@@ -23,7 +23,7 @@ const Login: NextPage = () => {
             fields={[
                 <TextField
                     key="login-email"
-                    label="email"
+                    label="email/username"
                     size="small"
                     type="email"
                     value={email}

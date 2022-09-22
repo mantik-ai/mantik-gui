@@ -20,6 +20,7 @@ interface AuthCardProps {
     fields: ReactNode[]
     type: AuthCardTypes
     onClick?: React.MouseEventHandler<HTMLButtonElement>
+    disabled?: boolean
 }
 
 export const AuthCard = (props: AuthCardProps) => {
@@ -94,6 +95,7 @@ export const AuthCard = (props: AuthCardProps) => {
                             </Link>
                         )}
                         <Button
+                            disabled={props.disabled}
                             variant="contained"
                             style={{
                                 color: 'white',
