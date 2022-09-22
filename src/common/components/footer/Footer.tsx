@@ -1,19 +1,27 @@
-import React from 'react'
-import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
-import Link from 'next/link'
-import InstagramIcon from '@mui/icons-material/Instagram'
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import styled from '@emotion/styled'
-import { useRouter } from 'next/router'
-import { NavbarProps } from '../../types/navbarProps'
-import { IconLinking } from '../../types/linking'
+import React from "react";
+import { Box, Stack } from "@mui/material";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import styled from "@emotion/styled";
+import { useRouter } from "next/router";
+import { NavbarProps } from "../../types/navbarProps";
+import { IconLinking } from "../../types/linking";
+
+const sponsorImages = [
+    { name: "4cast", src: "/sponsors/4cast.png" },
+    { name: "ambrosys-kiste", src: "/sponsors/ambrosys-kiste.png" },
+    { name: "eu", src: "/sponsors/eu.png" },
+    { name: "bmu", src: "/sponsors/bmu.png" },
+    { name: "eurohpc-maelstrom", src: "/sponsors/eurohpc-maelstrom.png" },
+    { name: "bmbf", src: "/sponsors/bmbf.png" }
+];
 
 const links: IconLinking[] = [
-    { url: 'https://example.com/1', icon: <InstagramIcon /> },
-    { url: 'https://example.com/2', icon: <FacebookOutlinedIcon /> },
-    { url: 'https://example.com/3', icon: <GitHubIcon /> },
-]
+    { url: "https://example.com/1", icon: <InstagramIcon /> },
+    { url: "https://example.com/2", icon: <FacebookOutlinedIcon /> },
+    { url: "https://example.com/3", icon: <GitHubIcon /> }
+];
 
 const FooterContainer = styled.div`
     width: 100%;
@@ -37,8 +45,8 @@ const FooterNavigation = styled.div`
 `
 
 export const Footer = (props: NavbarProps) => {
-    const router = useRouter()
-    return router.asPath === '/' ? (
+    const router = useRouter();
+    return router.asPath === "/" ? (
         <FooterContainer>
             <Box
                 component="img"
@@ -51,47 +59,34 @@ export const Footer = (props: NavbarProps) => {
                 alt="footer background"
             />
             <FooterNavigation color="primary.dark">
-                <Link href={'/'}>
-                    <Typography
-                        variant="h3"
-                        color="primary.dark"
-                        padding={'0 2rem'}
-                    >
-                        Mantik
-                    </Typography>
-                </Link>
                 <Stack
                     direction={'row'}
+                    flexWrap={'wrap'}
+                    alignItems={'center'}
+                    width={'100%'}
+                    pb={4}
+                    justifyContent={'center'}
                     style={{ height: '100%' }}
                     display={{ xs: 'none', sm: 'flex' }}
+                    spacing={6}
                 >
-                    {props.routes
-                        .filter((route) => route.positions?.includes('footer'))
-                        .map((route) => (
-                            <Link href={route.path} key={route.name}>
-                                <MenuItem>
-                                    <Typography
-                                        variant="h6"
-                                        color="primary.dark"
-                                    >
-                                        {route.name}
-                                    </Typography>
-                                </MenuItem>
-                            </Link>
-                        ))}
-                </Stack>
-                <Stack direction={'row'}>
-                    {links.map((link, index) => (
-                        <IconButton
-                            key={index}
-                            href={link.url}
-                            sx={{ color: 'primary.dark' }}
-                        >
-                            {link.icon}
-                        </IconButton>
-                    ))}
+                    {
+                        sponsorImages.map((image) => (
+                            <Box
+                                key={image.name}
+                                component="img"
+                                src={image.src}
+                                alt={image.name}
+                                height={{
+                                    xl: '90px',
+                                    lg: '75px',
+                                    xs: '60px',
+                                }}
+                            />
+                        ))
+                    }
                 </Stack>
             </FooterNavigation>
         </FooterContainer>
-    ) : null
-}
+    ) : null;
+};

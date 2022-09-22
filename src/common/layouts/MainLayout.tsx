@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import { Footer } from "../components/footer/Footer";
 import Navbar from "../components/navbar/Navbar";
 import { Route } from "../types/route";
-import { SponsorFooter } from "../components/footer/SponsorFooter";
 
 const routes: Route[] = [
     { name: "About", path: "/about", positions: ["navbar", "drawer"] },
@@ -33,9 +32,8 @@ const Layout: React.FC<MainLayoutProps> = (props) => {
                 }}
             >
                 <Navbar routes={routes} />
-                {props.children}
+                    {props.children}
                 <Footer routes={routes} />
-                <SponsorFooter></SponsorFooter>
             </Box>
         </>
     );
