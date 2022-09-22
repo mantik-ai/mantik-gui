@@ -44,4 +44,7 @@ export const defaultTheme = createTheme({
             minWidth: '95px',
         },
     },
+    shape: {
+        borderRadius: 6,
+    }
 })

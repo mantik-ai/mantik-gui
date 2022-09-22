@@ -21,14 +21,12 @@ export const PageHeading = (props: PageHeadingProps) => {
                     display: 'flex',
                     alignItems: 'baseline',
                     flexDirection: { xs: 'column', md: 'row' },
-                    justifyContent: 'center',
                 }}
             >
-                <Typography variant="h2" gutterBottom>
+                <Typography variant="h2" fontWeight={600} gutterBottom>
                     {props.children}
                 </Typography>
                 <Spacing horizontal value={theme.spacing(2)}></Spacing>
-                <Typography variant="h5">{props.description}</Typography>
             </Box>
             <Divider />
         </Box>
