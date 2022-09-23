@@ -32,7 +32,6 @@ export default async function handler(
             ...response,
         })
     } catch (err: unknown) {
-        console.log(err)
         return res.status(500).json({ message: err })
     }
 }

@@ -8,6 +8,7 @@ const nextConfig = {
         ),
         mockDynamically: Boolean(process.env.MOCK_DYNAMICALLY),
         nextAuthUrl: process.env.NEXTAUTH_URL,
+        vercelUrl: process.env.VERCEL_URL,
     },
 }
 

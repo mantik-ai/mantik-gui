@@ -4,7 +4,8 @@ import getConfig from 'next/config'
 const { publicRuntimeConfig } = getConfig()
 const instance = axios.create({
     baseURL:
-        publicRuntimeConfig.nextAuthUrl ?? `https://${process.env.VERCEL_URL}`,
+        publicRuntimeConfig.nextAuthUrl ??
+        `https://${publicRuntimeConfig.vercelUrl}`,
 })
 
 export default instance
