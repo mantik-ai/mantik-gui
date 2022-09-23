@@ -34,8 +34,6 @@ export const DetailsRunsTable = () => {
         startindex: page,
     })
 
-    console.log(data)
-
     const [openRunDialog, setOpenRunDialog] = React.useState(false)
     const runContext = useContext(RunDialogContext)
 
