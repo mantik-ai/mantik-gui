@@ -53,7 +53,7 @@ const ConfirmEmail: NextPage = () => {
                         ...formState,
                     })
                     if (response.status === 200) {
-                        await router.push('/')
+                        await router.push('/login')
                     }
                 } catch (e: unknown) {
                     const resError = e as AxiosError<{
