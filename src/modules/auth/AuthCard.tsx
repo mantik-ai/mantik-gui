@@ -13,6 +13,7 @@ import { SvgIconComponent } from '@mui/icons-material'
 export const enum AuthCardTypes {
     LOGIN = 'login',
     REGISTER = 'register',
+    CONFIRM = 'confirm',
 }
 
 interface AuthCardProps {
@@ -21,20 +22,29 @@ interface AuthCardProps {
     type: AuthCardTypes
     onClick?: React.MouseEventHandler<HTMLButtonElement>
     disabled?: boolean
+    globalError?: string
 }
 
 export const AuthCard = (props: AuthCardProps) => {
+    let heading = ''
     let linkText = ''
     let link = ''
 
     switch (props.type) {
         case AuthCardTypes.LOGIN:
+            heading = AuthCardTypes.LOGIN
             linkText = 'Not yet registered?'
             link = '/register'
             break
         case AuthCardTypes.REGISTER:
+            heading = AuthCardTypes.REGISTER
             linkText = 'Already registered?'
             link = '/login'
+            break
+        case AuthCardTypes.CONFIRM:
+            heading = 'Enter confirmation code'
+            linkText = ''
+            link = ''
             break
         default:
             break
@@ -72,7 +82,7 @@ export const AuthCard = (props: AuthCardProps) => {
                             alignItems="center"
                         >
                             <Typography variant="h4" textTransform="capitalize">
-                                {props.type}
+                                {heading}
                             </Typography>
                             <Link
                                 href={link}
@@ -104,6 +114,11 @@ export const AuthCard = (props: AuthCardProps) => {
                         >
                             {props.type}
                         </Button>
+                        {props.globalError ? (
+                            <Typography variant="body1" color="error">
+                                {props.globalError}
+                            </Typography>
+                        ) : null}
                     </Stack>
                 </CardContent>
             </Card>

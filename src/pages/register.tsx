@@ -1,14 +1,19 @@
 import React, { ChangeEvent, useState } from 'react'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import { TextField } from '@mui/material'
 import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 import axios from '../modules/auth/axios'
+import { getSignUpExceptionMessage } from '../modules/auth/utils'
+import { AxiosError } from 'axios'
 
 const emailRegex = new RegExp(
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 )
 const Register: NextPage = () => {
+    const router = useRouter()
+    const [globalError, setGlobalError] = useState('')
     const [errorState, setErrorState] = useState({
         email: '',
         username: '',
@@ -21,14 +26,15 @@ const Register: NextPage = () => {
         password: '',
         confirmPassword: '',
     })
+
     const onChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value } = e.target
         setFormState((prev) => ({ ...prev, [name]: value }))
+        setGlobalError('')
         setErrorState((prev) => {
             const stateObj = { ...prev, [name]: '' }
-            console.log(name)
             switch (name) {
                 case 'email':
                     if (!emailRegex.test(value)) {
@@ -63,15 +69,36 @@ const Register: NextPage = () => {
     return (
         <AuthCard
             icon={PersonOutlineIcon}
+            globalError={globalError === '' ? undefined : globalError}
             onClick={async () => {
-                const response = await axios.post('/api/register', {
-                    ...formState,
-                })
-                console.log(response)
+                try {
+                    const response = await axios.post('/api/register', {
+                        ...formState,
+                    })
+                    if (response.status === 200) {
+                        await router.push({
+                            pathname: '/confirm-email',
+                            query: { username: formState.username },
+                        })
+                    }
+                } catch (e: unknown) {
+                    const resError = e as AxiosError<{
+                        message: {
+                            name: string
+                            $fault: string
+                        }
+                    }>
+                    setGlobalError(
+                        getSignUpExceptionMessage(
+                            resError.response?.data.message.name ?? ''
+                        )
+                    )
+                }
             }}
             disabled={
                 Object.values(errorState).some((value) => value !== '') ||
-                Object.values(formState).some((value) => value === '')
+                Object.values(formState).some((value) => value === '') ||
+                globalError !== ''
             }
             fields={[
                 <TextField
