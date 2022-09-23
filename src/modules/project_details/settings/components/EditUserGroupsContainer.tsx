@@ -119,14 +119,14 @@ export default function EditUserGroupsContainer() {
         if (context.settings) {
             setUserGroups(context.settings.userGroups ?? [])
         }
-    }, [context.settings?.userGroups])
+    }, [context.settings])
 
     return (
         <div>
             <Typography variant={'h5'}>Usergroups</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
                 <TableContainer component={Paper} sx={{ mt: 4, mr: -4 }}>
