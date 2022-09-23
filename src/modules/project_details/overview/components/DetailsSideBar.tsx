@@ -50,24 +50,9 @@ export const DetailsSideBar = () => {
             icon: <AssignmentOutlined />,
         },
         {
-            name: 'Code',
-            path: `${id}/code`,
-            icon: <Code />,
-        },
-        {
-            name: 'Data',
-            path: `${id}/data`,
-            icon: <DatasetOutlined />,
-        },
-        {
-            name: 'Models',
-            path: `${id}/models`,
-            icon: <OnlinePredictionOutlined />,
-        },
-        {
-            name: 'Train a Model',
-            path: `${id}/train`,
-            icon: <ModelTrainingOutlined />,
+            name: 'Experiments',
+            path: `${id}/experiments`,
+            icon: <ScienceOutlined />,
         },
         {
             name: 'Runs',
@@ -75,9 +60,19 @@ export const DetailsSideBar = () => {
             icon: <DirectionsRun />,
         },
         {
-            name: 'Experiments',
-            path: `${id}/experiments`,
-            icon: <ScienceOutlined />,
+            name: 'Models',
+            path: `${id}/models`,
+            icon: <OnlinePredictionOutlined />,
+        },
+        {
+            name: 'Data',
+            path: `${id}/data`,
+            icon: <DatasetOutlined />,
+        },
+        {
+            name: 'Code',
+            path: `${id}/code`,
+            icon: <Code />,
         },
     ]
 

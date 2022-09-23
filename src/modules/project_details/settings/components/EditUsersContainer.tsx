@@ -81,7 +81,7 @@ export default function EditUserContainer() {
                 alignItems="top"
                 justifyContent="space-between"
             >
-                <TableContainer component={Paper} sx={{ mt: 4, mr: -4 }}>
+                <TableContainer component={Paper} sx={{ mt: 4, mr: -5 }}>
                     <Table aria-label="collapsible table">
                         <TableHead>
                             <TableRow>
