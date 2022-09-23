@@ -60,10 +60,7 @@ const Docs: NextPage<DocsPageProps> = (props: DocsPageProps) => {
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: {
-                            sx: theme.spacing(2),
-                            md: theme.spacing(4),
-                        },
+                        p: 4
                     }}
                     flex={3}
                     color={'blue'}

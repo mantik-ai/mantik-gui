@@ -43,6 +43,8 @@ const Home: NextPage = () => {
                     endIcon={<ArrowForwardIcon />}
                     color="primary"
                     variant="contained"
+                    href={'https://trial.cloud.mantik.ai/'}
+                    target={'_blank'}
                 >
                     try it out
                 </Button>
