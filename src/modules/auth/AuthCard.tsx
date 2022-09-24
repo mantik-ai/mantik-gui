@@ -2,6 +2,7 @@ import {
     Button,
     Card,
     CardContent,
+    CircularProgress,
     Divider,
     Link,
     Stack,
@@ -23,6 +24,7 @@ interface AuthCardProps {
     onClick?: React.MouseEventHandler<HTMLButtonElement>
     disabled?: boolean
     globalError?: string
+    loading?: boolean
 }
 
 export const AuthCard = (props: AuthCardProps) => {
@@ -74,52 +76,61 @@ export const AuthCard = (props: AuthCardProps) => {
                     />
                 </Divider>
                 <CardContent>
-                    <Stack direction={'column'} spacing={2}>
-                        <Stack
-                            mb={1}
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                        >
-                            <Typography variant="h4" textTransform="capitalize">
-                                {heading}
-                            </Typography>
-                            <Link
-                                href={link}
-                                variant="body2"
-                                color="textSecondary"
-                                align="right"
-                            >
-                                {linkText}
-                            </Link>
+                    {props.loading ? (
+                        <Stack direction="row" justifyContent="center">
+                            <CircularProgress></CircularProgress>
                         </Stack>
-                        {props.fields}
-
-                        {props.type === AuthCardTypes.LOGIN && (
-                            <Link
-                                variant="body2"
-                                color="textSecondary"
-                                align="left"
+                    ) : (
+                        <Stack direction={'column'} spacing={2}>
+                            <Stack
+                                mb={1}
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
                             >
-                                Forgot password?
-                            </Link>
-                        )}
-                        <Button
-                            disabled={props.disabled}
-                            variant="contained"
-                            style={{
-                                color: 'white',
-                            }}
-                            onClick={props.onClick}
-                        >
-                            {props.type}
-                        </Button>
-                        {props.globalError ? (
-                            <Typography variant="body1" color="error">
-                                {props.globalError}
-                            </Typography>
-                        ) : null}
-                    </Stack>
+                                <Typography
+                                    variant="h4"
+                                    textTransform="capitalize"
+                                >
+                                    {heading}
+                                </Typography>
+                                <Link
+                                    href={link}
+                                    variant="body2"
+                                    color="textSecondary"
+                                    align="right"
+                                >
+                                    {linkText}
+                                </Link>
+                            </Stack>
+                            {props.fields}
+
+                            {props.type === AuthCardTypes.LOGIN && (
+                                <Link
+                                    variant="body2"
+                                    color="textSecondary"
+                                    align="left"
+                                >
+                                    Forgot password?
+                                </Link>
+                            )}
+                            <Button
+                                disabled={props.disabled}
+                                variant="contained"
+                                style={{
+                                    color: 'white',
+                                }}
+                                onClick={props.onClick}
+                            >
+                                {props.type}
+                            </Button>
+                            {props.globalError ? (
+                                <Typography variant="body1" color="error">
+                                    {props.globalError}
+                                </Typography>
+                            ) : null}
+                        </Stack>
+                    )}
                 </CardContent>
             </Card>
         </Stack>

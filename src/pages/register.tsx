@@ -1,18 +1,19 @@
 import React, { ChangeEvent, useState } from 'react'
 import type { NextPage } from 'next'
+import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import { TextField } from '@mui/material'
 import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 import axios from '../modules/auth/axios'
 import { getSignUpExceptionMessage } from '../modules/auth/utils'
-import { AxiosError } from 'axios'
 
 const emailRegex = new RegExp(
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 )
 const Register: NextPage = () => {
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
     const [globalError, setGlobalError] = useState('')
     const [errorState, setErrorState] = useState({
         email: '',
@@ -69,9 +70,11 @@ const Register: NextPage = () => {
     return (
         <AuthCard
             icon={PersonOutlineIcon}
+            loading={loading}
             globalError={globalError === '' ? undefined : globalError}
             onClick={async () => {
                 try {
+                    setLoading(true)
                     const response = await axios.post('/api/register', {
                         ...formState,
                     })
@@ -93,6 +96,8 @@ const Register: NextPage = () => {
                             resError.response?.data.message.name ?? ''
                         )
                     )
+                } finally {
+                    setLoading(false)
                 }
             }}
             disabled={

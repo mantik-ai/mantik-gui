@@ -9,6 +9,7 @@ import { AuthCard, AuthCardTypes } from '../modules/auth/AuthCard'
 
 const Login: NextPage = () => {
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
     const [globalError, setGlobalError] = useState('')
     const [errorState, setErrorState] = useState({
         username: '',
@@ -47,6 +48,7 @@ const Login: NextPage = () => {
     return (
         <AuthCard
             icon={LockOutlinedIcon}
+            loading={loading}
             globalError={globalError === '' ? undefined : globalError}
             disabled={
                 Object.values(errorState).some((value) => value !== '') ||
@@ -54,6 +56,7 @@ const Login: NextPage = () => {
                 globalError !== ''
             }
             onClick={async () => {
+                setLoading(true)
                 const result = await signIn(COGNITO_PROVIDER_ID, {
                     username: formState.username,
                     password: formState.password,
@@ -64,6 +67,7 @@ const Login: NextPage = () => {
                 } else {
                     setGlobalError('username or password is incorrect')
                 }
+                setLoading(false)
             }}
             fields={[
                 <TextField
