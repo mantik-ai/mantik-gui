@@ -17,8 +17,9 @@ import { DataStateIndicator } from '../../../common/components/DataStateIndicato
 import { Spacing } from '../../../common/components/Spacing'
 import { Run, useGetProjectsProjectIdRuns } from '../../../common/queries'
 import RunDialogContext from './contexts/RunDialogContext'
-import { DetailsRunsTableToolbar } from './DetailsRunsTableToolbar'
 import { RunDialog } from './RunDialog'
+import { DetailsToolbar } from '../../../common/components/DetailsToolbar'
+import { Add } from '@mui/icons-material'
 
 const PageLengthOptions = [50, 25, 10, 5]
 
@@ -54,9 +55,14 @@ export const DetailsRunsTable = () => {
 
     return (
         <DataStateIndicator status={status} text="Loading Runs..." usePaper>
-            <DetailsRunsTableToolbar
-                openDialog={openDialog}
-            ></DetailsRunsTableToolbar>
+            <DetailsToolbar
+                title="Runs"
+                tool={
+                    <Button variant="text" onClick={() => openDialog()}>
+                        <Add></Add>Add
+                    </Button>
+                }
+            />
             <Spacing value={theme.spacing(1)}></Spacing>
             <TableContainer component={Paper}>
                 <Table>

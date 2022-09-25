@@ -15,7 +15,7 @@ export default function EditButton({
                     <Fab
                         size={'small'}
                         color={'secondary'}
-                        sx={{ mt: 1, mx: 1 }}
+                        sx={{ m: 1, mb: 1.5 }}
                         onClick={onSave}
                     >
                         <Check />
@@ -23,7 +23,7 @@ export default function EditButton({
                     <Fab
                         size={'small'}
                         color={'secondary'}
-                        sx={{ mt: 1, mx: 1 }}
+                        sx={{ m: 1, mb: 1.5 }}
                         onClick={onCancel}
                     >
                         <Clear />
@@ -34,7 +34,7 @@ export default function EditButton({
                     size={'small'}
                     color={'primary'}
                     onClick={onEdit}
-                    sx={{ mt: 1, mx: 1 }}
+                    sx={{ m: 1, mb: 1.5 }}
                 >
                     <Edit color={'secondary'} />
                 </Fab>

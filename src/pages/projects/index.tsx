@@ -18,7 +18,7 @@ const Projects: NextPage = () => {
                 }}
             >
                 <PageHeading description="Search through all project accessible to you.">
-                    Project Overview
+                    Projects
                 </PageHeading>
                 <Box
                     sx={{

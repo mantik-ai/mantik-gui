@@ -1,5 +1,6 @@
 import React from 'react'
+import { DetailsToolbar } from '../../../common/components/DetailsToolbar'
 
 export const ModelRepositoriesOverview = () => {
-    return <>Model Repositories Page</>
+    return <DetailsToolbar title={'Models'} tool={<></>}></DetailsToolbar>
 }
