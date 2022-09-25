@@ -7,6 +7,8 @@ const nextConfig = {
             process.env.DEBOUNCE_TIMER_SEARCH_QUERY
         ),
         mockDynamically: Boolean(process.env.MOCK_DYNAMICALLY),
+        nextAuthUrl: process.env.NEXTAUTH_URL,
+        vercelUrl: process.env.VERCEL_URL,
     },
 }
 

@@ -1,7 +1,6 @@
 import { GetUserCommandOutput } from '@aws-sdk/client-cognito-identity-provider'
 import nextAuth, { ISODateString } from 'next-auth'
 import credentialsProvider from 'next-auth/providers/credentials'
-import { AxiosError } from 'axios'
 import axios from '../../../modules/auth/axios'
 import { COGNITO_PROVIDER_ID } from '../../../common/constants'
 
@@ -11,8 +10,8 @@ export default nextAuth({
             id: COGNITO_PROVIDER_ID,
             name: 'Credentials',
             credentials: {
-                email: {
-                    label: 'Email',
+                username: {
+                    label: 'Username',
                     type: 'text',
                 },
                 password: { label: 'Password', type: 'password' },
@@ -22,7 +21,7 @@ export default nextAuth({
                     const res = await axios.post(
                         '/api/login',
                         {
-                            username: credentials?.email,
+                            username: credentials?.username,
                             password: credentials?.password,
                         },
                         {
@@ -39,7 +38,6 @@ export default nextAuth({
                     const cognitoTokens = res.data as Record<string, unknown>
                     return cognitoTokens
                 } catch (e: unknown) {
-                    console.log((e as AxiosError).message)
                     return null
                 }
             },
