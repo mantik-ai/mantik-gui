@@ -38,35 +38,35 @@ export const getSignUpExceptionMessage = (msg: string) => {
 export const getConfirmExceptionMessage = (msg: string) => {
     switch (msg) {
         case 'AliasExistsException':
-            return 'alias exists'
+            return 'your email is already in use'
         case 'CodeMismatchException':
             return 'code mismatch'
         case 'ExpiredCodeException':
-            return 'expired code exception'
+            return 'expired code'
         case 'ForbiddenException':
-            return 'forbidden exception'
+            return 'forbidden'
         case 'InternalErrorException':
-            return 'internal error exception'
+            return 'internal error'
         case 'InvalidLambdaResponseException':
-            return 'invalid lambda response exception'
+            return 'invalid lambda response'
         case 'InvalidParameterException':
-            return 'invalid parameter exception'
+            return 'invalid parameter'
         case 'LimitExceededException':
-            return 'limit exceeded exception'
+            return 'limit exceeded'
         case 'NotAuthorizedException':
-            return 'not authorized exception'
+            return 'not authorized'
         case 'ResourceNotFoundException':
-            return 'resource not found exception'
+            return 'resource not found'
         case 'TooManyFailedAttemptsException':
-            return 'too many failed attempts exception'
+            return 'too many failed attempts'
         case 'TooManyRequests':
             return 'too many requests'
         case 'UnexpectedLambdaException':
-            return 'unexpected lambda exception'
+            return 'unexpected lambda'
         case 'UserLambdaValidationException':
-            return 'user lambda validation exception'
+            return 'user lambda validation'
         case 'UserNotFoundException':
-            return 'user not found exception'
+            return 'user not found'
         default:
             return 'An unknown error occurred'
     }
