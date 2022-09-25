@@ -39,7 +39,7 @@ const Register: NextPage = () => {
             switch (name) {
                 case 'email':
                     if (!emailRegex.test(value)) {
-                        stateObj[name] = 'Please enter a valid Email'
+                        stateObj[name] = 'Please enter a valid email'
                     }
                     break
                 case 'username':
@@ -47,7 +47,7 @@ const Register: NextPage = () => {
                         stateObj[name] = 'Username cannot be empty'
                     }
                     if (emailRegex.test(value)) {
-                        stateObj[name] = 'Username connot be a Email'
+                        stateObj[name] = 'Username cannot be an email'
                     }
                     break
                 case 'password':
@@ -57,7 +57,7 @@ const Register: NextPage = () => {
                     break
                 case 'confirmPassword':
                     if (value !== formState.password) {
-                        stateObj[name] = 'password does not match'
+                        stateObj[name] = 'Password does not match'
                     }
                     break
                 default:

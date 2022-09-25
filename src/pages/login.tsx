@@ -30,7 +30,7 @@ const Login: NextPage = () => {
             switch (name) {
                 case 'username':
                     if (value === '') {
-                        stateObj[name] = 'Please enter a valid Email'
+                        stateObj[name] = 'Please enter a valid email'
                     }
                     break
                 case 'password':
@@ -65,7 +65,7 @@ const Login: NextPage = () => {
                 if (result?.ok) {
                     await router.push('/')
                 } else {
-                    setGlobalError('username or password is incorrect')
+                    setGlobalError('Username or password is incorrect')
                 }
                 setLoading(false)
             }}
