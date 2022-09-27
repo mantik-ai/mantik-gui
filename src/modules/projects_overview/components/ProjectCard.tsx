@@ -17,7 +17,7 @@ interface ProjectEntryProps {
 }
 export const ProjectCard = (props: ProjectEntryProps) => {
     return (
-        <Card>
+        <Card sx={{p: 1}}>
             <CardHeader
                 title={props.project.name}
                 subheader={`from ${props.project.owner.name}`}

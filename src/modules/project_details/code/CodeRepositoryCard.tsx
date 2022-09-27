@@ -6,6 +6,7 @@ import {
     CardActions,
     CardContent,
     CardHeader,
+    Stack,
     Typography,
     useTheme,
 } from '@mui/material'
@@ -16,10 +17,10 @@ import { CodeRepository } from '../../../common/queries'
 interface CodeRepositoryCardProps {
     codeRepository: CodeRepository
 }
+
 export const CodeRepositoryCard = (props: CodeRepositoryCardProps) => {
-    const theme = useTheme()
     return (
-        <Box p={theme.spacing(1)}>
+        <Stack direction={'row'} flexWrap={'wrap'} spacing={'auto'} mt={4}>
             <Card>
                 <CardHeader
                     avatar={<GitHub></GitHub>}
@@ -40,9 +41,17 @@ export const CodeRepositoryCard = (props: CodeRepositoryCardProps) => {
                     ) : null}
                 </CardContent>
                 <CardActions>
-                    <Button size="small">visit</Button>
+                    <Button
+                        sx={{ ml: 'auto' }}
+                        variant={'outlined'}
+                        size="small"
+                        href={props.codeRepository.uri}
+                        target={'_blank'}
+                    >
+                        visit
+                    </Button>
                 </CardActions>
             </Card>
-        </Box>
+        </Stack>
     )
 }

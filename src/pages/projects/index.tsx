@@ -18,7 +18,7 @@ const Projects: NextPage = () => {
                 }}
             >
                 <PageHeading description="Search through all project accessible to you.">
-                    Project Overview
+                    Projects
                 </PageHeading>
                 <Box
                     sx={{
@@ -33,10 +33,8 @@ const Projects: NextPage = () => {
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            padding: {
-                                sx: theme.spacing(2),
-                                md: theme.spacing(4),
-                            },
+                            p: 4,
+                            pr: 0,
                         }}
                         flex={3}
                         color={'blue'}

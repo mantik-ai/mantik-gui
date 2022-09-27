@@ -16,11 +16,11 @@ export default function EditLabelsContainer(props: EditLabelsContainerProps) {
     const [isOpen, setIsOpen] = React.useState(false)
 
     return (
-        <div>
+        <Box py={1}>
             <Typography variant={'h5'}>{props.title}</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
                 <Box px={1}>
@@ -36,6 +36,6 @@ export default function EditLabelsContainer(props: EditLabelsContainerProps) {
                 labels={props.labels}
                 onSave={(newLabels) => props.onSave(newLabels)}
             />
-        </div>
+        </Box>
     )
 }

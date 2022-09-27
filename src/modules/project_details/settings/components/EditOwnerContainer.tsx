@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import * as React from 'react'
 import { useContext } from 'react'
 //@Todo change useGetUsers to useGetUsersSearch
@@ -12,14 +12,14 @@ export default function EditOwnerContainer() {
     const [isOpen, setIsOpen] = React.useState(false)
 
     return (
-        <div>
+        <Box py={1}>
             <Typography variant={'h5'}>Project Owner</Typography>
             <Stack
                 direction="row"
-                alignItems="center"
+                alignItems="top"
                 justifyContent="space-between"
             >
-                <Typography variant={'body1'} ml={'14px'}>
+                <Typography variant={'body1'} ml={'14px'} pt={'11px'}>
                     The project is currently owned by{' '}
                     <b>{context.settings?.owner.name}</b>
                 </Typography>
@@ -40,6 +40,6 @@ export default function EditOwnerContainer() {
                 //@ts-expect-error wip
                 autocompleteOptions={(options) => options?.data.users ?? []}
             />
-        </div>
+        </Box>
     )
 }

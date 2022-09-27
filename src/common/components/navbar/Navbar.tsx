@@ -54,7 +54,7 @@ export default function Navbar(props: NavbarProps) {
     )
 
     const router = useRouter()
-    const activeRoute = router.pathname.split('/').at(-1)
+    const activeRoute = router.pathname
 
     return (
         <>
@@ -96,8 +96,7 @@ export default function Navbar(props: NavbarProps) {
                                                 color="secondary"
                                                 sx={{
                                                     textDecoration:
-                                                        route.name.toLowerCase() ===
-                                                        activeRoute
+                                                        activeRoute.includes(route.name.toLowerCase())
                                                             ? 'underline'
                                                             : null,
                                                 }}

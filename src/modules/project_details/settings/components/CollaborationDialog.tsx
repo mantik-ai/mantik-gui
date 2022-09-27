@@ -56,7 +56,7 @@ export const CollaborationDialog = <TData extends { name: string }>(
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="please select"
+                            label="Selection"
                             size="small"
                             InputProps={{
                                 ...params.InputProps,

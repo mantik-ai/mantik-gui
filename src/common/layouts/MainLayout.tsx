@@ -3,19 +3,16 @@ import { Box } from '@mui/material'
 import { Footer } from '../components/footer/Footer'
 import Navbar from '../components/navbar/Navbar'
 import { Route } from '../types/route'
-import { SponsorFooter } from '../components/footer/SponsorFooter'
 
 const routes: Route[] = [
-    { name: 'About', path: '/about', positions: ['navbar', 'drawer'] },
+    { name: 'About', path: '/', positions: ['navbar', 'drawer'] },
     {
         name: 'Docs',
         path: '/docs/Getting_Started/Welcome.md',
         positions: ['navbar', 'drawer'],
     },
     { name: 'Projects', path: '/projects', positions: ['navbar', 'drawer'] },
-    { name: 'Contact', path: '/contact', positions: ['footer', 'drawer'] },
-    { name: 'Privacy', path: '/privacy', positions: ['footer', 'drawer'] },
-    { name: 'Imprint', path: '/imprint', positions: ['footer', 'drawer'] },
+    { name: 'Contact', path: '/', positions: ['navbar', 'drawer'] },
 ]
 
 interface MainLayoutProps {
@@ -31,12 +28,12 @@ const Layout: React.FC<MainLayoutProps> = (props) => {
                     height: '100vh',
                     display: 'flex',
                     flexFlow: 'column',
+                    backgroundColor: '#f9fafb',
                 }}
             >
                 <Navbar routes={routes} />
                 {props.children}
                 <Footer routes={routes} />
-                <SponsorFooter></SponsorFooter>
             </Box>
         </>
     )

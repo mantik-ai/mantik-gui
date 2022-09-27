@@ -42,6 +42,11 @@
             "$ref": "dataRepositories.json"
         }
     ],
+    "modelRepositories": [
+        {
+            "$ref": "modelRepositories.json"
+        }
+    ],
     "labels": {
         "$ref": "labels1.json"
     }

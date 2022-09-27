@@ -38,6 +38,10 @@ properties:
         type: array
         items:
             $ref: ./ExperimentRepository.yaml
+    modelRepositories:
+        type: array
+        items:
+            $ref: ./ModelRepository.yaml
     dataRepositories:
         type: array
         items:
