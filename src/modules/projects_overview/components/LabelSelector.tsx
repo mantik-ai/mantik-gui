@@ -1,10 +1,10 @@
 import { Autocomplete, TextField } from '@mui/material'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useGetLabelsSearch } from '../../../common/queries'
-import SearchParamerterContext from '../contexts/SearchParameterContext'
+import { useSearchParameterContext } from '../contexts/SearchParameterContext'
 
 export const LabelSelector = () => {
-    const searchParameterContext = useContext(SearchParamerterContext)
+    const searchParameterContext = useSearchParameterContext()
     const [labelSearchString, setLabelSearchString] = useState('')
     const { data, status } = useGetLabelsSearch({
         searchString: labelSearchString,
@@ -16,7 +16,10 @@ export const LabelSelector = () => {
             multiple
             id="labels"
             onChange={(_, labels) =>
-                searchParameterContext.setSearchLabels!(labels)
+                searchParameterContext.dispatch({
+                    type: 'setSearchLabels',
+                    payload: labels,
+                })
             }
             options={data?.data.labels ?? []}
             getOptionLabel={(label) => label.name}

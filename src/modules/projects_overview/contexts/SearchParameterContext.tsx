@@ -1,12 +1,6 @@
 import { AxiosResponse } from 'axios'
 import getConfig from 'next/config'
-import {
-    createContext,
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useState,
-} from 'react'
+import { createContext, useContext, useEffect, useReducer } from 'react'
 import { QueryStatus } from 'react-query'
 import useDebounce from '../../../common/hooks/useDebounce'
 import {
@@ -23,88 +17,126 @@ interface ProblemType {
     active: boolean
 }
 
+type Action =
+    | { type: 'setSearchString'; payload: string }
+    | { type: 'setProblemType'; payload: { idx: number; value: boolean } }
+    | { type: 'setAllProblemTypes'; payload: Label[] }
+    | {
+          type: 'setSearchLabels'
+          payload: Label[]
+      }
+    | {
+          type: 'setProjectsQueryResult'
+          payload: AxiosResponse<GetProjectsUserUserIdSearch200, unknown>
+      }
+    | {
+          type: 'setProjectsQueryStatus'
+          payload: QueryStatus
+      }
+type Dispatch = (action: Action) => void
+
 export interface SearchParameters {
     searchString: string
-    setSearchString: Dispatch<SetStateAction<string>>
-
+    searchLabels: Label[]
     problemTypes: ProblemType[]
-    setProblemType: (idx: number, value: boolean) => void
-
-    setSearchLabels: Dispatch<SetStateAction<Label[]>>
-
-    projectsResultStatus: QueryStatus
-    projectsResult:
-        | AxiosResponse<GetProjectsUserUserIdSearch200, unknown>
-        | undefined
+    projectsQueryStatus?: QueryStatus
+    projectsQuery?: AxiosResponse<GetProjectsUserUserIdSearch200, unknown>
 }
 
-const SearchParamerterContext = createContext<Partial<SearchParameters>>({})
+const SearchParamerterContext = createContext<
+    { state: SearchParameters; dispatch: Dispatch } | undefined
+>(undefined)
 
+const reducer = (state: SearchParameters, action: Action): SearchParameters => {
+    switch (action.type) {
+        case 'setSearchString':
+            return { ...state, searchString: action.payload }
+        case 'setAllProblemTypes':
+            return {
+                ...state,
+                problemTypes: action.payload.map(
+                    (l) => ({ name: l.name, active: false } as ProblemType)
+                ),
+            }
+        case 'setProblemType':
+            state.problemTypes[action.payload.idx].active = action.payload.value
+            return { ...state }
+        case 'setSearchLabels':
+            return { ...state, searchLabels: action.payload }
+        case 'setProjectsQueryStatus':
+            return { ...state, projectsQueryStatus: action.payload }
+        case 'setProjectsQueryResult':
+            return { ...state, projectsQuery: action.payload }
+    }
+}
 interface SearchParameterProviderProps {
     children: React.ReactNode
 }
-
-export const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
+const SearchParameterProvider: React.FC<SearchParameterProviderProps> = (
     props
 ) => {
-    const [searchString, setSearchString] = useState('')
+    const [state, dispatch] = useReducer(reducer, {
+        searchString: '',
+        problemTypes: [],
+        searchLabels: [],
+    })
     const debouncedSearchString = useDebounce(
-        searchString,
+        state.searchString,
         Number(publicRuntimeConfig.debounceTimerSearchQuery)
     )
 
-    const [searchLabels, setSearchLabels] = useState<Label[]>([])
-    const [problemTypes, setProblemTypes] = useState<ProblemType[]>([])
-
+    const { data: projectsResult, status: projectsResultStatus } =
+        useGetProjectsUserUserIdSearch('c9de9883-5efc-4b4d-b156-9fe5acce8975', {
+            searchString: debouncedSearchString,
+            labels: [
+                ...state.searchLabels,
+                ...state.problemTypes
+                    .filter((pt) => pt.active)
+                    .map((pt) => ({
+                        scope: 'problem-type',
+                        name: pt.name,
+                    })),
+            ],
+        }) //TODO: set userid programmatically
     const { data: problemTypeLabel } = useGetLabelsScope('problem-type')
     useEffect(() => {
-        if (problemTypeLabel) {
-            setProblemTypes(
-                problemTypeLabel.data.labels?.map((label) => {
-                    return { name: label.name, active: false } as ProblemType
-                }) ?? []
-            )
+        if (problemTypeLabel && problemTypeLabel.data.labels) {
+            dispatch({
+                type: 'setAllProblemTypes',
+                payload: problemTypeLabel.data.labels,
+            })
         }
     }, [problemTypeLabel])
 
-    const {
-        data: projectsResult,
-        status: projectsResultStatus,
-        refetch,
-    } = useGetProjectsUserUserIdSearch('c9de9883-5efc-4b4d-b156-9fe5acce8975', {
-        searchString: debouncedSearchString,
-        labels: [
-            ...searchLabels,
-            ...problemTypes
-                .filter((pt) => pt.active)
-                .map((pt) => ({
-                    scope: 'problem-type',
-                    name: pt.name,
-                })),
-        ],
-    }) //TODO: set userid programmatically
+    useEffect(() => {
+        if (projectsResult) {
+            dispatch({
+                type: 'setProjectsQueryResult',
+                payload: projectsResult,
+            })
+        }
+    }, [projectsResult])
+    useEffect(() => {
+        dispatch({
+            type: 'setProjectsQueryStatus',
+            payload: projectsResultStatus,
+        })
+    }, [projectsResultStatus])
 
-    const setProblemType = (idx: number, value: boolean) => {
-        problemTypes[idx].active = value
-        setProblemTypes(problemTypes)
-        refetch().catch((e) => console.log(e))
-    }
-
+    const value = { state, dispatch }
     return (
-        <SearchParamerterContext.Provider
-            value={{
-                searchString,
-                setSearchString,
-                problemTypes,
-                setProblemType,
-                setSearchLabels,
-                projectsResult,
-                projectsResultStatus,
-            }}
-        >
+        <SearchParamerterContext.Provider value={value}>
             {props.children}
         </SearchParamerterContext.Provider>
     )
 }
 
-export default SearchParamerterContext
+function useSearchParameterContext() {
+    const context = useContext(SearchParamerterContext)
+    if (context === undefined) {
+        throw new Error('useCount must be used within a CountProvider')
+    }
+    return context
+}
+
+export { SearchParameterProvider, useSearchParameterContext }

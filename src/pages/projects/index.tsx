@@ -2,9 +2,9 @@ import React from 'react'
 import type { NextPage } from 'next'
 import { Box, useTheme } from '@mui/material'
 import { SearchSideBar } from '../../modules/projects_overview/components/SearchSideBar'
-import { SearchParameterProvider } from '../../modules/projects_overview/contexts/SearchParameterContext'
 import { ProjectList } from '../../modules/projects_overview/components/ProjectList'
 import { PageHeading } from '../../modules/projects_overview/components/SearchHeading'
+import { SearchParameterProvider } from '../../modules/projects_overview/contexts/SearchParameterContext'
 
 const Projects: NextPage = () => {
     const theme = useTheme()

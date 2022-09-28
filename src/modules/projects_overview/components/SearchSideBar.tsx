@@ -17,12 +17,12 @@ import Link from 'next/link'
 import React, { useContext } from 'react'
 import { Spacing } from '../../../common/components/Spacing'
 import { useGetProjectsUserUserId } from '../../../common/queries'
-import SearchParamerterContext from '../contexts/SearchParameterContext'
+import { useSearchParameterContext } from '../contexts/SearchParameterContext'
 import { LabelSelector } from './LabelSelector'
 
 export const SearchSideBar = () => {
     const theme = useTheme()
-    const searchParameterContext = useContext(SearchParamerterContext)
+    const searchParameterContext = useSearchParameterContext()
 
     const upToMediumSize = useMediaQuery(theme.breakpoints.up('md'))
     const { data } = useGetProjectsUserUserId(
@@ -38,16 +38,19 @@ export const SearchSideBar = () => {
                     label="Search"
                     size="small"
                     variant="outlined"
-                    value={searchParameterContext.searchString!}
+                    value={searchParameterContext.state.searchString}
                     onChange={(e) =>
-                        searchParameterContext.setSearchString!(e.target.value)
+                        searchParameterContext.dispatch({
+                            type: 'setSearchString',
+                            payload: e.target.value,
+                        })
                     }
                 />
                 <Spacing value={theme.spacing(4)}></Spacing>
 
                 <Typography variant="caption">Problem Type</Typography>
                 <FormGroup>
-                    {searchParameterContext.problemTypes!.map(
+                    {searchParameterContext.state.problemTypes.map(
                         (problemType, i) => (
                             <FormControlLabel
                                 key={problemType.name}
@@ -55,14 +58,14 @@ export const SearchSideBar = () => {
                                 control={<Checkbox />}
                                 label={problemType.name}
                                 value={
-                                    searchParameterContext.problemTypes![i]
+                                    searchParameterContext.state.problemTypes[i]
                                         .active
                                 }
                                 onChange={(_, checked) =>
-                                    searchParameterContext.setProblemType!(
-                                        i,
-                                        checked
-                                    )
+                                    searchParameterContext.dispatch({
+                                        type: 'setProblemType',
+                                        payload: { idx: i, value: checked },
+                                    })
                                 }
                             />
                         )
