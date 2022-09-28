@@ -1,8 +1,9 @@
 import { Box, CircularProgress, Paper, Typography } from '@mui/material'
 import React from 'react'
+import { QueryStatus } from 'react-query'
 
 interface DataStateIndicatorProps {
-    status: 'error' | 'loading' | 'idle' | 'success'
+    status?: QueryStatus
     usePaper?: boolean
     text: string
     children: React.ReactNode
