@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, useTheme } from '@mui/material'
+import { Box, Paper, useTheme } from '@mui/material'
 import { PageHeading } from '../../projects_overview/components/SearchHeading'
 import { UserSideBar } from '../UserSideBar'
 
@@ -31,13 +31,15 @@ export const UserSettingsLayout = (props: UserSettingsLayoutProps) => {
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        p: 4,
+                        p: 2,
                         pr: 0,
                     }}
                     flex={3}
                     color={'blue'}
                 >
-                    {props.children}
+                    <Paper>
+                        <Box sx={{ p: 4 }}>{props.children}</Box>
+                    </Paper>
                 </Box>
             </Box>
         </Box>

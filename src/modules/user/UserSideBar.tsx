@@ -98,26 +98,6 @@ export const UserSideBar = () => {
                         />
                     ))}
                     <Divider />
-                    <ListItemButton onClick={handleClick}>
-                        <ListItemIcon>
-                            <SettingsOutlined />
-                        </ListItemIcon>
-                        <ListItemText primary="Settings" />
-                        {open ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={open} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                            {settingRoutes.map((route) => (
-                                <SideBarItem
-                                    key={route.path}
-                                    name={route.name}
-                                    icon={<></>}
-                                    path={`${route.path}`}
-                                />
-                            ))}
-                        </List>
-                    </Collapse>
-                    <Divider />
                 </List>
             </Paper>
         </Box>
