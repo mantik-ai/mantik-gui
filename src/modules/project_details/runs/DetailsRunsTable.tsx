@@ -13,13 +13,13 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { useContext } from 'react'
+import { Add } from '@mui/icons-material'
 import { DataStateIndicator } from '../../../common/components/DataStateIndicator'
 import { Spacing } from '../../../common/components/Spacing'
 import { Run, useGetProjectsProjectIdRuns } from '../../../common/queries'
+import { DetailsToolbar } from '../../../common/components/DetailsToolbar'
 import RunDialogContext from './contexts/RunDialogContext'
 import { RunDialog } from './RunDialog'
-import { DetailsToolbar } from '../../../common/components/DetailsToolbar'
-import { Add } from '@mui/icons-material'
 
 const PageLengthOptions = [50, 25, 10, 5]
 
@@ -45,7 +45,6 @@ export const DetailsRunsTable = () => {
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage)
     }
-
     const handleChangeRowsPerPage = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
