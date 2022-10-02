@@ -16,17 +16,17 @@ import { DataStateIndicator } from '../../../common/components/DataStateIndicato
 import { DetailsToolbar } from '../../../common/components/DetailsToolbar'
 import { LabelArray } from '../../../common/components/LabelArray'
 import { Spacing } from '../../../common/components/Spacing'
-import { useGetProjectsProjectIdData } from '../../../common/queries'
+import { useGetProjectsProjectIdModels } from '../../../common/queries'
 
 const PageLengthOptions = [50, 25, 10, 5]
 
-export const DetailsDataTable = () => {
+export const DetailsModelsTable = () => {
     const theme = useTheme()
     const router = useRouter()
     const { id } = router.query
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(PageLengthOptions[0])
-    const { data, status } = useGetProjectsProjectIdData(id as string, {
+    const { data, status } = useGetProjectsProjectIdModels(id as string, {
         pagelength: rowsPerPage,
         startindex: page,
     })
@@ -42,29 +42,29 @@ export const DetailsDataTable = () => {
     }
     return (
         <DataStateIndicator status={status} text="Loading Runs..." usePaper>
-            <DetailsToolbar title={'Data'} tool={<></>}></DetailsToolbar>
+            <DetailsToolbar title={'Models'} tool={<></>}></DetailsToolbar>
             <Spacing value={theme.spacing(1)}></Spacing>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
+                            <TableCell>Commit</TableCell>
                             <TableCell>Description</TableCell>
                             <TableCell>Labels</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data?.data.dataRepositories?.map((dataRepo) => (
-                            <TableRow key={dataRepo.dataRepositoryId}>
+                        {data?.data.modelRepositories?.map((modelRepo) => (
+                            <TableRow key={modelRepo.commit}>
                                 <TableCell>
-                                    <Link href={dataRepo.uri}>
-                                        {dataRepo.dataRepositoryName}
+                                    <Link href={modelRepo.uri}>
+                                        {modelRepo.commit}
                                     </Link>
                                 </TableCell>
-                                <TableCell>{dataRepo.description}</TableCell>
+                                <TableCell>{modelRepo.description}</TableCell>
                                 <TableCell>
                                     <LabelArray
-                                        labels={dataRepo.labels}
+                                        labels={modelRepo.labels}
                                     ></LabelArray>
                                 </TableCell>
                             </TableRow>
