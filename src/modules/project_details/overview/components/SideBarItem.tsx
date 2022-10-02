@@ -25,7 +25,7 @@ export default function SideBarItem({
         removeIdFromPath(router.pathname) === removeIdFromPath(path)
 
     return (
-        <Link key={name} href={path}>
+        <Link key={name} href={path} passHref>
             <ListItemButton key={name} selected={isSelected}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText>{name}</ListItemText>
