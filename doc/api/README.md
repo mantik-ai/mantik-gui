@@ -17,8 +17,8 @@ Projects are the main data structure of the mantik platform. A project collects 
 
 A run represents the execution of some code. Usually, a model is trained in a run.
 
- - EntryPoint: Represents to entry point of an mlflow project.
- - ModelRepository: Represents an untrained model. Contains rederences to code and commit to be used in training. Description and labels can be added for quick information and search.
+ - EntryPoint: Represents the entry point of an mlflow project.
+ - ModelRepository: Represents an untrained model. Contains references to code and commit to be used in training. Description and labels can be added for quick information and search.
  - Resources: Specification of resources to use for a run on some compute backend, e.g. HPC.
  - Run: Represents the execution of some code. Contains references to experiment, code, data and hardware configuration (resources) used in the execution. Related to mlflow runs and UNICORE jobs.
  - SavedModelRepository: Represents a trained and saved model.
@@ -28,10 +28,10 @@ A run represents the execution of some code. Usually, a model is trained in a ru
 Saved models can be used for inference. In order to do so, the model must be deployed on some infrastructure.
 
  - PackagedDeployment: Represents a container image in which the model can be run.
- - PredictionRequest: Represents the request to use a deployed model for a prediction.
- - PredictionResponse: Represents the response to a PredictionRequest.
  - DeploymentInformation: Information on a deployed model, including connection, resources and scheduling information.
  - DeploymentMode: Information on the mode of the deployment. Usually contains information on the compute backend and its configuration. 
+ - PredictionRequest: Represents the request to use a deployed model for a prediction.
+ - PredictionResponse: Represents the response to a PredictionRequest.
 
 ![](project_dependencies.drawio.png)
 
@@ -66,8 +66,6 @@ The mantik platform enables multiple users to collaborate in projects.
  - AddRun: Request to add a run to the database.
  - PaginationResponse: Schema used for pagination.
  - ErrorMessage: Error message.
-
-
 
 # Render API specification for development
 
