@@ -26,7 +26,7 @@ export default function EditButton({
                         sx={{ m: 1, mb: 1.5 }}
                         onClick={onCancel}
                     >
-                        <Clear />
+                        <Check />
                     </Fab>
                 </Stack>
             ) : (
